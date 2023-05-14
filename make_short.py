@@ -21,6 +21,12 @@ def get_video_file(goal_name):
     background_video_file = os.path.join(background_video_dir, random.choice(background_video_files))
     return background_video_file
 
+def get_audio_file(goal_name):
+    background_audio_dir = os.path.join(os.getcwd(), "resources", "audio", f"{goal_name}")
+    background_audio_files  = [f for f in os.listdir(background_audio_dir) if f.endswith(".mp3")]
+    background_audio_file = os.path.join(background_audio_dir, random.choice(background_audio_files))
+    return background_audio_file
+
 def create_video_from_csv(csv_data, goal_name):
     # Define video parameters
     video_duration = 10
@@ -57,7 +63,8 @@ def create_video_from_csv(csv_data, goal_name):
         final_video = final_video.set_duration(video_duration)
 
         # Add the audio track to the video
-        audio_path = os.path.join("resources", "audio", f"{goal_name}", f"{goal_name}.mp3")
+        audio_path = get_audio_file(goal_name)
+        # audio_path = os.path.join("resources", "audio", f"{goal_name}", f"{goal_name}.mp3")
         audio_clip = AudioFileClip(audio_path).set_duration(video_duration)
         audio_clip = audio_clip.volumex(0.5)
         # audio_clip = AudioFileClip(audio_path).subclip(0, 10)
@@ -71,7 +78,8 @@ def create_video_from_csv(csv_data, goal_name):
         # break # for debug purposes only to generate 1 video.
 
 def main():
-    goal_name = "fitnessfacts"
+    goal_name = "relationshipgoals"
+    # goal_name = "fitnessfacts"
     # csv_file = "relationship_data.csv"
     csv_file = f"{goal_name}.csv"
     csv_path = os.path.join("resources", "data", csv_file)
