@@ -1,6 +1,7 @@
 import os
 import csv
 import random
+import time
 from moviepy.editor import *
 
 def create_folder_if_not_exists(goal_name):
@@ -18,6 +19,10 @@ def create_folder_if_not_exists(goal_name):
 
     # Create folder under resources/background_videos
     background_videos_folder_path = os.path.join("resources", "background_videos", goal_name)
+    _create_folder_if_not_exists(background_videos_folder_path)
+
+    # Create folder under resources/uploaded_videos
+    background_videos_folder_path = os.path.join("resources", "uploaded_videos", goal_name)
     _create_folder_if_not_exists(background_videos_folder_path)
 
 def get_csv(csv_filename):
@@ -46,8 +51,8 @@ def get_audio_file(goal_name):
 def create_video_from_csv(csv_data, goal_name):
     # Define video parameters
     video_duration = 10
-    clip1_duration = 8
-    clip2_duration = 2
+    clip1_duration = 5
+    clip2_duration = 5
     mobile_screen_size = (720, 1280) # portrait aspect ratio for mobile phones
     bg_color='black'
     opacity = 0.75
@@ -57,25 +62,34 @@ def create_video_from_csv(csv_data, goal_name):
     # Cycle through all the relationship data, create text clips and join them to a video. Finally add audio
     for i, data in enumerate(csv_data):
         # Create the clip for the statement
-        statement_clip = TextClip(data['statement'], fontsize=40, color='white', bg_color=bg_color, font='Arial', size=(mobile_text_screen_size[0],None))
+        statement_clip = TextClip(data['statement'], fontsize=50, color='white', bg_color=bg_color, font='Arial', size=(mobile_text_screen_size[0],None))
         statement_clip = statement_clip.set_position('center').set_start(0).set_duration(clip1_duration).set_opacity(opacity)
 
         # Create the clip for the goal
-        goal_clip = TextClip(data['goal'], fontsize=40, color='white', bg_color=bg_color, font='Arial', size=(mobile_text_screen_size[0],None), method='caption')
+        goal_clip = TextClip(data['goal'], fontsize=50, color='white', bg_color=bg_color, font='Arial', size=(mobile_text_screen_size[0],None), method='caption')
         goal_clip = goal_clip.set_position('center').set_start(clip1_duration).set_duration(clip2_duration).set_opacity(opacity)
 
         # Create the clip for the description
         description_clip = TextClip(description_text, fontsize=30, color='white', bg_color=bg_color, font='Arial', size=(mobile_text_screen_size[0],None))
         description_clip = description_clip.set_position(("center",0.8), relative=True).set_duration(video_duration).set_opacity(1)
 
-        # Create the background clip
+        # Create the background clip 1
         bg_video_path = get_video_file(goal_name)
-        bg_video_clip = VideoFileClip(bg_video_path, audio=True).loop(10)
-        bg_video_clip = bg_video_clip.set_start(0).set_duration(video_duration)
+        bg_video_clip = VideoFileClip(bg_video_path, audio=True).loop(clip1_duration)
+        bg_video_clip = bg_video_clip.set_start(0).set_duration(clip1_duration)
         bg_video_clip = bg_video_clip.resize(mobile_screen_size)
 
+        # Create the background clip 2
+        bg_video_path2 = get_video_file(goal_name)
+        bg_video_clip2 = VideoFileClip(bg_video_path2, audio=True).loop(clip2_duration)
+        bg_video_clip2 = bg_video_clip2.set_start(clip1_duration).set_duration(clip2_duration)
+        bg_video_clip2 = bg_video_clip2.resize(mobile_screen_size)
+
+        bg_video_full = concatenate_videoclips([bg_video_clip, bg_video_clip2])
+        # bg_video_full = CompositeVideoClip([bg_video_clip, bg_video_clip2])
+
         # Combine the clips
-        final_video = CompositeVideoClip([bg_video_clip, statement_clip, goal_clip, description_clip], use_bgclip=True)
+        final_video = CompositeVideoClip([bg_video_full, statement_clip, goal_clip, description_clip], use_bgclip=True)
         final_video = final_video.set_duration(video_duration)
 
         # Add the audio track to the video
@@ -95,15 +109,20 @@ def create_video_from_csv(csv_data, goal_name):
 
 def main():
     # goal_name = "relationshipgoals"
-    goal_name = "fitnessfacts"
+    # goal_name = "fitnessfacts"
+    # goal_name = "dogfacts"
+    goal_name = "catfacts"
     # csv_file = "relationship_data.csv"
-    
+
     # make dirs if not existing
     create_folder_if_not_exists(goal_name)
 
+    # read csv file
     csv_file = f"{goal_name}.csv"
     csv_path = os.path.join("resources", "data", csv_file)
     data = get_csv(csv_path) # takes csv with 3 fields, category, statement, and goal
+
+    # create shorts!
     create_video_from_csv(data, goal_name)
     return
 
