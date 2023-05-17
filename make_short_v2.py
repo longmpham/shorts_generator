@@ -101,7 +101,8 @@ def create_video_from_csv(csv_data, goal_name):
         final_video = final_video.set_audio(audio_clip)
 
         # Write the video to a file
-        filename = os.path.join("resources", "uploaded_videos", f"{goal_name}", f"{data['category']}_{goal_name}_{i+1}.mp4")
+        fname = f"Dog Facts to Make You Smile - {i+1} #shorts #dog #dogs #happy #fyp #pets"
+        filename = os.path.join("resources", "uploaded_videos", f"{goal_name}", f"{fname}.mp4")
         # final_video.write_videofile(filename, fps=30, codec='libx264', audio_codec='aac', preset='ultrafast')
         final_video.write_videofile(filename, fps=30, preset='ultrafast')
         # final_video.write_videofile(filename, verbose=True, write_logfile=True)
@@ -110,8 +111,8 @@ def create_video_from_csv(csv_data, goal_name):
 def main():
     # goal_name = "relationshipgoals"
     # goal_name = "fitnessfacts"
-    # goal_name = "dogfacts"
-    goal_name = "catfacts"
+    goal_name = "dogfacts"
+    # goal_name = "catfacts"
     # csv_file = "relationship_data.csv"
 
     # make dirs if not existing
