@@ -51,22 +51,23 @@ def get_audio_file(goal_name):
 def create_video_from_csv(csv_data, goal_name):
     # Define video parameters
     video_duration = 10
-    clip1_duration = 5
-    clip2_duration = 5
+    clip1_duration = 8
+    clip2_duration = 2
     mobile_screen_size = (720, 1280) # portrait aspect ratio for mobile phones
     bg_color='black'
     opacity = 0.75
     mobile_text_screen_size = (mobile_screen_size[0]*0.8,mobile_screen_size[1])
     description_text = f"#{goal_name}"
 
-    # Cycle through all the relationship data, create text clips and join them to a video. Finally add audio
     for i, data in enumerate(csv_data):
-        # Create the clip for the statement
-        statement_clip = TextClip(data['statement'], fontsize=50, color='white', bg_color=bg_color, font='Arial', size=(mobile_text_screen_size[0],None))
+        category = data[list(data.keys())[0]]  # Extract the first value dynamically
+        statement = data[list(data.keys())[1]]  # Extract the second value dynamically
+        goal = data[list(data.keys())[2]]  # Extract the third value dynamically
+
+        statement_clip = TextClip(statement, fontsize=50, color='white', bg_color=bg_color, font='Arial', size=(mobile_text_screen_size[0], None))
         statement_clip = statement_clip.set_position('center').set_start(0).set_duration(clip1_duration).set_opacity(opacity)
 
-        # Create the clip for the goal
-        goal_clip = TextClip(data['goal'], fontsize=50, color='white', bg_color=bg_color, font='Arial', size=(mobile_text_screen_size[0],None), method='caption')
+        goal_clip = TextClip(goal, fontsize=50, color='white', bg_color=bg_color, font='Arial', size=(mobile_text_screen_size[0], None), method='caption')
         goal_clip = goal_clip.set_position('center').set_start(clip1_duration).set_duration(clip2_duration).set_opacity(opacity)
 
         # Create the clip for the description
@@ -106,7 +107,7 @@ def create_video_from_csv(csv_data, goal_name):
         # final_video.write_videofile(filename, fps=30, codec='libx264', audio_codec='aac', preset='ultrafast')
         final_video.write_videofile(filename, fps=30, preset='ultrafast')
         # final_video.write_videofile(filename, verbose=True, write_logfile=True)
-        # break # for debug purposes only to generate 1 video.
+        break # for debug purposes only to generate 1 video.
 
 def main():
     # goal_name = "relationshipgoals"
