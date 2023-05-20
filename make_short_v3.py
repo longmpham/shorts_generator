@@ -111,8 +111,6 @@ def create_video_from_csv(csv_data, goal_name):
     opacity = 0.75
     mobile_text_screen_size = (mobile_screen_size[0]*0.8,mobile_screen_size[1])
 
-
-
     for i, data in enumerate(csv_data):
         # Skip the first column
         column_values = list(data.values())[1:]
