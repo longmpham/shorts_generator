@@ -1,5 +1,6 @@
 import os
 import time
+import shutil
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
@@ -8,38 +9,32 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 
-def get_image_from_answer(keyword, picture_desc):
+def get_image_from_answer(keyword, description):
+    
+    # Save the screenshot to a folder
+    screenshot_folder = os.path.join(os.getcwd(), 'resources', 'screenshots')
+    if os.path.exists(screenshot_folder):
+        shutil.rmtree(screenshot_folder)  # Delete the folder and its contents
+    os.makedirs(screenshot_folder)  # Create the folder    
+    
     # Set the path to the chromedriver executable
     chromedriver_path = "C:\\Program Files\\Google\\Chrome\\chromedriver.exe"
     filename = f"{keyword}.png"
     # Path to the adblocker extension file (.crx or .zip)
     adblocker_path = "C:\\Users\\longp\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\cjpalhdlnbpafiamejdnhcphjbkeiagm\\1.49.2_0.crx"
-    download_directory = os.path.join(os.getcwd(), "resources", "screenshots", f"{keyword}")
-    if not os.path.exists(download_directory):
-        os.makedirs(download_directory)
-
+    
     # Create a Chrome WebDriver service
     service = Service(chromedriver_path)
-
-    # Set the download filename with counter and original file extension
-    counter = 1
-    # download_filename = f"{filename}_{counter}.png"  # e.g., dog_1.png
-
-    # Check if the filename already exists and increment the counter
-    # while os.path.exists(os.path.join(download_directory, download_filename)):
-    #     counter += 1
-    #     download_filename = f"{filename}_{counter}.png"
-
 
     # Configure Chrome options
     chrome_options = Options()
     chrome_options.add_extension(adblocker_path)
     chrome_options.add_experimental_option("prefs", {
-    "download.default_directory": download_directory,
-    "download.prompt_for_download": False,
-    "download.directory_upgrade": True,
-    # "download.default_filename": filename,  # Specify the custom file name
-})
+        "download.default_directory": screenshot_folder,
+        "download.prompt_for_download": False,
+        "download.directory_upgrade": True,
+        # "download.default_filename": filename,  # Specify the custom file name
+    })
 
     # Start the WebDriver
     driver = webdriver.Chrome(service=service,  options=chrome_options)
@@ -62,7 +57,7 @@ def get_image_from_answer(keyword, picture_desc):
     wait = WebDriverWait(driver, 30)
     search_box = wait.until(EC.visibility_of_element_located((By.ID, "prompt")))
     # search_box = driver.find_element(By.ID, "search")
-    search_box.send_keys(keyword + picture_desc)
+    search_box.send_keys(keyword + description)
     search_box.send_keys(Keys.ENTER)
     print("sent keys")
 
@@ -107,11 +102,11 @@ def get_image_from_answer(keyword, picture_desc):
     
     time.sleep(1)
     
-    # Save the screenshot to a file
-    screenshot_folder = os.path.join(os.getcwd(), 'resources', 'screenshots')
-    if not os.path.exists(screenshot_folder):
-        os.makedirs(screenshot_folder)
-    screenshot_path = os.path.join(screenshot_folder, f'{keyword}.png')
+    # screenshot_path = os.path.join(screenshot_folder, f'{keyword}.png')
+    existing_files = os.listdir(screenshot_folder)
+    files = [file for file in existing_files if file.endswith('.png')] # should just be one file in png format always.
+    print(files)
+    screenshot_path = os.path.join(screenshot_folder, files[0])
     # with open(screenshot_path, 'wb') as f:
     #     f.write(screenshot)
     
@@ -122,6 +117,8 @@ def get_image_from_answer(keyword, picture_desc):
     return screenshot_path
 
 
-keyword = "dogs"
-picture_desc = ", not a person but a place or thing"
-get_image_from_answer(keyword, picture_desc)
+
+
+# keyword = "dogs"
+# description = ", not a person but a place or thing"
+# get_image_from_answer(keyword, description)

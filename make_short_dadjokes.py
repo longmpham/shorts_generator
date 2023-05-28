@@ -104,7 +104,7 @@ def generate_srt_from_audio(audio_file_path):
 
     return srt_file_path
 
-def create_video_from_csv(csv_data, goal_name):
+def create_video_from_csv(csv_data, goal_name, description_text, mp4_file_name):
     # Define video parameters
     video_duration = 10
     clip1_duration = 7
@@ -114,11 +114,8 @@ def create_video_from_csv(csv_data, goal_name):
     bg_color='black'
     opacity = 0.75
     mobile_text_screen_size = (mobile_screen_size[0]*0.8,mobile_screen_size[1])
-    # description_text = f"#{goal_name}"
-    description_text = "#PopQuiz"
-    # print(TextClip.list('font'))
     
-    for i, data in enumerate(csv_data, start = 103):
+    for i, data in enumerate(csv_data):
         question_num = data[list(data.keys())[0]]  # Extract the first value dynamically
         question = data[list(data.keys())[1]]  # Extract the second value dynamically
         answer = data[list(data.keys())[2]]  # Extract the third value dynamically
@@ -174,17 +171,20 @@ def create_video_from_csv(csv_data, goal_name):
         final_video = final_video.set_audio(audio_clip)
 
         # Write the video to a file
-        fname = f"Questions of the World - {i+1} #shorts #quiz #popquiz #brainteaser #fyp #worldfacts #earth #trivia #game #trivianight #travel"
+        fname = mp4_file_name.replace("_", str(i+1))
         filename = os.path.join("resources", "uploaded_videos", f"{goal_name}", f"{fname}.mp4")
         # final_video.write_videofile(filename, fps=30, codec='libx264', audio_codec='aac', preset='ultrafast')
         final_video.write_videofile(filename, fps=30, preset='ultrafast')
         # final_video.write_videofile(filename, verbose=True, write_logfile=True)
-        # break # for debug purposes only to generate 1 video.
+        break # for debug purposes only to generate 1 video.
         # if i == 2: # generate 3 vids
         #     break
 
 def main():
-    goal_name = "quiz"
+    goal_name = "dadjokes"
+    description_text = "#DadJokes"
+    mp4_file_name = f"Dad Jokes to Crack You Up - _ #shorts #jokes #jokes #brainteaser #fyp #dadjokes #funny #random #lol #laugh" # _ will be replaced by a number
+
     # recommend to follow the naming convention:
     # number | question | answer (1 word)
 
@@ -197,7 +197,7 @@ def main():
     data = get_csv(csv_path) # takes csv with 3 fields, category, statement, and goal
 
     # create shorts!
-    create_video_from_csv(data, goal_name)
+    create_video_from_csv(data, goal_name, description_text, mp4_file_name)
     return
 
 if __name__ == "__main__":
