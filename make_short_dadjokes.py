@@ -10,6 +10,7 @@ from pydub import AudioSegment
 from pydub.utils import make_chunks
 from datetime import timedelta
 import os
+from tts import generate_TTS_using_bark
 
 def create_folder_if_not_exists(goal_name):
 
@@ -166,9 +167,18 @@ def create_video_from_csv(csv_data, goal_name, description_text, mp4_file_name):
         audio_path = get_audio_file(goal_name)
         # audio_path = os.path.join("resources", "audio", f"{goal_name}", f"{goal_name}.mp3")
         audio_clip = AudioFileClip(audio_path).set_duration(video_duration)
-        audio_clip = audio_clip.volumex(0.5)
+        audio_clip = audio_clip.volumex(0.1)
         # audio_clip = AudioFileClip(audio_path).subclip(0, 10)
-        final_video = final_video.set_audio(audio_clip)
+        # Add the TTS audio track to the video using CompositeAudioClip
+        tts_audio_file = generate_TTS_using_bark([question, answer])
+        tts_audio_clip = AudioFileClip(tts_audio_file).set_duration(video_duration)
+        # min_audio_duration = min(audio_clip.duration, tts_audio_clip.duration)
+        tts_audio_clip = tts_audio_clip.volumex(0.75)
+        combined_audio = CompositeAudioClip([audio_clip.audio, tts_audio_clip.audio])
+        
+        
+        final_video = final_video.set_audio(combined_audio)
+        
 
         # Write the video to a file
         fname = mp4_file_name.replace("_", str(i+1))
