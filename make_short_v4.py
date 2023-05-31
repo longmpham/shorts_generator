@@ -10,7 +10,8 @@ from pydub import AudioSegment
 from pydub.utils import make_chunks
 from datetime import timedelta
 import os
-from tts import generate_TTS_using_bark
+from tts import generate_TTS_using_bark, generate_TTS_using_coqui
+
 
 def create_folder_if_not_exists(goal_name):
 
@@ -105,18 +106,18 @@ def generate_srt_from_audio(audio_file_path):
 
     return srt_file_path
 
-def create_video_from_csv(csv_data, goal_name, description_text, mp4_file_name):
+def create_video_from_csv(csv_data, goal_name, description_text, mp4_file_name, video1_time, video2_time):
     # Define video parameters
-    video_duration = 10
-    clip1_duration = 7
-    clip2_duration = 3
+    clip1_duration = video1_time
+    clip2_duration = video2_time
+    video_duration = video1_time + video2_time
     mobile_screen_size = (720, 1280) # portrait aspect ratio for mobile phones
     text_color = "white"
     bg_color='black'
     opacity = 0.75
     mobile_text_screen_size = (mobile_screen_size[0]*0.8,mobile_screen_size[1])
     
-    for i, data in enumerate(csv_data):
+    for i, data in enumerate(csv_data, start=0):
         question_num = data[list(data.keys())[0]]  # Extract the first value dynamically
         question = data[list(data.keys())[1]]  # Extract the second value dynamically
         answer = data[list(data.keys())[2]]  # Extract the third value dynamically
@@ -152,7 +153,8 @@ def create_video_from_csv(csv_data, goal_name, description_text, mp4_file_name):
 
         # Create the picture clip for answer
         bg_answer_clip = ImageClip(img=get_answer_picture(answer), duration=clip2_duration)
-        bg_answer_clip = bg_answer_clip.set_position(("center",0.8), relative=True).set_duration(clip2_duration).set_opacity(1)
+        # bg_answer_clip = ImageClip(img="C:\\Users\\longp\\Documents\\Coding\\shorts_generator\\resources\\screenshots\\craiyon_232231_A_gummy_bear___not_a_person_but_a_place_or_thing__1080x1920.png", duration=clip2_duration)
+        bg_answer_clip = bg_answer_clip.set_position("center").set_duration(clip2_duration)
         bg_answer_clip = bg_answer_clip.resize(mobile_screen_size)
         
         bg_video_full = concatenate_videoclips([bg_question_clip, bg_answer_clip])
@@ -170,14 +172,23 @@ def create_video_from_csv(csv_data, goal_name, description_text, mp4_file_name):
         audio_clip = audio_clip.volumex(0.1)
         # audio_clip = AudioFileClip(audio_path).subclip(0, 10)
         # Add the TTS audio track to the video using CompositeAudioClip
-        tts_audio_file = generate_TTS_using_bark([question, answer])
-        tts_audio_clip = AudioFileClip(tts_audio_file).set_duration(video_duration)
-        # min_audio_duration = min(audio_clip.duration, tts_audio_clip.duration)
-        tts_audio_clip = tts_audio_clip.volumex(0.75)
-        combined_audio = CompositeAudioClip([audio_clip.audio, tts_audio_clip.audio])
+        tts_audio_files = generate_TTS_using_coqui([question, answer])
+        # tts_audio_files = ["output_0.wav", "output_1.wav"]
+        tts_audio_clip1 = AudioFileClip(tts_audio_files[0]) # question tts
+        tts_audio_clip2 = AudioFileClip(tts_audio_files[1]) # answer tts
+        # tts_audio_clip1 = tts_audio_clip1.subclip(0,7)
+        # tts_audio_clip2 = tts_audio_clip2.subclip(0,3)
         
-        
-        final_video = final_video.set_audio(combined_audio)
+        if tts_audio_clip1.duration > 7:
+            tts_audio_clip1 = tts_audio_clip1.subclip(0, 7)
+            tts_audio_clip2 = tts_audio_clip2.subclip(0, 3)
+            combined_audio = CompositeAudioClip([audio_clip, tts_audio_clip1.set_start(0).set_end(7), tts_audio_clip2.set_start(7).set_end(10)])
+            final_video = final_video.set_audio(combined_audio)
+        else:
+            tts_audio_clip1 = tts_audio_clip1.set_start(0)
+            tts_audio_clip2 = tts_audio_clip2.set_start(7)
+            combined_audio = CompositeAudioClip([audio_clip, tts_audio_clip1, tts_audio_clip2])
+            final_video = final_video.set_audio(combined_audio)
         
 
         # Write the video to a file
@@ -186,14 +197,17 @@ def create_video_from_csv(csv_data, goal_name, description_text, mp4_file_name):
         # final_video.write_videofile(filename, fps=30, codec='libx264', audio_codec='aac', preset='ultrafast')
         final_video.write_videofile(filename, fps=30, preset='ultrafast')
         # final_video.write_videofile(filename, verbose=True, write_logfile=True)
-        break # for debug purposes only to generate 1 video.
-        # if i == 2: # generate 3 vids
-        #     break
+        # break # for debug purposes only to generate 1 video.
+        if i == 9: # generate 3 vids
+            break
 
 def main():
-    goal_name = "dadjokes"
-    description_text = "#DadJokes"
-    mp4_file_name = f"Dad Jokes to Crack You Up - _ #shorts #jokes #jokes #brainteaser #fyp #dadjokes #funny #random #lol #laugh" # _ will be replaced by a number
+    goal_name = "quiz"
+    description_text = "#PopQuiz"
+    mp4_file_name = f"Questions You Probably Don't Know - _ #shorts #quiz #question #brainteaser #fyp #random #popquiz #silly #testyourself" # _ will be replaced by a number
+    video1_time = 7
+    video2_time = 3
+
 
     # recommend to follow the naming convention:
     # number | question | answer (1 word)
@@ -207,7 +221,7 @@ def main():
     data = get_csv(csv_path) # takes csv with 3 fields, category, statement, and goal
 
     # create shorts!
-    create_video_from_csv(data, goal_name, description_text, mp4_file_name)
+    create_video_from_csv(data, goal_name, description_text, mp4_file_name, video1_time, video2_time)
     return
 
 if __name__ == "__main__":
