@@ -225,21 +225,21 @@ def create_video_audio_text_clip(text, text_options={}, video_options={}, audio_
 #     return final_video
 
 def main():
-    texts = [    "Once upon a time, in a charming little town,",    
-             "Lived a cat named Oliver, with fur of golden brown.",    
-             "And nearby, a dog named Max, full of playful zest,",    
-             "With a wagging tail and a heart so blessed.",    
-             "Oliver would perch on a windowsill high,",    
-             "Watching the world with a curious eye.",    
-             "Max would bound and chase his tail around,",    
-             "With a barking joy, a joyful sound.",    
-             "They met one day under a bright blue sky,",    
-             "A cat and a dog, unlikely allies.",    
-             "They played and explored, side by side,",    
-             "Creating memories, their friendship amplified.",    
-             "Through fields they roamed, a duo so true,",    
-             "Sharing adventures, just Max and Oliver knew.",    
-             "With every passing day, their bond grew strong,",    
+    texts = ["Once upon a time, in a charming little town,",
+             "Lived a cat named Oliver, with fur of golden brown.",
+             "And nearby, a dog named Max, full of playful zest,",
+             "With a wagging tail and a heart so blessed.",
+             "Oliver would perch on a windowsill high,",
+             "Watching the world with a curious eye.",
+             "Max would bound and chase his tail around,",
+             "With a barking joy, a joyful sound.",
+             "They met one day under a bright blue sky,",
+             "A cat and a dog, unlikely allies.",
+             "They played and explored, side by side,",
+             "Creating memories, their friendship amplified.",
+             "Through fields they roamed, a duo so true,",
+             "Sharing adventures, just Max and Oliver knew.",
+             "With every passing day, their bond grew strong,",
              "A cat and a dog, proving friendships can't go wrong."]
 
     # generate the video including the sentence, and tts
@@ -254,8 +254,9 @@ def main():
     background_audio_clip = AudioFileClip(audio_path).set_duration(final_video.duration)
     background_audio_clip = background_audio_clip.volumex(0.1) # set volume of background_audio to 10%
     combined_audio = CompositeAudioClip([background_audio_clip, final_video.audio])
-    
     final_video = final_video.set_audio(combined_audio)
+    
+    # Write the final video
     final_video.write_videofile("story.mp4", fps=30, preset='ultrafast')
 
     return
