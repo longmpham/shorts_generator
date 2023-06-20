@@ -1,981 +1,918 @@
-Question #,Question,Answer
-1,What is the chemical symbol for gold?,Au
-2,"Which planet is known as the ""Red Planet""?",Mars
-3,Who painted the Mona Lisa?,Leonardo da Vinci
-4,What is the tallest mountain in the world?,Mount Everest
-5,How many continents are there in the world?,Seven
-6,Who wrote the play Romeo and Juliet?,William Shakespeare
-7,What is the largest ocean on Earth?,Pacific Ocean
-8,In which country is the Taj Mahal located?,India
-9,What is the chemical symbol for water?,H2O
-10,Who is the author of the Harry Potter book series?,J.K. Rowling
-11,Which country is home to the Great Barrier Reef?,Australia
-12,What is the capital of France?,Paris
-13,What is the largest mammal on Earth?,Blue whale
-14,"Who painted the famous artwork ""Starry Night""?",Vincent van Gogh
-15,How many bones are there in the human body?,206
-16,Which planet is known for its beautiful rings?,Saturn
-17,Who is the Greek god of thunder?,Zeus
-18,What is the capital city of Japan?,Tokyo
-19,Which element is represented by the symbol Fe on the periodic table?,Iron
-20,"Who wrote the novel ""To Kill a Mockingbird""?",Harper Lee
-21,What is the largest planet in our solar system?,Jupiter
-22,"Who is the author of the book ""Pride and Prejudice""?",Jane Austen
-23,What is the capital of Brazil?,Brasília
-24,"Which animal is known as the ""king of the jungle""?",Lion
-25,What is the chemical symbol for oxygen?,O
-26,"Who painted the famous artwork ""The Starry Night""?",Vincent van Gogh
-27,How many players are there in a basketball team?,Five
-28,Which country is known for inventing pizza?,Italy
-29,What is the largest desert in the world?,Sahara Desert
-30,"Who is the lead singer of the band ""Queen""?",Freddie Mercury
-31,Which continent is home to the Amazon Rainforest?,South America
-32,What is the capital city of Canada?,Ottawa
-33,"Who wrote the novel ""1984""?",George Orwell
-34,What is the chemical symbol for sodium?,Na
-35,How many sides does a hexagon have?,Six
-36,Who is the Greek goddess of love and beauty?,Aphrodite
-37,What is the official language of China?,Mandarin Chinese
-38,Which famous scientist developed the theory of relativity?,Albert Einstein
-39,How many strings does a standard guitar have?,Six
-40,"Who wrote the play ""Hamlet""?",William Shakespeare
-41,Who is the author of the Harry Potter book series?,J.K. Rowling
-42,What is the capital of France?,Paris
-43,How many colors are there in a rainbow?,Seven
-44,"Which planet is known as the ""Red Planet""?",Mars
-45,Who painted the Mona Lisa?,Leonardo da Vinci
-46,What is the symbol for the chemical element gold?,Au
-47,How many continents are there in the world?,Seven
-48,Which country is famous for the Great Wall?,China
-49,"Who is the protagonist of the ""Lord of the Rings"" trilogy?",Frodo Baggins
-50,What is the largest ocean on Earth?,Pacific Ocean
-51,What is the capital city of Australia?,Canberra
-52,"Who is the artist behind the famous painting ""The Scream""?",Edvard Munch
-53,How many legs does a spider have?,Eight
-54,Which country is known for the Taj Mahal?,India
-55,"Who is the lead guitarist of the rock band ""Led Zeppelin""?",Jimmy Page
-56,What is the chemical symbol for iron?,Fe
-57,How many sides does a triangle have?,Three
-58,Who is the Egyptian god of the sun?,Ra
-59,What is the official language of Japan?,Japanese
-60,"Who wrote the novel ""To Kill a Mockingbird""?",Harper Lee
-61,What is the largest animal in the world?,Blue whale
-62,Who is the current President of the United States?,Joe Biden
-63,What is the currency of Brazil?,Brazilian real
-64,Which country is known for producing the most coffee?,Brazil
-65,Who painted the ceiling of the Sistine Chapel?,Michelangelo
-66,How many sides does an octagon have?,Eight
-67,What is the chemical symbol for oxygen?,O
-68,"Who wrote the play ""Romeo and Juliet""?",William Shakespeare
-69,Which country is home to the pyramids of Giza?,Egypt
-70,What is the largest desert in the world?,Sahara Desert
-71,"Who is the author of ""Pride and Prejudice""?",Jane Austen
-72,How many players are there in a baseball team?,Nine
-73,What is the capital of South Africa?,Pretoria
-74,Who is the Greek god of thunder?,Zeus
-75,"Which country is known for the famous landmark, the Colosseum?",Italy
-76,How many sides does a pentagon have?,Five
-77,Who is the lead vocalist of the band Queen?,Freddie Mercury
-78,What is the chemical symbol for helium?,He
-79,"Who wrote the novel ""1984""?",George Orwell
-80,"Which planet is known as the ""Giant of the Solar System""?",Jupiter
-101,"Who painted the famous artwork ""The Starry Night""?",Vincent van Gogh
-102,What is the chemical symbol for gold?,Au
-103,Which country is known for the Taj Mahal?,India
-104,What is the capital city of Japan?,Tokyo
-105,How many strings does a typical guitar have?,Six
-106,Who is the author of the Harry Potter book series?,J.K. Rowling
-107,What is the largest ocean in the world?,Pacific Ocean
-108,"Who wrote the play ""Hamlet""?",William Shakespeare
-109,Which country is known for the Eiffel Tower?,France
-110,What is the capital of Spain?,Madrid
-111,How many planets are there in our solar system?,Eight
-112,Who is the lead singer of the band U2?,Bono
-113,What is the chemical symbol for sodium?,Na
-114,Which country is known for the Great Wall?,China
-115,"Who is the author of ""To Kill a Mockingbird""?",Harper Lee
-116,How many colors are there in a rainbow?,Seven
-117,What is the tallest mountain in the world?,Mount Everest
-118,"Who painted the famous artwork ""Mona Lisa""?",Leonardo da Vinci
-119,What is the capital city of Australia?,Canberra
-120,Who is the Greek goddess of wisdom?,Athena
-121,"Who wrote the novel ""Pride and Prejudice""?",Jane Austen
-122,What is the largest desert in the world?,Sahara Desert
-123,Which city hosted the 2016 Summer Olympics?,Rio de Janeiro
-124,What is the chemical symbol for oxygen?,O
-125,"Who painted the famous artwork ""The Last Supper""?",Leonardo da Vinci
-126,What is the capital city of Canada?,Ottawa
-127,How many players are there in a basketball team on the court?,Five
-128,Who is the lead vocalist of the band Queen?,Freddie Mercury
-129,Which country is known for the Colosseum?,Italy
-130,What is the capital of South Korea?,Seoul
-131,How many sides does a pentagon have?,Five
-132,"Who wrote the novel ""1984""?",George Orwell
-133,What is the chemical symbol for carbon?,C
-134,Which country is known for the Pyramids of Giza?,Egypt
-135,"Who is the author of ""The Lord of the Rings"" trilogy?",J.R.R. Tolkien
-136,How many time zones are there in the world?,24
-137,What is the tallest building in the world?,Burj Khalifa
-138,"Who painted the famous artwork ""The Scream""?",Edvard Munch
-139,What is the capital city of Brazil?,Brasília
-140,Who is the Norse god of thunder?,Thor
-141,"Who is the author of ""To Kill a Mockingbird""?",Harper Lee
-142,What is the largest planet in our solar system?,Jupiter
-143,"Which city is known as the ""Eternal City""?",Rome
-144,What is the chemical symbol for gold?,Au
-145,"Who painted the famous artwork ""Starry Night""?",Vincent van Gogh
-146,What is the capital city of France?,Paris
-147,How many players are there on a baseball team?,Nine
-148,Who is the lead singer of the band U2?,Bono
-149,Which country is known for the Taj Mahal?,India
-150,What is the capital of Australia?,Canberra
-151,How many sides does an octagon have?,Eight
-152,"Who wrote the play ""Romeo and Juliet""?",William Shakespeare
-153,What is the chemical symbol for hydrogen?,H
-154,Which country is known for the Great Wall?,China
-155,"Who is the author of the ""Harry Potter"" book series?",J.K. Rowling
-156,How many bones are there in the human body?,206
-157,What is the tallest mountain in the world?,Mount Everest
-158,"Who painted the famous artwork ""Mona Lisa""?",Leonardo da Vinci
-159,What is the capital city of Germany?,Berlin
-160,Who is the Greek god of the sea?,Poseidon
-141,"Who is the author of ""To Kill a Mockingbird""?",Harper Lee
-142,What is the largest planet in our solar system?,Jupiter
-143,"Which city is known as the ""Eternal City""?",Rome
-144,What is the chemical symbol for gold?,Au
-145,"Who painted the famous artwork ""Starry Night""?",Vincent van Gogh
-146,What is the capital city of France?,Paris
-147,How many players are there on a baseball team?,Nine
-148,Who is the lead singer of the band U2?,Bono
-149,Which country is known for the Taj Mahal?,India
-150,What is the capital of Australia?,Canberra
-151,How many sides does an octagon have?,Eight
-152,"Who wrote the play ""Romeo and Juliet""?",William Shakespeare
-153,What is the chemical symbol for hydrogen?,H
-154,Which country is known for the Great Wall?,China
-155,"Who is the author of the ""Harry Potter"" book series?",J.K. Rowling
-156,How many bones are there in the human body?,206
-157,What is the tallest mountain in the world?,Mount Everest
-158,"Who painted the famous artwork ""Mona Lisa""?",Leonardo da Vinci
-159,What is the capital city of Germany?,Berlin
-160,Who is the Greek god of the sea?,Poseidon
-161,What is the largest ocean in the world?,Pacific
-162,"Who wrote the famous novel ""Pride and Prejudice""?",Jane Austen
-163,What is the capital city of Japan?,Tokyo
-164,How many planets are there in our solar system?,Eight
-165,Who is the lead guitarist of the band Queen?,Brian May
-166,Which country is known for the pyramids of Giza?,Egypt
-167,What is the chemical symbol for oxygen?,O
-168,"Who is the protagonist of the ""Lord of the Rings"" trilogy?",Frodo Baggins
-169,Which country is known for the Acropolis?,Greece
-170,What is the capital of Canada?,Ottawa
-171,How many players are there on a basketball team?,Five
-172,"Who painted the famous artwork ""The Last Supper""?",Leonardo da Vinci
-173,What is the chemical symbol for carbon?,C
-174,Which country is known for the Eiffel Tower?,France
-175,"Who is the author of ""The Chronicles of Narnia"" book series?",C.S. Lewis
-176,How many planets in our solar system have rings?,Four
-177,What is the tallest mountain in North America?,Denali/Mount McKinley
-178,"Who painted the famous artwork ""The Starry Night""?",Vincent van Gogh
-179,What is the capital city of Brazil?,Brasília
-180,Who is the Norse god of thunder?,Thor
-181,What is the largest desert in the world?,Sahara
-182,"Who wrote the famous play ""Romeo and Juliet""?",William Shakespeare
-183,What is the capital city of Australia?,Canberra
-184,How many bones are there in the human body?,206
-185,Who is the lead singer of the band Coldplay?,Chris Martin
-186,Which country is known for the Taj Mahal?,India
-187,What is the chemical symbol for gold?,Au
-188,Who is the author of the Harry Potter book series?,J.K. Rowling
-189,Which country is known for the Great Wall?,China
-190,What is the capital of South Africa?,Pretoria
-191,How many players are there on a soccer team?,Eleven
-192,"Who painted the famous artwork ""Mona Lisa""?",Leonardo da Vinci
-193,What is the chemical symbol for hydrogen?,H
-194,Which country is known for the Colosseum?,Italy
-195,"Who is the author of ""To Kill a Mockingbird""?",Harper Lee
-196,How many sides does a hexagon have?,Six
-197,What is the deepest ocean in the world?,Pacific
-198,"Who painted the famous artwork ""The Scream""?",Edvard Munch
-199,What is the capital city of Russia?,Moscow
-200,Who is the Greek goddess of love and beauty?,Aphrodite
-201,What is the largest planet in our solar system?,Jupiter
-202,"Who is the author of ""Pride and Prejudice""?",Jane Austen
-203,How many legs does a spider have?,Eight
-204,Which country is known for the Pyramids of Giza?,Egypt
-205,What is the chemical symbol for oxygen?,O
-206,"Who painted the famous artwork ""Starry Night""?",Vincent van Gogh
-207,What is the capital city of Japan?,Tokyo
-208,How many colors are there in a rainbow?,Seven
-209,Who is the lead vocalist of the band Queen?,Freddie Mercury
-210,Which country is known for the Eiffel Tower?,France
-211,What is the capital of Spain?,Madrid
-212,How many bones are there in a human hand?,27
-213,"Who wrote the novel ""1984""?",George Orwell
-214,What is the chemical symbol for carbon?,C
-215,Which country is known for the Statue of Liberty?,United States
-216,"Who is the author of ""The Great Gatsby""?",F. Scott Fitzgerald
-217,How many sides does a pentagon have?,Five
-218,What is the capital city of Brazil?,Brasília
-219,"Who painted the famous artwork ""The Last Supper""?",Leonardo da Vinci
-220,What is the chemical symbol for silver?,Ag
-221,What is the largest ocean on Earth?,Pacific
-222,"Who is the author of ""To Kill a Mockingbird""?",Harper Lee
-223,How many sides does a hexagon have?,Six
-224,Which country is known for the Taj Mahal?,India
-225,What is the chemical symbol for gold?,Au
-226,"Who painted the famous artwork ""Mona Lisa""?",Leonardo da Vinci
-227,What is the capital city of Australia?,Canberra
-228,How many players are there in a basketball team on the court?,Five
-229,"Who is the author of ""The Catcher in the Rye""?",J.D. Salinger
-230,Which country is known for the Great Wall?,China
-231,What is the capital of Canada?,Ottawa
-232,How many teeth does an adult human usually have?,32
-233,"Who wrote the play ""Romeo and Juliet""?",William Shakespeare
-234,What is the chemical symbol for hydrogen?,H
-235,Which country is known for the Colosseum?,Italy
-236,"Who is the author of ""The Lord of the Rings""?",J.R.R. Tolkien
-237,How many sides does a heptagon have?,Seven
-238,What is the capital city of South Africa?,Pretoria
-239,"Who painted the famous artwork ""The Starry Night""?",Vincent van Gogh
-240,What is the chemical symbol for potassium?,K
-241,What is the largest planet in our solar system?,Jupiter
-242,"Who is the author of ""Pride and Prejudice""?",Jane Austen
-243,How many legs does a spider have?,Eight
-244,Which country is known for the Eiffel Tower?,France
-245,What is the chemical symbol for oxygen?,O
-246,"Who painted the famous artwork ""The Last Supper""?",Leonardo da Vinci
-247,What is the capital city of Japan?,Tokyo
-248,How many strings does a violin typically have?,Four
-249,"Who is the author of ""1984""?",George Orwell
-250,Which country is known for the pyramids of Giza?,Egypt
-251,What is the capital of Spain?,Madrid
-252,How many bones are there in the human body?,206
-253,"Who wrote the novel ""The Great Gatsby""?",F. Scott Fitzgerald
-254,What is the chemical symbol for silver?,Ag
-255,Which country is known for the Acropolis?,Greece
-256,"Who is the author of ""Harry Potter and the Sorcerer's Stone""?",J.K. Rowling
-257,How many sides does an octagon have?,Eight
-258,What is the capital city of Brazil?,Brasília
-259,"Who painted the famous artwork ""The Scream""?",Edvard Munch
-260,What is the chemical symbol for carbon?,C
-261,"Who wrote the play ""Romeo and Juliet""?",William Shakespeare
-262,What is the capital city of Australia?,Canberra
-263,How many players are there in a baseball team?,Nine
-264,"Which planet is known as the ""Red Planet""?",Mars
-265,What is the chemical symbol for gold?,Au
-266,"Who painted the famous artwork ""Starry Night""?",Vincent van Gogh
-267,What is the capital of South Korea?,Seoul
-268,How many keys are there on a standard piano?,88
-269,"Who is the author of ""To Kill a Mockingbird""?",Harper Lee
-270,Which country is known for the Taj Mahal?,India
-271,What is the capital of Canada?,Ottawa
-272,How many sides does a hexagon have?,Six
-273,"Who wrote the novel ""The Catcher in the Rye""?",J.D. Salinger
-274,What is the chemical symbol for hydrogen?,H
-275,Which country is known for the Colosseum?,Italy
-276,"Who is the author of ""The Lord of the Rings""?",J.R.R. Tolkien
-277,How many players are there in a basketball team?,Five
-278,What is the capital city of China?,Beijing
-279,"Who painted the famous artwork ""Mona Lisa""?",Leonardo da Vinci
-280,What is the chemical symbol for nitrogen?,N
-301,"Who is the author of ""Pride and Prejudice""?",Jane Austen
-302,What is the capital city of Brazil?,Brasília
-303,How many sides does an octagon have?,Eight
-304,"Who painted the famous artwork ""The Starry Night""?",Vincent van Gogh
-305,What is the chemical symbol for oxygen?,O
-306,Which country is known for the Great Wall?,China
-307,"Who is the author of ""The Great Gatsby""?",F. Scott Fitzgerald
-308,How many players are there in a volleyball team?,Six
-309,What is the capital of Spain?,Madrid
-310,Which country is known for the Pyramids of Giza?,Egypt
-311,What is the chemical symbol for carbon?,C
-312,"Who wrote the novel ""1984""?",George Orwell
-313,How many planets are there in our solar system?,Eight
-314,What is the capital city of France?,Paris
-315,"Who is the author of ""Harry Potter and the Philosopher's Stone""?",J.K. Rowling
-316,How many sides does a pentagon have?,Five
-317,"Who painted the famous artwork ""The Last Supper""?",Leonardo da Vinci
-318,What is the chemical symbol for silver?,Ag
-319,Which country is known for the Acropolis?,Greece
-320,"Who is the author of ""Moby-Dick""?",Herman Melville
-321,"Who is the author of ""To Kill a Mockingbird""?",Harper Lee
-322,What is the capital city of Australia?,Canberra
-323,How many sides does a hexagon have?,Six
-324,"Who painted the famous artwork ""Mona Lisa""?",Leonardo da Vinci
-325,What is the chemical symbol for gold?,Au
-326,Which country is known for the Taj Mahal?,India
-327,"Who is the author of ""The Catcher in the Rye""?",J.D. Salinger
-328,How many players are there in a basketball team?,Five
-329,What is the capital of Italy?,Rome
-330,Which country is known for the Colosseum?,Italy
-331,What is the chemical symbol for hydrogen?,H
-332,"Who wrote the play ""Romeo and Juliet""?",William Shakespeare
-333,How many bones are there in the human body?,206
-334,What is the capital city of Germany?,Berlin
-335,"Who is the author of ""The Lord of the Rings""?",J.R.R. Tolkien
-336,How many sides does a triangle have?,Three
-337,"Who painted the famous artwork ""Guernica""?",Pablo Picasso
-338,What is the chemical symbol for sodium?,Na
-339,Which country is known for the Statue of Liberty?,United States
-340,"Who is the author of ""The Chronicles of Narnia""?",C.S. Lewis
-341,"Who is the creator of the ""Harry Potter"" book series?",J.K. Rowling
-342,How many planets are there in our solar system?,Eight
-343,What is the capital city of Spain?,Madrid
-344,"Who painted the famous artwork ""The Starry Night""?",Vincent van Gogh
-345,What is the chemical symbol for oxygen?,O
-346,Which country is known for the Great Wall?,China
-347,"Who is the author of ""Pride and Prejudice""?",Jane Austen
-348,How many players are there in a baseball team?,Nine
-349,What is the capital of Brazil?,Brasília
-350,Which country is known for the Pyramids of Giza?,Egypt
-351,What is the chemical symbol for carbon?,C
-352,"Who wrote the play ""Hamlet""?",William Shakespeare
-353,How many keys are there on a standard piano?,88
-354,What is the capital city of France?,Paris
-355,"Who is the author of ""1984""?",George Orwell
-356,How many sides does a square have?,Four
-357,"Who painted the famous artwork ""The Last Supper""?",Leonardo da Vinci
-358,What is the chemical symbol for iron?,Fe
-359,Which country is known for the Petra archaeological site?,Jordan
-360,"Who is the author of ""The Great Gatsby""?",F. Scott Fitzgerald
-381,"Who wrote the novel ""To Kill a Mockingbird""?",Harper Lee
-382,How many sides does a hexagon have?,Six
-383,What is the capital city of Australia?,Canberra
-384,"Who painted the famous artwork ""Mona Lisa""?",Leonardo da Vinci
-385,What is the chemical symbol for gold?,Au
-386,Which country is known for the Taj Mahal?,India
-387,"Who is the author of ""The Catcher in the Rye""?",J.D. Salinger
-388,How many strings does a standard guitar have?,Six
-389,What is the capital of Russia?,Moscow
-390,Which country is known for the Colosseum?,Italy
-391,What is the chemical symbol for hydrogen?,H
-392,"Who wrote the play ""Romeo and Juliet""?",William Shakespeare
-393,How many sides does a pentagon have?,Five
-394,What is the capital city of South Africa?,Pretoria
-395,"Who is the author of ""The Lord of the Rings""?",J.R.R. Tolkien
-396,How many players are there on a basketball team?,Five
-397,What is the chemical symbol for silver?,Ag
-398,Which country is known for the Machu Picchu archaeological site?,Peru
-399,"Who is the author of ""The Chronicles of Narnia""?",C.S. Lewis
-400,How many sides does a triangle have?,Three
-401,"Who is the author of ""Pride and Prejudice""?",Jane Austen
-402,How many planets are in our solar system?,Eight
-403,What is the capital city of Japan?,Tokyo
-404,"Who painted the famous artwork ""The Starry Night""?",Vincent van Gogh
-405,What is the chemical symbol for oxygen?,O
-406,Which country is known for the Great Wall?,China
-407,"Who is the author of ""1984""?",George Orwell
-408,How many sides does a square have?,Four
-409,What is the capital of Brazil?,Brasília
-410,Which country is known for the Pyramids of Giza?,Egypt
-411,What is the chemical symbol for carbon?,C
-412,"Who wrote the play ""Hamlet""?",William Shakespeare
-413,How many sides does an octagon have?,Eight
-414,What is the capital city of Canada?,Ottawa
-415,"Who is the author of ""The Great Gatsby""?",F. Scott Fitzgerald
-416,How many players are there on a soccer team?,Eleven
-417,What is the chemical symbol for iron?,Fe
-418,Which country is known for the Statue of Liberty?,United States
-419,"Who is the author of ""The Hobbit""?",J.R.R. Tolkien
-420,How many sides does a decagon have?,Ten
-421,Who painted the Mona Lisa?,Leonardo da Vinci
-422,How many bones are there in the human body?,206
-423,What is the capital city of Australia?,Canberra
-424,"Who wrote the novel ""To Kill a Mockingbird""?",Harper Lee
-425,How many sides does a triangle have?,Three
-426,Which country is known for the Eiffel Tower?,France
-427,What is the chemical symbol for gold?,Au
-428,"Who is the author of ""The Catcher in the Rye""?",J.D. Salinger
-429,How many continents are there in the world?,Seven
-430,What is the capital of Spain?,Madrid
-431,Who painted the ceiling of the Sistine Chapel?,Michelangelo
-432,How many sides does a pentagon have?,Five
-433,What is the capital city of Germany?,Berlin
-434,"Who wrote the play ""Romeo and Juliet""?",William Shakespeare
-435,How many players are there on a basketball team?,Five
-436,What is the chemical symbol for sodium?,Na
-437,Which country is known for the Taj Mahal?,India
-438,"Who is the author of ""The Chronicles of Narnia""?",C.S. Lewis
-439,How many sides does a hexagon have?,Six
-440,What is the capital city of Russia?,Moscow
-441,Who is the Greek god of the sea?,Poseidon
-442,How many planets are there in our solar system?,Eight
-443,What is the largest organ in the human body?,Skin
-444,"Who painted the ""Starry Night""?",Vincent van Gogh
-445,How many colors are there in a rainbow?,Seven
-446,What is the capital city of Japan?,Tokyo
-447,"Who is the author of ""Pride and Prejudice""?",Jane Austen
-448,How many sides does an octagon have?,Eight
-449,What is the capital of Canada?,Ottawa
-450,"Who wrote the novel ""1984""?",George Orwell
-451,How many players are there on a soccer team?,Eleven
-452,What is the chemical symbol for oxygen?,O
-453,Which country is known for the Great Wall?,China
-454,"Who is the author of ""The Great Gatsby""?",F. Scott Fitzgerald
-455,How many sides does a square have?,Four
-456,What is the capital city of Brazil?,Brasília
-457,"Who painted the ""Sistine Chapel Ceiling""?",Michelangelo
-458,How many players are there on a baseball team?,Nine
-459,What is the chemical symbol for carbon?,C
-460,Which country is known for the pyramids of Giza?,Egypt
-481,What is the largest ocean in the world?,Pacific Ocean
-482,"Who wrote the play ""Romeo and Juliet""?",William Shakespeare
-483,How many sides does a hexagon have?,Six
-484,What is the capital city of Australia?,Canberra
-485,"Who painted the ""Mona Lisa""?",Leonardo da Vinci
-486,How many continents are there on Earth?,Seven
-487,What is the chemical symbol for gold?,Au
-488,Which country is known for the Eiffel Tower?,France
-489,"Who is the author of ""To Kill a Mockingbird""?",Harper Lee
-490,How many players are there on a basketball team?,Five
-491,What is the capital city of Russia?,Moscow
-492,"Who painted the ""Scream""?",Edvard Munch
-493,How many sides does a pentagon have?,Five
-494,What is the capital of South Africa?,Pretoria
-495,"Who wrote the novel ""The Catcher in the Rye""?",J.D. Salinger
-496,How many players are there on a volleyball team?,Six
-497,What is the chemical symbol for silver?,Ag
-498,Which country is known for the Taj Mahal?,India
-499,"Who is the author of ""The Lord of the Rings""?",J.R.R. Tolkien
-500,How many sides does a triangle have?,Three
-501,What is the largest planet in our solar system?,Jupiter
-502,"Who painted the ""Starry Night""?",Vincent van Gogh
-503,How many sides does an octagon have?,Eight
-504,What is the capital city of Canada?,Ottawa
-505,"Who wrote the novel ""Pride and Prejudice""?",Jane Austen
-506,How many bones are there in the human body?,206
-507,What is the chemical symbol for oxygen?,O
-508,Which country is known for the Great Wall?,China
-509,"Who is the author of ""1984""?",George Orwell
-510,How many players are there on a baseball team?,Nine
-511,What is the capital city of Spain?,Madrid
-512,"Who painted the ""Last Supper""?",Leonardo da Vinci
-513,How many sides does a heptagon have?,Seven
-514,What is the capital of Brazil?,Brasília
-515,"Who wrote the play ""Hamlet""?",William Shakespeare
-516,How many players are there on a soccer team?,Eleven
-517,What is the chemical symbol for hydrogen?,H
-518,Which country is known for the pyramids?,Egypt
-519,"Who is the author of ""The Great Gatsby""?",F. Scott Fitzgerald
-520,How many sides does a square have?,Four
-521,"Who painted the ""Mona Lisa""?",Leonardo da Vinci
-522,How many days are there in a leap year?,366
-523,What is the capital city of Australia?,Canberra
-524,"Who wrote the play ""Romeo and Juliet""?",William Shakespeare
-525,How many sides does a pentagon have?,Five
-526,What is the chemical symbol for carbon?,C
-527,Which country is known for the Taj Mahal?,India
-528,"Who is the author of ""To Kill a Mockingbird""?",Harper Lee
-529,How many players are there on a basketball team?,Five
-530,What is the capital city of Italy?,Rome
-531,"Who painted the ""Sistine Chapel ceiling""?",Michelangelo
-532,How many sides does a hexagon have?,Six
-533,What is the capital of South Africa?,Pretoria
-534,"Who wrote the novel ""The Catcher in the Rye""?",J.D. Salinger
-535,How many players are there on a hockey team?,Six
-536,What is the chemical symbol for gold?,Au
-537,Which country is known for the Eiffel Tower?,France
-538,"Who is the author of ""The Lord of the Rings""?",J.R.R. Tolkien
-539,How many sides does a triangle have?,Three
-540,What is the capital city of Russia?,Moscow
-561,"Who is the author of ""Pride and Prejudice""?",Jane Austen
-562,How many planets are there in our solar system?,Eight
-563,What is the capital city of Canada?,Ottawa
-564,"Who painted the ""Starry Night""?",Vincent van Gogh
-565,How many sides does an octagon have?,Eight
-566,What is the chemical symbol for oxygen?,O
-567,Which country is known for the Great Wall?,China
-568,"Who is the author of ""The Great Gatsby""?",F. Scott Fitzgerald
-569,How many players are there on a baseball team?,Nine
-570,What is the capital city of Brazil?,Brasília
-571,Who painted the ceiling of the Sistine Chapel?,Michelangelo
-572,How many sides does a decagon have?,Ten
-573,What is the capital of Japan?,Tokyo
-574,"Who wrote the play ""Hamlet""?",William Shakespeare
-575,How many players are there on a soccer team?,Eleven
-576,What is the chemical symbol for silver?,Ag
-577,Which country is known for the Pyramids of Giza?,Egypt
-578,"Who is the author of ""1984""?",George Orwell
-579,How many sides does a square have?,Four
-580,What is the capital city of Spain?,Madrid
-601,"Who wrote the novel ""To Kill a Mockingbird""?",Harper Lee
-602,How many sides does a pentagon have?,Five
-603,What is the capital city of France?,Paris
-604,Who painted the Mona Lisa?,Leonardo da Vinci
-605,How many players are there on a basketball team?,Five
-606,What is the chemical symbol for gold?,Au
-607,Which country is known for the Taj Mahal?,India
-608,"Who is the author of ""The Catcher in the Rye""?",J.D. Salinger
-609,How many sides does a hexagon have?,Six
-610,What is the capital city of Australia?,Canberra
-611,"Who painted the ""Last Supper""?",Leonardo da Vinci
-612,How many players are there on a volleyball team?,Six
-613,What is the capital of South Africa?,Pretoria
-614,"Who wrote the novel ""Moby-Dick""?",Herman Melville
-615,How many sides does a triangle have?,Three
-616,What is the chemical symbol for carbon?,C
-617,Which country is known for the Colosseum?,Italy
-618,"Who is the author of ""The Lord of the Rings""?",J.R.R. Tolkien
-619,How many sides does a heptagon have?,Seven
-620,What is the capital city of South Korea?,Seoul
-621,What is the capital city of Canada?,Ottawa
-622,Which Canadian province is the largest by area?,Quebec
-623,What is the official language of Canada?,English and French
-624,"Which Canadian city is known as the ""Gateway to the West""?",Winnipeg
-625,What is the national animal of Canada?,Beaver
-626,Which province is known for its stunning Rocky Mountains?,Alberta
-627,Which Canadian province is the most populous?,Ontario
-628,What is the highest mountain in Canada?,Mount Logan
-629,Which Canadian province is known for its beautiful coastal scenery along the Pacific Ocean?,British Columbia
-630,What is the largest lake in Canada?,Great Bear Lake
-631,Which Canadian city is known for its annual Winter Carnival and Bonhomme mascot?,Quebec City
-632,"Which province is home to the famous Cabot Trail, offering breathtaking coastal views?",Nova Scotia
-633,What is the national sport of Canada?,Lacrosse
-634,"Which Canadian province is known for its stunning Bay of Fundy, home to the highest tides in the world?",New Brunswick
-635,What is the longest river in Canada?,Mackenzie River
-636,"Which Canadian city is often referred to as the ""Cultural Capital of Canada""?",Montreal
-637,Which province is known for its vast wilderness and polar bear population?,Manitoba
-638,What is the national symbol of Canada?,Maple leaf
-639,Which Canadian province is known for its stunning landscapes and outdoor activities?,British Columbia
-640,What is the largest island in Canada?,Baffin Island
-641,Which Canadian province is the only officially bilingual province in Canada?,New Brunswick
-642,What is the national winter sport of Canada?,Ice hockey
-643,Which Canadian province is known for its stunning Cape Breton Island and the Cabot Trail?,Nova Scotia
-644,What is the national symbol of Canada's indigenous peoples?,Inuksuk
-645,Which Canadian city hosted the 2010 Winter Olympics?,Vancouver
-646,What is the official national summer sport of Canada?,Lacrosse
-647,Which Canadian province is known for its vast oil sands reserves?,Alberta
-648,What is the national flower of Canada?,Maple leaf
-649,"Which Canadian city is home to the CN Tower, one of the tallest freestanding structures in the world?",Toronto
-650,What is the largest province in Canada by population?,Ontario
-651,Which Canadian province is known for its stunning fjords and coastal rainforests?,British Columbia
-652,What is the national bird of Canada?,Common loon
-653,"Which Canadian city is known for its annual Calgary Stampede, a famous rodeo and festival?",Calgary
-654,What is the official currency of Canada?,Canadian dollar
-655,Which Canadian province is known for its unique cultural mix and vibrant city of Montreal?,Quebec
-656,What is the largest inland body of water in Canada?,Great Slave Lake
-657,Which Canadian city is famous for its historic Citadel and the Anne of Green Gables novel?,Charlottetown
-658,What is the national tree of Canada?,Maple tree
-659,"Which Canadian province is known for its stunning national parks, including Banff and Jasper?",Alberta
-660,What is the official motto of Canada?,"""A Mari Usque Ad Mare"""
-661,What is the capital city of the United States?,"Washington, D.C."
-662,"Which U.S. state is known as the ""Sunshine State""?",Florida
-663,Who was the first President of the United States?,George Washington
-664,"Which famous document begins with the words ""We the People""?",The U.S. Constitution
-665,What is the national bird of the United States?,Bald eagle
-666,Which U.S. state is home to the Grand Canyon?,Arizona
-667,"Which city is known as the ""Big Apple""?",New York City
-668,Who wrote the Declaration of Independence?,Thomas Jefferson
-669,Which U.S. state is known for its colorful autumn foliage?,Vermont
-670,What is the nickname of the United States flag?,Stars and Stripes
-671,Which U.S. state is home to the Rocky Mountains?,Colorado
-672,Which U.S. city is famous for its Golden Gate Bridge?,San Francisco
-673,"Who was the Civil Rights activist known for his ""I Have a Dream"" speech?",Martin Luther King Jr.
-674,"Which U.S. state is known as the ""Lone Star State""?",Texas
-675,What is the official motto of the United States?,"""In God We Trust"""
-676,Which U.S. state is known for its iconic Hollywood sign and movie industry?,California
-677,Who was the President of the United States during World War II?,Franklin D. Roosevelt
-678,"Which U.S. state is known as the ""Land of 10,000 Lakes""?",Minnesota
-679,What is the highest mountain peak in the United States?,Mount Denali
-680,Which U.S. city is famous for its jazz music and Mardi Gras celebrations?,New Orleans
-681,What is the longest river in the United States?,Mississippi River
-682,"Which U.S. state is known as the ""Golden State""?",California
-683,Who was the 16th President of the United States?,Abraham Lincoln
-684,Which famous American inventor is credited with inventing the light bulb?,Thomas Edison
-685,What is the national flower of the United States?,Rose
-686,"Which U.S. state is known as the ""Empire State""?",New York
-687,Who was the first woman to fly solo across the Atlantic Ocean?,Amelia Earhart
-688,Which U.S. state is home to the Statue of Liberty?,New Jersey
-689,What is the largest state by land area in the United States?,Alaska
-690,Which U.S. city is famous for its historical Freedom Trail?,Boston
-691,Who was the President of the United States during the American Civil War?,Abraham Lincoln
-692,Which U.S. state is known for its beautiful beaches and theme parks?,Florida
-693,What is the national anthem of the United States?,"""The Star-Spangled Banner"""
-694,Which U.S. state is known for its vibrant music scene and country music capital?,Tennessee
-695,What is the official tree of the United States?,Oak
-696,Which U.S. city is famous for its historic Alamo mission?,San Antonio
-697,Who was the President of the United States during the Great Depression and World War II?,Franklin D. Roosevelt
-698,"Which U.S. state is known as the ""Garden State""?",New Jersey
-699,What is the highest waterfall in the United States?,Yosemite Falls
-700,Which U.S. city is famous for its iconic Space Needle?,Seattle
-701,"Which U.S. state is known as the ""Sunshine State""?",Florida
-702,Who was the first President of the United States?,George Washington
-703,What is the tallest mountain in North America located in the United States?,Mount Denali
-704,Which U.S. state is home to the Grand Canyon?,Arizona
-705,Who wrote the Declaration of Independence?,Thomas Jefferson
-706,What is the official bird of the United States?,Bald Eagle
-707,Which U.S. city is known for its historic Freedom Tower and Wall Street?,New York City
-708,Who was the President of the United States during the Cuban Missile Crisis?,John F. Kennedy
-709,Which U.S. state is known for its famous Hollywood film industry?,California
-710,What is the national mammal of the United States?,American Bison
-711,Which U.S. city is famous for its jazz music and Mardi Gras celebrations?,New Orleans
-712,Who was the first African American President of the United States?,Barack Obama
-713,What is the largest city in the United States by population?,New York City
-714,"Which U.S. state is known as the ""Lone Star State""?",Texas
-715,"Who led the American civil rights movement and delivered the famous ""I Have a Dream"" speech?",Martin Luther King Jr.
-716,What is the national symbol of the United States?,Bald Eagle
-717,Which U.S. city is famous for its iconic Golden Gate Bridge?,San Francisco
-718,Who was the President of the United States during the Watergate scandal?,Richard Nixon
-719,Which U.S. state is known for its stunning national parks like Yellowstone and Glacier?,Montana
-720,What is the currency used in the United States?,United States Dollar
-721,What is the longest river in the United States?,Mississippi River
-722,Who is the current Chief Justice of the United States Supreme Court?,John Roberts
-723,"Which U.S. state is known as the ""Golden State""?",California
-724,Who was the President of the United States during the Great Depression?,Franklin D. Roosevelt
-725,What is the largest lake by surface area located entirely in the United States?,Lake Superior
-726,Which U.S. city is known for its space industry and NASA's Kennedy Space Center?,Cape Canaveral
-727,Who wrote the national anthem of the United States?,Francis Scott Key
-728,"Which U.S. state is known as the ""Land of 10,000 Lakes""?",Minnesota
-729,What is the official language of the United States?,There is no official language
-730,Who was the President of the United States during World War II?,Franklin D. Roosevelt
-731,Which U.S. city is famous for its historical role in the American Revolution and the Freedom Trail?,Boston
-732,Who was the first woman to be appointed to the United States Supreme Court?,Sandra Day O'Connor
-733,What is the nickname for the United States flag?,Stars and Stripes
-734,Which U.S. state is known for its beautiful beaches and theme parks?,Florida
-735,Who was the President of the United States during the Civil War?,Abraham Lincoln
-736,What is the national flower of the United States?,Rose
-737,Which U.S. city is famous for its historic Alamo and River Walk?,San Antonio
-738,Who was the first Vice President and the second President of the United States?,John Adams
-739,"Which U.S. state is known as the ""Granite State""?",New Hampshire
-740,What is the national tree of the United States?,Oak
-761,What is the tallest mountain in North America located in the United States?,Mount Denali
-762,Who was the President of the United States during the Cuban Missile Crisis?,John F. Kennedy
-763,Which U.S. state is known for its famous jazz music and Mardi Gras celebrations?,Louisiana
-764,Who was the President of the United States during the Watergate scandal?,Richard Nixon
-765,What is the largest island of Hawaii?,Hawaii (Big Island)
-766,Which U.S. city is famous for its Broadway shows and Times Square?,New York City
-767,Who wrote the Declaration of Independence?,Thomas Jefferson
-768,"Which U.S. state is known as the ""Last Frontier""?",Alaska
-769,What is the national bird of the United States?,Bald Eagle
-770,Who was the President of the United States during the Korean War?,Harry S. Truman
-771,Which U.S. city is famous for its music scene and the Country Music Hall of Fame?,Nashville
-772,Who was the first Secretary of the Treasury of the United States?,Alexander Hamilton
-773,What is the currency used in the United States?,United States dollar
-774,Which U.S. state is known for its breathtaking Grand Canyon?,Arizona
-775,Who was the President of the United States during the Vietnam War?,Lyndon B. Johnson
-776,What is the national mammal of the United States?,American Bison
-777,Which U.S. city is famous for its iconic Golden Gate Bridge and cable cars?,San Francisco
-778,Who was the third President of the United States and the principal author of the United States Constitution?,James Madison
-779,"Which U.S. state is known as the ""Sunshine State""?",Florida
-780,What is the national motto of the United States?,"""In God We Trust"""
-801,Who is credited with inventing the telephone?,Alexander Graham Bell
-802,Who is the creator of the theory of relativity?,Albert Einstein
-803,Who invented the electric light bulb?,Thomas Edison
-804,"Who is the creator of the painting ""Mona Lisa""?",Leonardo da Vinci
-805,Who invented the World Wide Web?,Tim Berners-Lee
-806,Who is the creator of the theory of evolution by natural selection?,Charles Darwin
-807,Who is the inventor of the printing press?,Johannes Gutenberg
-808,Who invented the first practical telephone?,Antonio Meucci
-809,Who is the creator of the theory of gravity?,Isaac Newton
-810,Who invented the airplane?,Wright brothers (Orville and Wilbur Wright)
-811,"Who is the creator of the painting ""The Starry Night""?",Vincent van Gogh
-812,Who invented the computer mouse?,Douglas Engelbart
-813,Who is the creator of the theory of general relativity?,Albert Einstein
-814,Who invented the steam engine?,James Watt
-815,"Who is the creator of the sculpture ""David""?",Michelangelo
-816,Who invented the light bulb with a carbon filament?,Lewis Howard Latimer
-817,Who is the creator of the theory of special relativity?,Albert Einstein
-818,Who invented the sewing machine?,Elias Howe
-819,"Who is the creator of the novel ""Pride and Prejudice""?",Jane Austen
-820,Who invented the first practical camera?,Louis Daguerre
-821,Who was the first President of the United States?,George Washington
-822,What is the capital city of the United States?,"Washington, D.C."
-823,Who wrote the Declaration of Independence?,Thomas Jefferson
-824,Which document established the U.S. Constitution?,United States Constitution
-825,What is the largest state in the United States by land area?,Alaska
-826,Who was the 16th President of the United States?,Abraham Lincoln
-827,"Which city is known as the ""Big Apple""?",New York City
-828,Who invented the telephone?,Alexander Graham Bell
-829,Which river flows through the Grand Canyon?,Colorado River
-830,"Who was the civil rights leader who gave the ""I Have a Dream"" speech?",Martin Luther King Jr.
-831,"Which state is known as the ""Sunshine State""?",Florida
-832,Who is the current President of the United States?,Joe Biden
-833,"Which city is known as the ""Windy City""?",Chicago
-834,Who is the inventor of the light bulb?,Thomas Edison
-835,Which state is home to the Hollywood film industry?,California
-836,Who wrote the national anthem of the United States?,Francis Scott Key
-837,Which mountain range stretches along the west coast of the United States?,Rocky Mountains
-838,Who is the only President to serve more than two terms?,Franklin D. Roosevelt
-839,"Which state is known as the ""Lone Star State""?",Texas
-840,Who is the famous American inventor and businessman behind the Model T car?,Henry Ford
-861,Who is credited with inventing the telephone?,
-862,Who invented the electric light bulb?,
-863,Who is the creator of the theory of relativity?,
-864,Who invented the World Wide Web?,
-865,Who is known for creating the theory of evolution?,
-866,Who invented the printing press?,
-867,Who is credited with discovering gravity?,
-868,Who invented the first practical electric battery?,
-869,Who is known for inventing the steam engine?,
-870,Who created the first successful airplane?,
-871,Who invented the telephone?,
-872,Who is the creator of the periodic table of elements?,
-873,Who invented the light microscope?,
-874,Who is known for inventing the assembly line production system?,
-875,Who is the creator of the theory of general relativity?,
-876,Who invented the modern computer?,
-877,Who is credited with discovering the laws of motion?,
-878,Who invented the first practical incandescent light bulb?,
-879,Who is known for inventing the alternating current (AC) system?,
-880,Who invented the first successful practical telephone?,
-921,What is the best-selling video game of all time?,Minecraft
-922,Which video game franchise features a character named Mario?,Super Mario
-923,In which game do players battle against each other in a virtual arena?,Fortnite
-924,What is the main character's name in The Legend of Zelda series?,Link
-925,Which game features a block-building and exploration gameplay?,Minecraft
-926,What is the name of the main character in the Metal Gear Solid series?,Solid Snake
-927,Which game franchise is set in the fantasy world of Azeroth?,World of Warcraft
-928,What is the objective of the game Tetris?,Clear lines by arranging falling blocks
-929,Which game features a plumber named Luigi as a playable character?,Super Mario
-930,In which game can players capture and train creatures called Pokémon?,Pokémon
-931,What is the name of the main character in the game Assassin's Creed?,Altaïr Ibn-La'Ahad
-932,Which game franchise follows the adventures of Lara Croft?,Tomb Raider
-933,In which game do players control a character named Master Chief?,Halo
-934,What is the name of the virtual world in the game Second Life?,Linden Lab
-935,Which game series is known for its open-world crime action gameplay?,Grand Theft Auto
-936,In which game do players build and manage their own virtual cities?,SimCity
-937,What is the name of the main character in the game Half-Life?,Gordon Freeman
-938,Which game franchise features the adventures of Nathan Drake?,Uncharted
-939,What is the objective of the game Pac-Man?,Eat all the dots and avoid the ghosts
-940,In which game can players create and control their own virtual Sims?,The Sims
-941,"Which game franchise features the character Kratos, the God of War?",God of War
-942,"In which game can players perform a ""Fatality"" to finish their opponent?",Mortal Kombat
-943,What is the name of the iconic puzzle game that involves colored blocks?,Tetris
-944,Which game series allows players to explore a post-apocalyptic wasteland?,Fallout
-945,In which game do players control a team of heroes with special abilities?,Overwatch
-946,What is the name of the main character in the game The Witcher 3: Wild Hunt?,Geralt of Rivia
-947,Which game franchise features an intergalactic conflict between humans and aliens?,Mass Effect
-948,What is the objective of the game Minecraft?,"Explore, build, and survive"
-949,In which game do players battle against computer-controlled enemies?,Diablo
-950,"Which game series features a character named Samus Aran, a space bounty hunter?",Metroid
-951,What is the name of the popular multiplayer online battle arena (MOBA) game?,League of Legends
-952,In which game can players control a character named Marcus Fenix?,Gears of War
-953,Which game franchise takes place in the fictional universe of Tamriel?,The Elder Scrolls
-954,What is the name of the virtual reality game that features blocky graphics?,Minecraft VR
-955,In which game do players control a character named Ezio Auditore?,Assassin's Creed II
-956,"Which game series features a character named Kratos, the Spartan warrior?",God of War
-957,What is the objective of the game Portal?,Solve puzzles using a portal gun
-958,In which game can players explore the vast galaxy and complete quests?,Mass Effect
-959,Which game franchise is known for its real-time strategy gameplay?,StarCraft
-960,What is the name of the main character in the game BioShock?,Jack/Rapture
-961,In which game can players control a character named Master Chief?,Halo
-962,"What is the name of the main character in the game ""The Legend of Zelda""?",Link
-963,Which game franchise features a protagonist named Lara Croft?,Tomb Raider
-964,"What is the objective of the game ""Fortnite""?",Be the last person standing
-965,In which game can players build and manage their own virtual world?,Roblox
-966,Which game series allows players to assume the role of a Dragonborn?,The Elder Scrolls V: Skyrim
-967,What is the name of the popular battle royale game developed by Epic Games?,Fortnite
-968,In which game do players control a character named Joel?,The Last of Us
-969,Which game franchise features a character named Sonic the Hedgehog?,Sonic the Hedgehog
-970,"What is the objective of the game ""Super Mario Bros.""?",Rescue Princess Peach
-971,In which game can players create and manage their own virtual city?,SimCity
-972,Which game series is set in the fantasy world of Azeroth?,World of Warcraft
-973,"What is the name of the main character in the game ""Metal Gear Solid""?",Solid Snake
-974,"In which game do players control a character named Kratos, a Spartan warrior?",God of War
-975,"Which game franchise is known for its iconic ""Creeper"" enemy?",Minecraft
-976,"What is the objective of the game ""Pokémon GO""?",Capture and train Pokémon
-977,In which game can players control a character named Marcus Holloway?,Watch Dogs 2
-978,Which game series features a character named Geralt of Rivia?,The Witcher
-979,What is the name of the popular first-person shooter game developed by Valve?,Counter-Strike
-980,In which game do players control a character named Arthur Morgan?,Red Dead Redemption 2
-981,"What is the name of the iconic character in the game ""Super Mario Bros.""?",Mario
-982,In which game can players control a character named Samus Aran?,Metroid
-983,Which game franchise features a protagonist named Ezio Auditore?,Assassin's Creed
-984,"What is the objective of the game ""Minecraft""?",Build and survive
-985,In which game can players explore a post-apocalyptic wasteland?,Fallout
-986,"Which game series allows players to pilot giant mechs known as ""Titans""?",Titanfall
-987,What is the name of the popular puzzle game developed by Alexey Pajitnov?,Tetris
-988,"In which game do players control a character named Kratos, the God of War?",God of War (2018)
-989,Which game franchise features a character named Nathan Drake?,Uncharted
-990,"What is the objective of the game ""The Sims""?",Simulate and manage virtual lives
-991,In which game can players control a character named Marcus Fenix?,Gears of War
-992,Which game series is set in the fictional city of Rapture?,BioShock
-993,"What is the name of the main character in the game ""Resident Evil""?",Jill Valentine
-994,In which game do players control a character named Aloy?,Horizon Zero Dawn
-995,Which game franchise is known for its massive multiplayer online role-playing games (MMORPGs)?,Final Fantasy
-996,"What is the objective of the game ""Overwatch""?",Complete team-based objectives
-997,In which game can players control a character named Max Caulfield?,Life is Strange
-998,Which game series features a character named Commander Shepard?,Mass Effect
-999,What is the name of the popular survival horror game developed by Capcom?,Resident Evil
-1000,In which game do players control a character named John Marston?,Red Dead Redemption
-1001,What is the smallest unit of matter?,Atom
-1002,Who is credited with the discovery of penicillin?,Alexander Fleming
-1003,What is the process by which plants convert sunlight into energy?,Photosynthesis
-1004,Which scientist developed the theory of relativity?,Albert Einstein
-1005,What is the study of heredity called?,Genetics
-1006,What is the chemical symbol for gold?,Au
-1007,"Who is known as the ""Father of the Internet""?",Vint Cerf
-1008,What is the largest planet in our solar system?,Jupiter
-1009,What is the process by which a solid changes directly into a gas?,Sublimation
-1010,Who is the inventor of the telephone?,Alexander Graham Bell
-1011,What is the basic unit of information in computing?,Bit
-1012,What is the speed of light in a vacuum?,"Approximately 299,792,458 meters per second"
-1013,Who discovered the laws of planetary motion?,Johannes Kepler
-1014,What is the study of the Earth's atmosphere called?,Meteorology
-1015,"Who is considered the ""Father of Modern Chemistry""?",Antoine Lavoisier
-1016,What is the process of converting a liquid into a gas called?,Vaporization
-1017,Who is credited with the invention of the electric light bulb?,Thomas Edison
-1018,What is the branch of biology that deals with the study of microorganisms?,Microbiology
-1019,What is the primary function of a microscope?,Magnify small objects
-1020,Who developed the theory of general relativity?,Albert Einstein
-1021,What is the study of the Earth's physical structure called?,Geology
-1022,Who is credited with the discovery of electricity?,Benjamin Franklin
-1023,What is the unit of electrical resistance?,Ohm
-1024,Who developed the theory of evolution by natural selection?,Charles Darwin
-1025,What is the SI unit of force?,Newton
-1026,What is the branch of physics that deals with motion and forces?,Mechanics
-1027,Who is known for proposing the theory of general relativity?,Albert Einstein
-1028,What is the study of the structure and function of cells called?,Cell Biology
-1029,What is the process of converting light energy into chemical energy in plants called?,Photosynthesis
-1030,"Who is considered the ""Father of Genetics""?",Gregor Mendel
-1031,What is the unit of electric current?,Ampere
-1032,Who is credited with the invention of the computer mouse?,Douglas Engelbart
-1033,What is the branch of science that deals with the study of matter and its properties?,Chemistry
-1034,What is the process of splitting an atomic nucleus called?,Nuclear fission
-1035,Who is known for proposing the laws of planetary motion?,Isaac Newton
-1036,What is the study of the behavior and properties of matter at extremely low temperatures?,Cryogenics
-1037,Who is credited with the invention of the World Wide Web (WWW)?,Tim Berners-Lee
-1038,What is the branch of biology that studies the interactions between organisms and their environment?,Ecology
-1039,What is the process of converting a gas into a liquid called?,Condensation
-1040,Who developed the theory of special relativity?,Albert Einstein
-1041,What is the unit of electric charge?,Coulomb
-1042,Who is known for discovering penicillin?,Alexander Fleming
-1043,What is the study of heredity and variation in organisms called?,Genetics
-1044,Who is credited with the invention of the telephone?,Alexander Graham Bell
-1045,What is the process of converting sunlight into electrical energy called?,Photovoltaics
-1046,Who developed the theory of general relativity?,Albert Einstein
-1047,What is the branch of biology that studies the classification and naming of organisms?,Taxonomy
-1048,What is the unit of frequency?,Hertz
-1049,Who is known for proposing the laws of motion?,Isaac Newton
-1050,What is the study of the Earth's atmosphere called?,Meteorology
-1051,What is the branch of science that deals with the study of diseases?,Pathology
-1052,Who is credited with the invention of the light bulb?,Thomas Edison
-1053,What is the process of converting liquid into gas called?,Evaporation
-1054,Who is known for developing the theory of relativity?,Albert Einstein
-1055,What is the unit of pressure?,Pascal
-1056,What is the study of the human brain and its functions called?,Neuroscience
-1057,Who is credited with the discovery of the law of gravity?,Isaac Newton
-1058,What is the process of converting a liquid into a solid called?,Freezing
-1059,Who is known for proposing the theory of special relativity?,Albert Einstein
-1060,What is the branch of science that deals with the study of living organisms?,Biology
-1061,What is the study of the Earth's physical structure and composition called?,Geology
-1062,Who is known for formulating the laws of motion and the law of universal gravitation?,Isaac Newton
-1063,What is the unit of electrical resistance?,Ohm
-1064,Who developed the theory of evolution by natural selection?,Charles Darwin
-1065,What is the branch of science that studies the behavior and properties of matter?,Physics
-1066,What is the process of converting light energy into chemical energy in plants called?,Photosynthesis
-1067,Who is credited with the discovery of the structure of DNA?,James Watson and Francis Crick
-1068,What is the unit of power?,Watt
-1069,Who is known for inventing the World Wide Web (WWW)?,Tim Berners-Lee
-1070,What is the study of the function and structure of living organisms called?,Physiology
-1071,What is the process of converting a solid into a liquid called?,Melting
-1072,Who is credited with the discovery of radioactivity?,Marie Curie
-1073,What is the branch of science that deals with the study of the behavior and mental processes of organisms?,Psychology
-1074,What is the unit of electric current?,Ampere
-1075,Who is known for proposing the theory of gravity?,Isaac Newton
-1076,What is the study of the Earth's physical and cultural features called?,Geography
-1077,Who is credited with the invention of the computer?,Charles Babbage
-1078,What is the process of converting gas into liquid called?,Condensation
-1079,Who is known for developing the theory of quantum mechanics?,Max Planck
-1080,What is the branch of science that deals with the study of matter and energy?,Chemistry
-1081,What is the process of converting liquid into gas called?,Evaporation
-1082,Who is known for developing the theory of relativity?,Albert Einstein
-1083,What is the unit of frequency?,Hertz
-1084,What is the study of the Earth's atmosphere and weather called?,Meteorology
-1085,Who is credited with the invention of the telephone?,Alexander Graham Bell
-1086,What is the branch of science that deals with the study of heredity and variation?,Genetics
-1087,What is the unit of electric charge?,Coulomb
-1088,Who is known for formulating the theory of general relativity?,Albert Einstein
-1089,What is the process of converting a liquid into a solid called?,Freezing
-1090,Who is credited with the discovery of penicillin?,Alexander Fleming
-1091,What is the study of the Earth's oceans called?,Oceanography
-1092,Who is known for developing the theory of evolution by natural selection?,Charles Darwin
-1093,What is the unit of electric potential?,Volt
-1094,What is the branch of science that deals with the study of the universe?,Astronomy
-1095,Who is credited with the invention of the light bulb?,Thomas Edison
-1096,What is the process of converting a gas directly into a solid called?,Deposition
-1097,Who is known for proposing the theory of relativity?,Albert Einstein
-1098,What is the study of the Earth's rocks and minerals called?,Petrology
-1099,Who is credited with the discovery of the laws of planetary motion?,Johannes Kepler
-1100,What is the branch of science that deals with the study of the Earth's history?,Geology
-1101,Which country hosted the 2021 Summer Olympics?,Japan
-1102,Who won the 2021 Nobel Peace Prize?,Maria Ressa and Dmitry Muratov
-1103,Which country withdrew from the European Union in 2020?,United Kingdom
-1104,Who is the current President of the United States?,Joe Biden
-1105,Which country launched the world's first 6G satellite in 2021?,China
-1106,What major global climate summit took place in Glasgow in 2021?,COP26
-1107,Who won the 2021 FIFA Men's World Cup?,France (as of my knowledge cutoff in 2021)
-1108,Which company became the first publicly traded trillion-dollar company?,Apple Inc.
-1109,What was the name of the mission launched by NASA to Mars in 2020?,Mars Perseverance Rover
-1110,Who won the 2021 Academy Award for Best Picture?,"""Nomadland"""
-1111,Which country successfully landed its rover Zhurong on Mars in 2021?,China
-1112,Who won the 2021 Nobel Prize in Physiology or Medicine?,David Julius and Ardem Patapoutian
-1113,What major international agreement aims to limit global warming?,Paris Agreement
-1114,Which city hosted the 2021 UEFA Champions League Final?,"Porto, Portugal"
-1115,Who won the 2021 Nobel Prize in Literature?,Abdulrazak Gurnah
-1116,What major social media platform faced scrutiny over its handling of user data in 2021?,Facebook
-1117,Which country became the first to administer COVID-19 vaccines to its population?,United Kingdom
-1118,Who won the 2021 Nobel Prize in Chemistry?,Benjamin List and David W.C. MacMillan
-1119,Which country hosted the 2022 FIFA World Cup?,Qatar
-1120,What major global trade agreement was signed in 2020?,Regional Comprehensive Economic Partnership (RCEP)
-1121,What is the chemical symbol for gold?,Au
-1122,Who is credited with discovering penicillin?,Alexander Fleming
-1123,What is the largest planet in our solar system?,Jupiter
-1124,What is the process of converting sunlight into energy called?,Photosynthesis
-1125,What is the unit of measurement for electric current?,Ampere
-1126,"Who is known as the ""Father of Modern Physics""?",Albert Einstein
-1127,What is the atomic number of carbon?,6
-1128,What is the study of the Earth's atmosphere called?,Meteorology
-1129,What is the primary function of a neuron?,Transmitting and processing nerve impulses
-1130,What is the phenomenon that causes the bending of light waves?,Refraction
-1131,Who developed the theory of relativity?,Albert Einstein
-1132,What is the smallest unit of an element?,Atom
-1133,What is the process of a liquid changing into a gas called?,Evaporation
-1134,What is the fundamental particle that carries a positive charge?,Proton
-1135,What is the SI unit of force?,Newton
-1136,What is the process of a gas changing into a liquid called?,Condensation
-1137,Who is credited with inventing the World Wide Web (WWW)?,Tim Berners-Lee
-1138,What is the study of heredity called?,Genetics
-1139,What is the chemical formula for water?,H2O
-1140,What is the speed of light in a vacuum?,"Approximately 299,792,458 meters per second"
-1141,Who is the current President of the United States?,Joe Biden
-1142,Which country recently hosted the Olympic Games in 2021?,Japan
-1143,Which company became the world's most valuable publicly traded company in 2022?,Apple
-1144,Which country won the most gold medals in the 2020 Tokyo Olympics?,United States
-1145,What is the capital of Australia?,Canberra
-1146,Who won the Nobel Peace Prize in 2021?,Maria Ressa and Dmitry Muratov
-1147,Which country launched the Mars Perseverance rover in 2020?,United States
-1148,Which social media platform was banned in India in 2021?,TikTok
-1149,Which country is the largest producer of oil in the world?,Saudi Arabia
-1150,Who is the CEO of Tesla and SpaceX?,Elon Musk
-1151,Which city hosted the 2020 Summer Olympics?,"Tokyo, Japan"
-1152,Which country recently became the first to land a spacecraft on the far side of the moon?,China
-1153,Who is the current Chancellor of Germany?,Angela Merkel
-1154,Which country recently signed a historic peace agreement with Israel?,United Arab Emirates
-1155,Which city is hosting the 2022 FIFA World Cup?,Qatar
-1156,"Which country recently launched its own digital currency, called e-CNY?",China
-1157,Who won the 2021 UEFA European Championship?,Italy
-1158,"Which country is home to the tallest building in the world, Burj Khalifa?",United Arab Emirates
-1159,Which country recently withdrew from the European Union?,United Kingdom
-1160,Who is the current Prime Minister of Canada?,Justin Trudeau
-1161,Which country recently signed a peace agreement with Sudan?,Israel
-1162,Who won the 2021 Wimbledon Men's Singles title?,Novak Djokovic
-1163,Which country recently launched the world's first digital vaccine passport?,Denmark
-1164,Who is the current Secretary-General of the United Nations?,António Guterres
-1165,Which country recently experienced a volcanic eruption in 2021?,Iceland
-1166,Who won the 2021 Nobel Prize in Literature?,Abdulrazak Gurnah
-1167,Which country recently achieved a milestone of vaccinating one billion people against COVID-19?,China
-1168,Who won the 2021 Formula 1 World Championship?,Max Verstappen
-1169,Which country hosted the 2021 G7 Summit?,United Kingdom
-1170,Who is the current Prime Minister of Australia?,Scott Morrison
-1171,Which company recently became the first to reach a market valuation of $3 trillion?,Microsoft
-1172,Who won the 2022 FIFA World Cup?,To be determined
-1173,Which country recently launched the James Webb Space Telescope?,United States
-1174,Who is the current President of France?,Emmanuel Macron
-1175,Which country recently became the first to officially recognize Bitcoin as legal tender?,El Salvador
-1176,Who won the 2021 Nobel Prize in Physics?,"Syukuro Manabe, Klaus Hasselmann, Giorgio Parisi"
-1177,Which country hosted the 2021 United Nations Climate Change Conference (COP26)?,United Kingdom
-1178,Who is the current Prime Minister of India?,Narendra Modi
-1179,Which country recently launched the world's first hydrogen-powered passenger train?,Germany
-1180,Who won the 2021 Nobel Prize in Chemistry?,"Benjamin List, David W.C. MacMillan"
+Question,Question,Answer
+1,What is the title of the debut studio album by Nirvana released in 1989?,"""Bleach"""
+2,What is the capital city of Italy?,Rome
+3,"Who played the character Bella Swan in the ""Twilight"" film series?",Kristen Stewart
+4,What is a name of a popular survival horror game developed by Capcom?,Resident Evil
+5,Which country successfully landed its rover Zhurong on Mars in 2021?,China
+6,"Which Canadian city is often referred to as the ""Cultural Capital of Canada""?",Montreal
+7,"In which sport is the term ""hat-trick"" commonly used?",Soccer
+8,What is the chemical formula for water?,H2O
+9,Who won the 2021 Academy Award for Best Picture?,"""Nomadland"""
+10,What is the popular Mexican beverage made from the juice of the Agave plant?,Tequila
+11,What is the national symbol of Canada's indigenous peoples?,Inuksuk
+12,Who invented the sewing machine?,Elias Howe
+13,"In which sport is the term ""strikeout"" commonly used?",Baseball
+14,Which U.S. state is home to the Rocky Mountains?,Colorado
+15,What is the smallest species of bird?,Bee Hummingbird
+16,Who invented the computer mouse?,Douglas Engelbart
+17,In what movie does a group of toys come to life when humans are not around?,Toy Story
+18,What is the name of the main character in the game Assassin's Creed?,Altaïr Ibn-La'Ahad
+19,"Which singer released the album ""1989"" in 2014?",Taylor Swift
+20,"What is the title of the first book in the ""A Song of Ice and Fire"" series by George R.R. Martin?",A Game of Thrones
+21,Who is the lead vocalist of the band The Who?,Roger Daltrey
+22,"Which actor portrayed the character Jack Dawson in the film ""Titanic""?",Leonardo DiCaprio
+23,Which TV show is about a fictional advertising agency set in the 1960s?,Mad Men
+24,What is the green vegetable often used in salads and sandwiches?,Lettuce
+25,"Who says, ""I can accept failure, everyone fails at something. But I can't accept not trying""?",Michael Jordan
+26,What is the result of 4 ÷ 2(2 + 1)?,1
+27,What is the largest species of crab?,Japanese Spider Crab
+28,What is the name of the iconic puzzle game that involves colored blocks?,Tetris
+29,Which animal is known for its black and white striped coat?,Zebra
+30,"Which TV show features the line ""I'm not a regular mom, I'm a cool mom""?",Mean Girls
+31,"What is the popular Mexican dish consisting of a tortilla filled with meat, beans, and cheese?",Burrito
+32,"Who directed the film ""The Shawshank Redemption""?",Frank Darabont
+33,Which animal is known for its ability to roll into a ball for protection?,Armadillo
+34,"Which American rapper is known for hits like ""Stronger"" and ""Gold Digger""?",Kanye West
+35,Which country is known for inventing pizza?,Italy
+36,In what movie does a boy befriend a friendly alien and help him return home?,E.T. the Extra-Terrestrial
+37,Who is the lead vocalist of the band Radiohead?,Thom Yorke
+38,What is the study of the behavior and properties of matter at extremely low temperatures?,Cryogenics
+39,What is the name of the popular first-person shooter game developed by Valve?,Counter-Strike
+40,Which movie features a young girl who gets transported to a magical land of witches?,The Wizard of Oz
+41,"What is the name of the American singer-songwriter who released the album ""Born This Way""?",Lady Gaga
+42,"Which comedian created the TV series ""Family Guy""?",Seth MacFarlane
+43,Who is the creator of the theory of gravity?,Isaac Newton
+44,What is the capital city of South Africa?,Pretoria
+45,Who wrote the national anthem of the United States?,Francis Scott Key
+46,In what TV show does a high school chemistry teacher become a zombie and work as a medical examiner?,iZombie
+47,Which actor portrayed Wolverine in the X-Men film series?,Hugh Jackman
+48,What is the Mexican dish consisting of a tortilla filled with cheese and grilled?,Quesadilla
+49,"What is the spicy Korean noodle dish made with thick, chewy noodles and a fiery red sauce?",Jjajangmyeon
+50,"What is the classic French sauce made from egg yolks, butter, and lemon juice?",Hollandaise
+51,"Who is the lead guitarist of the rock band ""Led Zeppelin""?",Jimmy Page
+52,What movie follows the life of a mentally disabled man and his extraordinary achievements?,Forrest Gump
+53,What is the title of Michael Jackson's seventh studio album?,"""Bad"""
+54,What is the national tree of the United States?,Oak
+55,What is the title of the debut studio album by Billie Eilish released in 2019?,"""When We All Fall Asleep, Where Do We Go?"""
+56,Who invented the light bulb with a carbon filament?,Lewis Howard Latimer
+57,Which spice is made from the dried stigma of a crocus flower?,Saffron
+58,What was the name of the mission launched by NASA to Mars in 2020?,Mars Perseverance Rover
+59,"Who played the character Captain Jack Sparrow in the ""Pirates of the Caribbean"" films?",Johnny Depp
+60,What is the classic Italian pasta dish with a creamy sauce made from Parmesan cheese and butter?,Fettuccine Alfredo
+61,"What is the name of the American singer-songwriter who released the album ""Fearless""?",Taylor Swift
+62,"What is the famous opening line of Charles Dickens' novel ""A Tale of Two Cities""?","""It was the best of times, it was the worst of times."""
+63,What is the largest province in Canada by population?,Ontario
+64,What is the title of the debut studio album by Adele released in 2008?,"""19"""
+65,What is the popular French cheese made from cow's milk?,Camembert
+66,Which country is known for the Petra archaeological site?,Jordan
+67,What is the largest species of shark?,Great White Shark
+68,Who is the lead guitarist of the band Nirvana?,Kurt Cobain
+69,"Which city is known as the ""Windy City""?",Chicago
+70,What is the chemical symbol for carbon?,"C, Carbon"
+71,In what movie does a man with short-term memory loss try to find his wife's killer?,Memento
+72,What is the branch of biology that studies the interactions between organisms and their environment?,Ecology
+73,What is the objective of the game Pac-Man?,Eat all the dots and avoid the ghosts
+74,What is the study of the Earth's physical structure and composition called?,Geology
+75,How many players are there in a basketball team?,5
+76,What is the traditional Japanese rice wine?,Sake
+77,"What is the first book in the ""Chronicles of Narnia"" series by C.S. Lewis?","The Lion, the Witch and the Wardrobe"
+78,Which movie is about a group of magicians who perform elaborate heists during their shows?,Now You See Me
+79,"What is the traditional Middle Eastern dip made from mashed chickpeas, tahini, lemon juice, and garlic?",Hummus
+80,What is the national animal of South Africa?,Springbok
+81,What is the largest species of lizard?,Komodo Dragon
+82,How many sides does a hexagon have?,6
+83,What is the Japanese green tea also referred as?,Matcha
+84,What is the process of removing caffeine from coffee beans called?,Decaffeination
+85,"Who said, ""The only thing standing between you and your goal is the story you keep telling yourself""?",Jordan Belfort
+86,What is the tallest mountain in the world?,Mount Everest
+87,Who is the current Chancellor of Germany?,Angela Merkel
+88,Which nut is commonly used in pesto sauce?,Pine nuts
+89,"Which artist released the hit song ""Bad Guy"" in 2019?",Billie Eilish
+90,What is the largest species of octopus?,Giant Pacific Octopus
+91,What is the type of bread made from whole wheat flour and often used in sandwiches?,Whole wheat bread
+92,"Who said, ""The greatest glory in living lies not in never falling, but in rising every time we fall.""",Nelson Mandela
+93,"Who says, ""The secret of getting ahead is getting started""?",Mark Twain
+94,What is the branch of science that deals with the study of diseases?,Pathology
+95,Which actress played the character Rey in the recent Star Wars trilogy?,Daisy Ridley
+96,"What is the traditional Middle Eastern salad made with bulgur, tomatoes, and herbs?",Tabouleh
+97,Which company became the first publicly traded trillion-dollar company?,Apple Inc.
+98,"Who said, ""Float like a butterfly, sting like a bee""?",Muhammad Ali
+99,What is the traditional French pastry made from puff pastry and filled with cream or fruit?,Mille-Feuille (Napoleon)
+100,How many planets in our solar system have rings?,4
+101,"Which American singer is known for the hit single ""Just the Way You Are""?",Bruno Mars
+102,In which country did the sport of archery originate?,Japan
+103,Calculate 2 + 2 x 2,6
+104,Which movie is about a young girl who enters a magical world through a wardrobe?,"The Chronicles of Narnia: The Lion, the Witch and the Wardrobe"
+105,"Who says, ""I'm not a businessman. I'm a business, man""?",Jay-Z
+106,Who is the creator of the theory of evolution by natural selection?,Charles Darwin
+107,What is the heaviest species of bony fish?,Ocean Sunfish
+108,"Which planet is known as the ""Red Planet""?",Mars
+109,What is the traditional Indian bread made from wheat flour and cooked in a tandoor oven?,Naan
+110,What is the chemical symbol for oxygen?,"O, Oxygen"
+111,In which game can players create and manage their own virtual city?,SimCity
+112,Which country is known for the Eiffel Tower?,France
+113,What is the unit of electric current?,Ampere
+114,What is the title of the debut single by Justin Bieber released in 2009?,"""One Time"""
+115,"Who said, ""It is during our darkest moments that we must focus to see the light.""",Aristotle Onassis
+116,"Who says, ""I have not failed. I've just found 10,000 ways that won't work""?",Thomas Edison
+117,What is the process of converting sunlight into electrical energy called?,Photovoltaics
+118,What is the Indian dish made with lentils and spices?,Dal
+119,Which sport is associated with Wimbledon?,Tennis
+120,"Who said, ""Happiness is not something ready-made. It comes from your own actions""?",Dalai Lama
+121,Who is the lead singer of the band Aerosmith?,Steven Tyler
+122,What is the official ball used in professional golf?,Titleist Pro V1
+123,Which animal is known for its ability to regrow its limbs?,Starfish
+124,What is the main function of the lungs?,Respiration
+125,Which province is known for its stunning Rocky Mountains?,Alberta
+126,In what movie does a man find a magical remote control that allows him to control time?,Click
+127,"Which singer is known as the ""Queen of Pop""?",Madonna
+128,"Which TV show features the line ""Winter is coming""?",Game of Thrones
+129,"Which city is known as the ""Eternal City""?",Rome
+130,Who invented the first practical telephone?,Antonio Meucci
+131,What is the largest species of butterfly?,Atlas Moth
+132,Which U.S. city is famous for its music scene and the Country Music Hall of Fame?,Nashville
+133,Which sport uses a 20-pound metal ball?,Shot put
+134,What is the result of 2 + 3 x 4?,14
+135,What is the bone that forms the upper arm?,Humerus
+136,What is the currency of Brazil?,Brazilian real
+137,What is the result of 1 + 1?,2
+138,Which country withdrew from the European Union in 2020?,United Kingdom
+139,Which country launched the Mars Perseverance rover in 2020?,United States
+140,Which U.S. city is famous for its jazz music and Mardi Gras celebrations?,New Orleans
+141,What is the name of the popular battle royale game developed by Epic Games?,Fortnite
+142,What is the branch of science that deals with the study of the universe?,Astronomy
+143,"Who said, ""The best way to predict the future is to create it""?",Peter Drucker
+144,Who is the lead vocalist of the band Metallica?,James Hetfield
+145,Who won the 2020 Grammy Award for Album of the Year?,Billie Eilish
+146,"Who said, ""The only true wisdom is in knowing you know nothing""?",Socrates
+147,"What is the Italian rice dish cooked in broth with various ingredients, like peas or mushrooms?",Risotto
+148,Who is the lead guitarist of the rock band AC/DC?,Angus Young
+149,Who is the lead vocalist of the band Maroon 5?,Adam Levine
+150,What is the fundamental particle that carries a positive charge?,Proton
+151,What is the national mammal of the United States?,American Bison
+152,"Which singer is known for hits like ""Rolling in the Deep"" and ""Hello""?",Adele
+153,Which bird is the fastest animal on Earth?,Peregrine Falcon
+154,Who is credited with the discovery of penicillin?,Alexander Fleming
+155,How many days are there in a leap year?,366
+156,Which animal is the largest land mammal?,African Elephant
+157,In which sport are competitors judged on their artistic impression?,Figure skating
+158,What is the unit of pressure?,Pascal
+159,How many bones are there in the human body?,206
+160,Which country is known for the Statue of Liberty?,United States
+161,What movie is about a lawyer who defends a man accused of murder in a racially charged trial?,To Kill a Mockingbird
+162,Which film won the Best Picture Oscar in 2020?,Parasite
+163,Which bird is famous for its migration across continents?,Swallow
+164,Which country has won the most Rugby World Cups?,New Zealand
+165,What is the most-watched sporting event in the world?,FIFA World Cup
+166,What is the result of 5 x 3 - 2 + 1?,14
+167,"Who says, ""The greatest pleasure in life is doing what people say you cannot do""?",Walter Bagehot
+168,"Who wrote the play ""Hamlet""?",William Shakespeare
+169,Who is the lead singer of the band U2?,Bono
+170,"Who said, ""Success is not final, failure is not fatal: It is the courage to continue that counts""?",Winston Churchill
+171,"Who said, ""Life is 10% what happens to us and 90% how we react to it.""",Charles R. Swindoll
+172,What is the smallest unit of the nervous system?,Neuron
+173,Which book tells the story of a young orphan named Pip?,Great Expectations
+174,Which animal is known for its distinctive black and white markings?,Panda or Zebra
+175,"What is the name of the pigment responsible for the color of the skin, hair, and eyes?",Melanin
+176,Which Canadian province is known for its beautiful coastal scenery along the Pacific Ocean?,British Columbia
+177,What is the traditional base of a Greek salad?,Feta cheese
+178,What movie is about a boy who becomes a superhero after being bitten by a radioactive spider?,Spider-Man
+179,"Which band is known for the song ""Hotel California""?",Eagles
+180,What is the process by which food is broken down in the stomach?,Digestion
+181,Which animal is known for its ability to regrow its teeth continuously?,Shark
+182,"Which legendary musician is known for hits like ""Purple Haze"" and ""Hey Joe""?",Jimi Hendrix
+183,"What is the name of the American singer-songwriter who released the album ""Back to Black"" in 2006?",Amy Winehouse
+184,What is the largest species of eagle?,Steller's Sea Eagle
+185,"Who painted the famous artwork ""The Starry Night""?",Vincent van Gogh
+186,What is the capital city of Canada?,Ottawa
+187,What TV show follows the life of a New Jersey mob boss and his family?,The Sopranos
+188,What is the official height of a basketball hoop in professional play?,10 feet
+189,What is the largest part of the brain?,Cerebrum
+190,Calculate: 2 + 2 + 2 + 2 + 2,10
+191,Who was the first President of the United States?,George Washington
+192,What is the title of Beyoncé's debut solo album released in 2003?,"""Dangerously in Love"""
+193,Which creature is known for its ability to spit venom?,Spitting Cobra
+194,"Who says, ""Don't watch the clock; do what it does. Keep going""?",Sam Levenson
+195,What is the chemical symbol for iron?,"Fe, Iron"
+196,Calculate: 1 + 1 - 1 + 1 - 1 + 1,2
+197,Who is the current President of the United States?,Joe Biden
+198,What is the title of Adele's second studio album?,"""21"""
+199,What is the capital city of China?,Beijing
+200,Which film franchise features the character Captain Jack Sparrow?,Pirates of the Caribbean
+201,Which movie is about a young boy who is accidentally left behind by his family during Christmas?,Home Alone
+202,What is the branch of science that deals with the study of matter and its properties?,Chemistry
+203,"Who is the author of the ""Twilight"" book series?",Stephenie Meyer
+204,Which mammal lays eggs?,Platypus
+205,What is the process of converting a gas into a liquid called?,Condensation
+206,What is the title of the debut studio album by Ariana Grande released in 2013?,"""Yours Truly"""
+207,What is the national flower of the United States?,Rose
+208,Who is the inventor of the printing press?,Johannes Gutenberg
+209,In which sport would you find a pommel horse?,Gymnastics
+210,"Who is considered the ""Father of Modern Chemistry""?",Antoine Lavoisier
+211,Who played the character Harry Potter in the film series?,Daniel Radcliffe
+212,"Who played the character Luke Skywalker in the ""Star Wars"" franchise?",Mark Hamill
+213,Which movie is about a young woman who disguises herself as a man to join the army?,Mulan
+214,What is the chemical symbol for helium?,"He, Helium"
+215,Which game series allows players to assume the role of a Dragonborn?,The Elder Scrolls V: Skyrim
+216,"Which Canadian city is home to the CN Tower, one of the tallest freestanding structures in the world?",Toronto
+217,What is the atomic number of carbon?,6
+218,What is the unit of electrical resistance?,Ohm
+219,Which animal is known for its ability to produce silk?,Spider
+220,What TV show is about a group of inmates in a women's prison?,Orange is the New Black
+221,"Which game franchise is known for its iconic ""Creeper"" enemy?",Minecraft
+222,Which Canadian city is famous for its historic Citadel and the Anne of Green Gables novel?,Charlottetown
+223,Which country is known for the Pyramids of Giza?,Egypt
+224,What is the longest river in the United States?,Mississippi River
+225,"Which country is known for the famous landmark, the Colosseum?",Italy
+226,What is the title of the debut studio album by Taylor Swift released in 2006?,"""Taylor Swift"""
+227,What is the highest mountain in Canada?,Mount Logan
+228,What is the largest organ in the human body?,Skin
+229,"Who directed the film ""Pulp Fiction""?",Quentin Tarantino
+230,Who is the Greek god of thunder?,Zeus
+231,Which continent is home to the Amazon Rainforest?,South America
+232,What is the organ that stores bile produced by the liver?,Gallbladder
+233,Who was the President of the United States during the Vietnam War?,Lyndon B. Johnson
+234,"What is the name of the Canadian rapper known for the song ""God's Plan""?",Drake
+235,Who wrote the play Romeo and Juliet?,William Shakespeare
+236,Which U.S. state is known for its iconic Hollywood sign and movie industry?,California
+237,"Which U.S. state is known as the ""Garden State""?",New Jersey
+238,"What is the traditional Japanese soybean dish, often served as a snack or appetizer?",Edamame
+239,What major global climate summit took place in Glasgow in 2021?,COP26
+240,"Which sport is associated with the term ""slam dunk""?",Basketball
+241,How many sides does a square have?,4
+242,Which game series features a character named Commander Shepard?,Mass Effect
+243,What is the fastest marine animal?,Sailfish
+244,"What is the title of the theme song for the film ""The Lion King""?","""Circle of Life"""
+245,What is the capital city of Spain?,Madrid
+246,Who is the current Secretary-General of the United Nations?,António Guterres
+247,"Who says, ""You have brains in your head. You have feet in your shoes. You can steer yourself any direction you choose""?",Dr. Seuss
+248,Which animated film features the characters Woody and Buzz Lightyear?,Toy Story
+249,How many teeth does an adult human usually have?,32
+250,Which animal is the symbol of peace?,Dove
+251,"Which band released the hit song ""Bohemian Rhapsody""?",Queen
+252,"Who is the author of the book ""Pride and Prejudice""?",Jane Austen
+253,Which bird is famous for its ability to swim underwater?,Penguin
+254,Calculate 4 + 4 - 4 + 4 - 4,4
+255,Which vegetable is used to make pickles?,Cucumber
+256,What movie is based on a true story about a mathematician who breaks the Enigma code during World War II?,The Imitation Game
+257,What is the result of 9 - 3 + 1?,7
+258,Who is considered the greatest basketball player of all time?,Michael Jordan
+259,What is the traditional Japanese dish of raw fish and rice?,Sushi
+260,Who won the 2021 Nobel Prize in Physics?,"Syukuro Manabe, Klaus Hasselmann, Giorgio Parisi"
+261,Who was the first woman to be appointed to the United States Supreme Court?,Sandra Day O'Connor
+262,What is the traditional Japanese soybean paste used in many dishes?,Miso
+263,"Who is known for the phrase, ""To infinity and beyond""?",Buzz Lightyear (Toy Story)
+264,Which city hosted the 2020 Summer Olympics?,"Tokyo, Japan"
+265,Who discovered the laws of planetary motion?,Johannes Kepler
+266,Who won the Super Bowl in 2021?,Tampa Bay Buccaneers
+267,"Which American singer is known for the hit single ""Wrecking Ball""?",Miley Cyrus
+268,What is the chemical symbol for gold?,"Au, Gold"
+269,Who is the all-time leading scorer in the history of the English Premier League?,Alan Shearer
+270,"Who says, ""The only way to do great work is to love what you do""?",Steve Jobs
+271,Who is known for proposing the laws of motion?,Isaac Newton
+272,What movie features a group of high school students who discover a time-traveling DeLorean?,Back to the Future
+273,What is the title of Madonna's best-selling studio album released in 1986?,"""True Blue"""
+274,What is the main ingredient in coleslaw?,Shredded cabbage
+275,"Which British band is known for the hit song ""Yellow""?",Coldplay
+276,What is the hormone responsible for regulating blood sugar levels?,Insulin
+277,Who won the FIFA Women's World Cup in 2019?,United States
+278,Who is the fictional detective created by Arthur Conan Doyle?,Sherlock Holmes
+279,What is the primary ingredient in guacamole?,Avocado
+280,What is the outermost layer of the skin called?,Epidermis
+281,Which game franchise features a protagonist named Ezio Auditore?,Assassin's Creed
+282,"What is the traditional Indian yogurt-based drink, often flavored with fruit or spices?",Lassi
+283,"Which U.S. state is known as the ""Lone Star State""?",Texas
+284,Who won the NBA Finals in 2021?,Milwaukee Bucks
+285,"Who is the main protagonist in the ""Harry Potter"" series?",Harry Potter
+286,What is the national bird of Australia?,Emu
+287,What is the process of converting a liquid into a gas called?,Vaporization
+288,What is the branch of biology that studies the classification and naming of organisms?,Taxonomy
+289,What is the tube that connects the mouth to the stomach?,Esophagus
+290,"Which singer released the hit single ""Uptown Funk"" in 2014?",Mark Ronson
+291,What is the title of the debut studio album by Bob Marley and the Wailers released in 1973?,"""Catch a Fire"""
+292,Which creature is known for its ability to regrow its lost tail?,Salamander
+293,Which game series features a character named Geralt of Rivia?,The Witcher
+294,"What is the objective of the game ""Super Mario Bros.""?",Rescue Princess Peach
+295,What is the smallest species of penguin?,Little Blue Penguin
+296,What is the capital city of the United States?,"Washington, D.C."
+297,What is the process of converting liquid into gas called?,Evaporation
+298,What is the main character's name in The Legend of Zelda series?,Link
+299,What is the largest species of penguin?,Emperor Penguin
+300,Who was the 16th President of the United States?,Abraham Lincoln
+301,"Who wrote the novel ""To Kill a Mockingbird""?",Harper Lee
+302,"Which British band is known for the hit song ""Clocks""?",Coldplay
+303,Which Canadian province is the largest by area?,Quebec
+304,Who is the famous American inventor and businessman behind the Model T car?,Henry Ford
+305,What is the chemical symbol for hydrogen?,"H, Hydrogen"
+306,What is the technical term for the voice box?,Larynx
+307,What is the liquid part of the blood called?,Plasma
+308,"Which American rapper is known for the hit single ""Lose Yourself""?",Eminem
+309,"Who directed the film ""Jurassic Park""?",Steven Spielberg
+310,What is the method of brewing coffee that involves immersing coffee grounds in water for an extended period?,Cold brew
+311,What is the popular Italian ice cream dessert served in a sweet bread roll?,Gelato
+312,Which bird is known for its long neck and legs?,Crane
+313,What is the study of the Earth's atmosphere called?,Meteorology
+314,"Who is known as the ""Father of the Internet""?",Vint Cerf
+315,"What is the traditional Mexican sauce made from chocolate, chili peppers, and various spices?",Mole
+316,What is the official bird of the United States?,Bald Eagle
+317,"Who said, ""The best revenge is massive success.""",Frank Sinatra
+318,Which country is known for producing the most coffee?,Brazil
+319,"What is the name of the American singer who released the album ""Born to Die""?",Lana Del Rey
+320,Which social media platform was banned in India in 2021?,TikTok
+321,Who is the Greek god of the sea?,Poseidon
+322,What is the title of Taylor Swift's sixth studio album released in 2017?,"""Reputation"""
+323,"Which American rapper released the albums ""The Marshall Mathers LP"" and ""The Eminem Show""?",Eminem
+324,How many strings does a violin typically have?,4
+325,What is the traditional filling of a calzone?,Cheese and tomato sauce
+326,"What is the name of the Canadian singer who released the album ""Beauty Behind the Madness""?",The Weeknd
+327,What is the chemical symbol for nitrogen?,"N, Nitrogen"
+328,Which game franchise takes place in the fictional universe of Tamriel?,The Elder Scrolls
+329,What is the highest-grossing film of all time?,Avengers: Endgame
+330,What is the fastest bird in level flight?,Swift
+331,Who was the President of the United States during the Cuban Missile Crisis?,John F. Kennedy
+332,Which creature is known for its ability to glide through the air using skin flaps?,Flying Fox
+333,Who won the Nobel Peace Prize in 2021?,Maria Ressa and Dmitry Muratov
+334,"Who painted the famous artwork ""Guernica""?",Pablo Picasso
+335,"Who released the hit single ""Shape of You"" in 2017?",Ed Sheeran
+336,Who is the lead vocalist of the band Guns N' Roses?,Axl Rose
+337,"Who said, ""You miss 100% of the shots you don't take""?",Wayne Gretzky
+338,What is the largest city in the United States by population?,New York City
+339,"In which sport is the term ""birdie"" commonly used?",Golf
+340,Which film franchise features the characters Luke Skywalker and Darth Vader?,Star Wars
+341,Which country recently launched the world's first hydrogen-powered passenger train?,Germany
+342,"Who says, ""It always seems impossible until it's done""?",Nelson Mandela
+343,"What is the creamy, frozen dessert made from dairy products and flavors?",Ice cream
+344,What TV show is set in the 1980s and follows a group of kids investigating supernatural occurrences?,Stranger Things
+345,"Who wrote the novel ""1984""?",George Orwell
+346,"Who says, ""Life isn't about finding yourself. It's about creating yourself""?",George Bernard Shaw
+347,What is the tallest mountain in North America?,Denali/Mount McKinley
+348,What is the world's smallest mammal?,Bumblebee Bat
+349,Which Canadian province is known for its stunning Cape Breton Island and the Cabot Trail?,Nova Scotia
+350,Who is the lead guitarist of the rock band Aerosmith?,Joe Perry
+351,What is the highest possible score in a gymnastics routine?,10
+352,"Which game series features a character named Kratos, the Spartan warrior?",God of War
+353,Who is the lead vocalist of the band The Rolling Stones?,Mick Jagger
+354,Who is the creator of the Marvel superhero Spider-Man?,Stan Lee
+355,"What is the title of the first book in J.K. Rowling's ""Harry Potter"" series?",Harry Potter and the Philosopher's Stone (or Sorcerer's Stone)
+356,What is the traditional Japanese tea ceremony that involves the preparation and serving of matcha (powdered green tea)?,Chanoyu
+357,Which game franchise features a protagonist named Lara Croft?,Tomb Raider
+358,What is the traditional British dish of mashed potatoes and cooked cabbage or kale?,Colcannon
+359,How many players are there on a soccer team?,Eleven
+360,"Which American singer-songwriter is known for hits like ""All of Me"" and ""Ordinary People""?",John Legend
+361,What is the capital city of Russia?,Moscow
+362,"Which British band is known for the song ""Don't Stop Believin'""?",Journey
+363,How many colors are there in a rainbow?,7
+364,"Which British singer released the album ""25""?",Adele
+365,What is the fermented cabbage dish that is a staple in Korean cuisine?,Kimchi
+366,"Who is the creator of the TV series ""The Office""?",Ricky Gervais
+367,Which country won the most gold medals in the 2020 Tokyo Olympics?,United States
+368,Which animal is known for its ability to glide between trees?,Flying Squirrel
+369,What is the name of the popular puzzle game developed by Alexey Pajitnov?,Tetris
+370,How many strings does a standard guitar have?,6
+371,What is the title of the debut studio album by Amy Winehouse released in 2003?,"""Frank"""
+372,"Which animal is known as the ""king of the jungle""?",Lion
+373,"What is the traditional Mexican dessert made of fried dough, dusted with sugar, and often served with chocolate sauce?",Churros
+374,What is the smallest species of whale?,Dwarf Sperm Whale
+375,"Who directed the film ""The Dark Knight""?",Christopher Nolan
+376,Which planet is known for its beautiful and many rings?,Saturn
+377,Which creature is known for its ability to emit light?,Firefly
+378,Which sport is associated with the yellow jersey in the Tour de France?,Cycling
+379,Who won the 2021 Nobel Prize in Physiology or Medicine?,David Julius and Ardem Patapoutian
+380,Which animal is known for its humps and ability to store water?,Camel
+381,"Which British singer-songwriter is known for the hit single ""Thinking Out Loud""?",Ed Sheeran
+382,Who was the first Vice President and the second President of the United States?,John Adams
+383,"Who won the Best Supporting Actress Oscar for her role in ""Boyhood""?",Patricia Arquette
+384,"Who said, ""The journey of a thousand miles begins with a single step""?",Lao Tzu
+385,Which creature is often considered a symbol of good luck?,Ladybug
+386,What is the title of the debut single by Katy Perry released in 2008?,"""I Kissed a Girl"""
+387,Which sport uses a shuttlecock?,Badminton
+388,Calculate 5 - 2 + 1,4
+389,"Who won the Best Actress Oscar for her role in ""Black Swan""?",Natalie Portman
+390,What is the branch of biology that deals with the study of microorganisms?,Microbiology
+391,"Who says, ""Success usually comes to those who are too busy to be looking for it""?",Henry David Thoreau
+392,Which country hosted the 2018 FIFA World Cup?,Russia
+393,Who wrote the Declaration of Independence?,Thomas Jefferson
+394,Which bird is famous for its ability to hover in mid-air?,Hummingbird
+395,What is the national sport of Canada?,Lacrosse
+396,What is the largest island in Canada?,Baffin Island
+397,"What is the traditional Mexican soup made from hominy and meat, typically pork?",Pozole
+398,"Who is the author of the ""The Hunger Games"" book series?",Suzanne Collins
+399,Which U.S. city is known for its historic Freedom Tower and Wall Street?,New York City
+400,"Who played the character Katniss Everdeen in ""The Hunger Games"" films?",Jennifer Lawrence
+401,"What is the Italian dessert consisting of layers of ladyfingers, mascarpone cheese, and coffee-flavored liqueur?",Tiramisu
+402,"Which American singer is known as the ""Queen of Soul""?",Aretha Franklin
+403,"What is the sweet, creamy filling inside a Boston cream pie?",Custard
+404,Which country is known for the Acropolis?,Greece
+405,Who won the Tour de France in 2021?,Tadej Pogačar
+406,"Who said, ""The greatest enemy of knowledge is not ignorance, it is the illusion of knowledge""?",Stephen Hawking
+407,What is the chemical symbol for potassium?,"K, Potassium"
+408,What is the title of the debut studio album by Bob Dylan released in 1962?,"""Bob Dylan"""
+409,What is the traditional Scottish dish made of oats and water or milk?,Porridge
+410,Who is the current Chief Justice of the United States Supreme Court?,John Roberts
+411,Who is the only President to serve more than two terms?,Franklin D. Roosevelt
+412,"Which band released the hit song ""Stairway to Heaven""?",Led Zeppelin
+413,In which game do players control a character named Aloy?,Horizon Zero Dawn
+414,What is the Chinese stir-fried noodle dish typically made with soy sauce and various vegetables and meats?,Chow mein
+415,What is 10% of 50?,5
+416,What is the national animal of Canada?,Beaver
+417,"Which actress starred in the film ""Black Widow""?",Scarlett Johansson
+418,"Who is the author of ""The Great Gatsby""?",F. Scott Fitzgerald
+419,What is the primary ingredient in paella?,Rice
+420,What is the objective of the game Tetris?,Clear lines by arranging falling blocks
+421,What is the process of splitting an atomic nucleus called?,Nuclear fission
+422,"Who is the creator of the TV series ""Stranger Things""?",The Duffer Brothers
+423,What is the national bird of Canada?,Common loon
+424,Which city hosted the 2016 Summer Olympics?,Rio de Janeiro
+425,Which creature is often associated with the Great Barrier Reef?,Clownfish
+426,"What is the sweet, caramelized dessert made from condensed milk and sugar?",Dulce de leche
+427,Which animal is known for its ability to play dead?,Opossum
+428,What is the nickname of the United States flag?,Stars and Stripes
+429,What is the world's smallest species of owl?,Elf Owl
+430,In what TV show does a high school teacher secretly work as a vigilante?,Arrow
+431,"Which U.S. state is known as the ""Land of 10,000 Lakes""?",Minnesota
+432,In which game do players control a character named Arthur Morgan?,Red Dead Redemption 2
+433,Which country recently became the first to officially recognize Bitcoin as legal tender?,El Salvador
+434,What is the study of the human brain and its functions called?,Neuroscience
+435,What movie follows the adventures of a clownfish searching for his son?,Finding Nemo
+436,What is the official motto of Canada?,"""A Mari Usque Ad Mare"""
+437,"What is the traditional Greek pastry filled with spinach, feta cheese, and herbs?",Spanakopita
+438,What is the largest lake in Canada?,Great Bear Lake
+439,"What is the classic American sandwich made with layers of turkey, bacon, lettuce, and tomato?","BLT (Bacon, Lettuce, and Tomato)"
+440,"Which country is home to the tallest building in the world, Burj Khalifa?",United Arab Emirates
+441,"Which singer released the album ""21"" in 2011?",Adele
+442,What is the term for the foam on top of a freshly brewed espresso shot?,Crema
+443,Which movie features a group of people who are trapped on a stranded train during a snowstorm?,Snowpiercer
+444,Who was the President of the United States during the Korean War?,Harry S. Truman
+445,What is the study of the function and structure of living organisms called?,Physiology
+446,What is the title of the debut studio album by The Beatles released in 1963?,"""Please Please Me"""
+447,What is the term for the release of carbon dioxide gas from freshly roasted coffee beans?,Degassing
+448,Which country hosted the 2014 FIFA World Cup?,Brazil
+449,What is the title of the debut studio album by Michael Jackson released in 1972?,"""Got to Be There"""
+450,Who is the current Prime Minister of Canada?,Justin Trudeau
+451,"What is the title of the theme song for the James Bond film ""Skyfall""?","""Skyfall"""
+452,What is the longest river in Canada?,Mackenzie River
+453,Which animal is known for its ability to spray a foul-smelling liquid?,Skunk
+454,Who is the CEO of Tesla and SpaceX?,Elon Musk
+455,Which bird is known for its ability to fly backward?,Hummingbird
+456,What is the Japanese snack made from dried seaweed and seasoned rice?,Onigiri
+457,Which country is known for the Machu Picchu archaeological site?,Peru
+458,"Which Canadian singer-songwriter is known for the hit single ""Hallelujah""?",Leonard Cohen
+459,What is the main ingredient in a croissant?,Butter
+460,Calculate 6 ÷ 2(1 + 2),9
+461,What movie follows the story of a young girl who befriends a giant friendly robot?,Big Hero 6
+462,Which famous scientist developed the theory of relativity?,Albert Einstein
+463,What TV show features a serial killer who works as a blood-spatter analyst during the day?,Dexter
+464,Who holds the record for the most career goals in soccer?,Cristiano Ronaldo
+465,What is the main ingredient in a margarita cocktail?,Tequila
+466,What is the largest species of bear?,Polar Bear
+467,Which game series allows players to explore a post-apocalyptic wasteland?,Fallout
+468,"Who is the host of the TV talk show ""The Ellen DeGeneres Show""?",Ellen DeGeneres
+469,"Who is considered the ""Father of Genetics""?",Gregor Mendel
+470,"In which game can players perform a ""Fatality"" to finish their opponent?",Mortal Kombat
+471,What is the Korean dish made with seasoned vegetables and rice?,Bibimbap
+472,"What is the name of the iconic character in the game ""Super Mario Bros.""?",Mario
+473,In which sport does a player score a touchdown?,American football
+474,Which company became the world's most valuable publicly traded company in 2022?,Apple
+475,Which TV show features the character Walter White?,Breaking Bad
+476,What is the popular Japanese dish of battered and deep-fried seafood or vegetables?,Tempura
+477,"Who says, ""The greatest wealth is to live content with little""?",Plato
+478,"What is the Italian pasta dish made with long, thin noodles and tomato sauce?",Spaghetti
+479,What is the national bird of India?,Indian Peacock
+480,"Who said, ""I can't change the direction of the wind, but I can adjust my sails to always reach my destination""?",Jimmy Dean
+481,"Which actor played the character Neo in the film ""The Matrix""?",Keanu Reeves
+482,Calculate: 3 x 3 + 3 ÷ 3 - 3,8
+483,"Who said, ""In three words I can sum up everything I've learned about life: it goes on""?",Robert Frost
+484,What is the unit of electric charge?,Coulomb
+485,"Who is the main antagonist in the ""Harry Potter"" series?",Lord Voldemort
+486,"What is the title of the theme song for the film ""Titanic""?","""My Heart Will Go On"""
+487,"What is the popular Thai stir-fried noodle dish with shrimp, tofu, bean sprouts, and peanuts?",Pad Thai
+488,Which province is known for its vast wilderness and polar bear population?,Manitoba
+489,What is the name of the lead singer of the band Bon Jovi?,Jon Bon Jovi
+490,What is the largest lake by surface area located entirely in the United States?,Lake Superior
+491,"What is the name of the American singer-songwriter who released the album ""Red""?",Taylor Swift
+492,What TV show follows the lives of six friends living in New York City?,Friends
+493,"What is the name of the American singer who released the album ""Thriller"" in 1982?",Michael Jackson
+494,Who is the lead vocalist of the band Red Hot Chili Peppers?,Anthony Kiedis
+495,"Who is the main antagonist in the ""Star Wars"" franchise?",Darth Vader
+496,"What is the name of the American singer who released the album ""Blackstar""?",David Bowie
+497,"Who painted the famous artwork ""The Scream""?",Edvard Munch
+498,"Who is the author of ""The Hobbit""?",J.R.R. Tolkien
+499,Who was the President of the United States during the Great Depression and World War II?,Franklin D. Roosevelt
+500,What is the largest species of snake?,Green Anaconda
+501,What is the most widely consumed beverage in the world after water?,Coffee
+502,What movie features a superhero who can shrink in size but increase in strength?,Ant-Man
+503,"What is the name of the English singer-songwriter who released the album ""÷""?",Ed Sheeran
+504,"What is the Spanish omelette made with eggs, potatoes, and onions?",Tortilla de patatas
+505,In which sport would you use a sand wedge?,Golf
+506,Which TV show is set in the fictional town of Pawnee?,Parks and Recreation
+507,What is the capital city of Germany?,Berlin
+508,"Which singer released the album ""Lemonade"" in 2016?",Beyoncé
+509,Who was the first Secretary of the Treasury of the United States?,Alexander Hamilton
+510,What movie is set in a dinosaur theme park where the attractions break free?,Jurassic Park
+511,What is the name of the main character in the game The Witcher 3: Wild Hunt?,Geralt of Rivia
+512,"Which actor portrayed James Bond in the film ""Casino Royale""?",Daniel Craig
+513,Which film franchise features the characters Bella Swan and Edward Cullen?,Twilight
+514,Calculate 10 - 5 + 2,7
+515,"Who said, ""Two things are infinite: the universe and human stupidity.""",Albert Einstein
+516,"Who is the lead singer of the band ""Queen""?",Freddie Mercury
+517,"Which British band is known for the song ""Wonderwall""?",Oasis
+518,"Who says, ""The only person you should try to be better than is the person you were yesterday""?",Matty Mullins
+519,In which game can players control a character named Samus Aran?,Metroid
+520,Which U.S. state is home to the Statue of Liberty?,New Jersey
+521,"What is the sweet, flaky pastry often filled with fruit or custard?",Danish
+522,Which actor portrayed Spider-Man in the Marvel Cinematic Universe?,Tom Holland
+523,What is the classic Italian cheese made from buffalo milk and often used in dishes such as pizza and pasta?,Mozzarella
+524,Which game franchise features a character named Sonic the Hedgehog?,SEGA
+525,"Which Canadian city is known as the ""Gateway to the West""?",Winnipeg
+526,Who was the first woman to fly solo across the Atlantic Ocean?,Amelia Earhart
+527,Which creature is often associated with the Amazon rainforest?,Jaguar
+528,What is the title of the debut single by Madonna released in 1982?,"""Everybody"""
+529,What is the distance of a marathon in kilometers?,42.195 kilometers
+530,What is the Vietnamese noodle soup made with beef or chicken and flavorful broth?,Pho
+531,What is the process of converting a liquid into a solid called?,Freezing
+532,What is the diameter of a basketball hoop in inches?,18 inches
+533,What is the maximum number of players allowed on a basketball court per team?,5
+534,"Who said, ""The only thing we have to fear is fear itself""?",Franklin D. Roosevelt
+535,What TV show follows the lives of the employees working at Dunder Mifflin Paper Company?,The Office
+536,Which animal is known for its ability to swim against the current?,Salmon
+537,What is the branch of science that deals with the study of living organisms?,Biology
+538,"Which actor played the character Joker in ""The Dark Knight""?",Heath Ledger
+539,"Which U.S. state is known as the ""Golden State""?",California
+540,What is the study of the Earth's physical and cultural features called?,Geography
+541,What is the French pastry made from choux dough filled with cream or custard?,Profiterole
+542,How many sides does a heptagon have?,7
+543,What is the study of the structure and function of cells called?,Cell Biology
+544,How many sides does a triangle have?,3
+545,"What is the process of roasting coffee beans to a medium-brown color, resulting in a balanced flavor?",Medium roast
+546,"What is the classic French soup made with onions and beef broth, topped with cheese and toasted bread?",French Onion Soup
+547,"Which game series allows players to pilot giant mechs known as ""Titans""?",Titanfall
+548,"Who won the Best Actor Oscar for his role in ""The Revenant""?",Leonardo DiCaprio
+549,Which Canadian city is known for its annual Winter Carnival and Bonhomme mascot?,Quebec City
+550,"Who won the Academy Award for Best Actress for her role in ""La La Land""?",Emma Stone
+551,In which city were the first modern Olympic Games held in 1896?,"Athens, Greece"
+552,Who is credited with the invention of the light bulb?,Thomas Edison
+553,Who is the lead vocalist of the band Imagine Dragons?,Dan Reynolds
+554,Who invented the steam engine?,James Watt
+555,"Who played the character Tony Stark in the ""Iron Man"" films?",Robert Downey Jr.
+556,"Which American rapper is known for the hit single ""Thrift Shop""?",Macklemore
+557,Who is the fastest man in the world?,Usain Bolt
+558,Which fruit is used to make guava juice?,Guava
+559,"Which actress portrayed Hermione Granger in the ""Harry Potter"" films?",Emma Watson
+560,Who painted the Mona Lisa?,Leonardo da Vinci
+561,Which U.S. city is famous for its historical role in the American Revolution and the Freedom Trail?,Boston
+562,What is the largest state by land area in the United States?,Alaska
+563,What is the Greek yogurt and cucumber dip often served with pita bread?,Tzatziki
+564,"Who is known for the catchphrase, ""May the Force be with you""?",Obi-Wan Kenobi (Star Wars)
+565,"Which Canadian city is known for its annual Calgary Stampede, a famous rodeo and festival?",Calgary
+566,"What is the sweet, frozen treat made from fruit puree and sugar?",Sorbet
+567,What is the study of the Earth's oceans called?,Oceanography
+568,"Who is the creator of the sculpture ""David""?",Michelangelo
+569,How many continents are there in the world?,7
+570,Which TV show features the character Ross Geller?,Friends
+571,"What is the name of the American singer who released the album ""Teenage Dream""?",Katy Perry
+572,Which TV show revolves around a talented but self-destructive surgeon?,Grey's Anatomy
+573,What movie follows the life of a mentally troubled mathematical genius?,A Beautiful Mind
+574,In which game do players control a character named Joel with his partner Ellie?,The Last of Us
+575,Which animal is known for its ability to regrow its tail?,Lizard
+576,In what TV show does a chemistry genius turn his life around by becoming a lawyer?,Better Call Saul
+577,Which U.S. city is famous for its Broadway shows and Times Square?,New York City
+578,What is the primary function of the small intestine?,Absorption
+579,What is the name of the main character in the game Half-Life?,Gordon Freeman
+580,Who is the lead guitarist of the band Queen?,Brian May
+581,Who won the 2021 Wimbledon Men's Singles title?,Novak Djokovic
+582,How many sides does a pentagon have?,5
+583,What is the primary function of the kidneys?,Filtration
+584,Which classic novel by Jane Austen features the character Mr. Darcy?,Pride and Prejudice
+585,What is the Italian term for a shot of espresso?,Caffè (short for Caffè Espresso)
+586,"What is the name of the American singer who released the album ""Unapologetic"" in 2012?",Rihanna
+587,What is the classic British dish consisting of sausages wrapped in bacon and baked or grilled?,Pigs in a Blanket
+588,"Which band released the album ""Abbey Road""?",The Beatles
+589,"Who was the Civil Rights activist known for his ""I Have a Dream"" speech?",Martin Luther King Jr.
+590,What is the largest desert in the world?,Sahara Desert
+591,Which sport is played with a small white ball and mallets?,Croquet
+592,"What is the Italian pasta dish with a creamy sauce made from eggs, cheese, and bacon or pancetta?",Carbonara
+593,How many players are there on a baseball team?,Nine
+594,"Who said, ""Be the change you wish to see in the world.""",Mahatma Gandhi
+595,What is the title of Michael Jackson's sixth studio album?,"""Thriller"""
+596,What is the world's largest living species of fish?,Whale Shark
+597,"What is the name of the Canadian singer who released the album ""Scorpion""?",Drake
+598,Who is the most decorated Olympian of all time?,Michael Phelps
+599,"Which band released the hit song ""Hey Jude""?",The Beatles
+600,"Which famous document begins with the words ""We the People""?",The U.S. Constitution
+601,In which game do players control a character named John Marston?,Red Dead Redemption
+602,"Who is the author of ""The Catcher in the Rye""?",J.D. Salinger
+603,Who is the Norse god of thunder?,Thor
+604,What is the popular American fast food made from ground beef patty and bun?,Hamburger
+605,What is the title of the debut studio album by Michael Jackson released in 1979?,"""Off the Wall"""
+606,"Which American rock band is known for the song ""Sweet Home Alabama""?",Lynyrd Skynyrd
+607,"What is the traditional Mexican grilled corn on the cob, typically topped with cheese, chili powder, and lime?",Elote
+608,What is the unit of frequency?,Hertz
+609,Which U.S. state is home to the Grand Canyon?,Arizona
+610,"What is the name of the American singer-songwriter who released the album ""Reputation""?",Taylor Swift
+611,What movie is about a fish who dreams of becoming a professional swimmer?,The Little Mermaid
+612,In which game can players control a character named Max Caulfield?,Life is Strange
+613,Which country launched the James Webb Space Telescope?,United States
+614,What is the fermented tea beverage that originated in China?,Kombucha
+615,"Who played the character Edward Cullen in the ""Twilight"" film series?",Robert Pattinson
+616,"Which American rapper is known for the hit single ""Empire State of Mind""?",Jay-Z
+617,"Who said, ""The future belongs to those who believe in the beauty of their dreams.""",Eleanor Roosevelt
+618,In which city are the headquarters of the International Olympic Committee?,"Lausanne, Switzerland"
+619,Which bird is known for its long neck and legs?,Flamingo
+620,"Which Canadian province is known for its stunning national parks, including Banff and Jasper?",Alberta
+621,Which country hosted the 2022 FIFA World Cup?,Qatar
+622,What is the national animal of Scotland?,Unicorn
+623,In what movie does a retired spy come out of retirement to save his kidnapped daughter?,Taken
+624,What is the largest mammal on Earth?,Blue whale
+625,"Which sport is associated with the term ""knockout""?",Boxing
+626,Which creature is known for its ability to walk on water?,Jesus Christ Lizard
+627,What is the unit of power?,Watt
+628,What is the title of Harper Lee's only published novel?,To Kill a Mockingbird
+629,What is the national animal of China?,Giant Panda
+630,"What is the traditional Thai curry made from green chili peppers, coconut milk, and various spices?",Green Curry
+631,Who invented the World Wide Web?,Tim Berners-Lee
+632,Which company recently became the first to reach a market valuation of $3 trillion?,Microsoft
+633,"Who is the creator of the animated TV series ""The Simpsons""?",Matt Groening
+634,"Which creature is often called the ""ship of the desert""?",Camel
+635,What is the traditional British dish of sausages wrapped in bacon and served with mashed potatoes and gravy?,Toad in the hole
+636,"Who is the main character in ""The Hunger Games"" trilogy?",Katniss Everdeen
+637,What is the largest species of living reptile?,Saltwater Crocodile
+638,"Who is the author of the ""Harry Potter"" book series?",J.K. Rowling
+639,"Which American singer is known for the hit song ""Uptown Funk""?",Bruno Mars
+640,"What is the popular Mexican condiment made from mashed avocados, onions, tomatoes, lime juice, and seasonings?",Guacamole
+641,"Who is the author of ""The Lord of the Rings"" trilogy?",J.R.R. Tolkien
+642,How many time zones are there in the world?,24
+643,What is the capital city of France?,Paris
+644,What is the traditional Korean side dish made from fermented soybeans?,Doenjang
+645,Which creature other than spiders are known for its ability to produce venom?,Snake
+646,Which sport uses a cue stick and balls on a table?,Pool
+647,"Which band released the album ""Sgt. Pepper's Lonely Hearts Club Band""?",The Beatles
+648,What is the largest species of deer?,Moose
+649,"What is the popular Italian bread with a long, thin shape and crispy crust?",Baguette
+650,"What is the traditional Spanish cured ham, typically sliced thin and served as tapas?",Jamón
+651,"What is the objective of the game ""Fortnite""?",Be the last person standing
+652,Which country recently signed a peace agreement with Sudan?,Israel
+653,"Which U.S. state is known as the ""Sunshine State""?",Florida
+654,Which U.S. city is known for its space industry and NASA's Kennedy Space Center?,Cape Canaveral
+655,"Who played the character Jon Snow in the TV series ""Game of Thrones""?",Kit Harington
+656,Which country is known as the birthplace of coffee?,Ethiopia
+657,"What is the classic American sandwich made with corned beef, Swiss cheese, sauerkraut, and Russian dressing?",Reuben
+658,What is the largest island of Hawaii?,Hawaii
+659,Who is credited with the invention of the computer?,Charles Babbage
+660,How many sides does a decagon have?,10
+661,"What is the name of the British rock band known for the song ""Smoke on the Water""?",Deep Purple
+662,What is the largest species of bee?,Carpenter Bee
+663,"Which fruit is known as ""The King of Fruits""?",Durian
+664,How many legs does a spider have?,8
+665,What is the muscular organ that pumps blood throughout the body?,Heart
+666,What is the branch of physics that deals with motion and forces?,Mechanics
+667,"Who won the Academy Award for Best Director for the film ""La La Land""?",Damien Chazelle
+668,Which U.S. state is known for its famous jazz music and Mardi Gras celebrations?,Louisiana
+669,"What is the objective of the game ""Minecraft""?",Build and survive
+670,Which TV show is set in the fictional town of Hawkins?,Stranger Things
+671,What is the process by which plants convert sunlight into energy?,Photosynthesis
+672,Calculate: 10 ÷ 2 + 5,10
+673,In which country is the Taj Mahal located?,India
+674,In which game can players capture and train creatures?,Pokémon
+675,What is the capital city of Brazil?,Brasília
+676,"What is the traditional Spanish cold soup made from blended vegetables, often including tomatoes?",Gazpacho
+677,Which game franchise is known for its massive multiplayer online role-playing games (MMORPGs)?,Final Fantasy
+678,Who won the Super Bowl in 2020?,Kansas City Chiefs
+679,Who won the 2021 Nobel Prize in Literature?,Abdulrazak Gurnah
+680,"Which American singer is known for the hit single ""I Will Always Love You""?",Whitney Houston
+681,Which country is home to the Great Barrier Reef?,Australia
+682,Who was the President of the United States during the Watergate scandal?,Richard Nixon
+683,Which U.S. state is known for its stunning national parks like Yellowstone and Glacier?,Montana
+684,What is the chemical symbol for sodium?,"Na, Sodium"
+685,What is the unit of electric potential?,Volt
+686,Which TV show is set in the fictional town of Springfield?,The Simpsons
+687,"Who is the author of ""Moby-Dick""?",Herman Melville
+688,What is the capital city of South Korea?,Seoul
+689,What is the chemical symbol for silver?,"Ag, Silver"
+690,What is the term for the residue left behind by brewed coffee?,Coffee grounds
+691,"Which American rock band is known for the song ""Smells Like Teen Spirit""?",Nirvana
+692,Who is the lead vocalist of the band AC/DC?,Brian Johnson
+693,Which bird is known for its long beak used to catch fish?,Pelican
+694,"Which Canadian province is known for its stunning Bay of Fundy, home to the highest tides in the world?",New Brunswick
+695,"What is the name of the Canadian rapper known for songs like ""Hotline Bling""?",Drake
+696,Which sport is played on ice with stones and brooms?,Curling
+697,What movie follows the story of a young woman who becomes a prima ballerina?,Black Swan
+698,Which vegetable is used to make sauerkraut?,Cabbage
+699,What major global trade agreement was signed in 2020?,Regional Comprehensive Economic Partnership (RCEP)
+700,What is the process of converting a solid into a liquid called?,Melting
+701,"Which actor played the character Batman in ""The Dark Knight"" trilogy?",Christian Bale
+702,Who is the lead singer of the band Coldplay?,Chris Martin
+703,"Who says, ""You are never too old to set another goal or to dream a new dream""?",C.S. Lewis
+704,What is the capital city of Japan?,Tokyo
+705,What is the highest mountain peak in the United States?,Mount Denali
+706,How many keys are there on a standard piano?,88
+707,Which U.S. city is famous for its historic Alamo and River Walk?,San Antonio
+708,Who was the first African American President of the United States?,Barack Obama
+709,What is the largest species of turtle?,Leatherback Sea Turtle
+710,Which bird is famous for its colorful plumage and elaborate courtship display?,Peacock
+711,Who is credited with the discovery of electricity?,Benjamin Franklin
+712,What is the basic unit of information in computing?,Bit
+713,What is the fastest land animal?,Cheetah
+714,"What is the name of the British singer-songwriter who released the album ""X""?",Ed Sheeran
+715,What is the process by which a solid changes directly into a gas?,Sublimation
+716,How many sides does an octagon have?,8
+717,"Who says, ""You can't blame gravity for falling in love""?",Albert Einstein
+718,Which animal is often associated with wisdom in many cultures?,Owl
+719,What is the largest ocean in the world?,Pacific Ocean
+720,What is the title of the debut single by Lady Gaga released in 2008?,"""Just Dance"""
+721,Which river flows through the Grand Canyon?,Colorado River
+722,Who is the lead guitarist of the band Guns N' Roses?,Slash
+723,What is the primary species of coffee that is commercially cultivated?,Coffea arabica
+724,"What is the popular Mexican dish made from tortilla chips topped with melted cheese, salsa, and other ingredients?",Nachos
+725,In what movie does a young girl befriend a friendly extraterrestrial and help him return home?,Lilo & Stitch
+726,What is the name of the main character in the Metal Gear Solid series?,Solid Snake
+727,"What is the classic American dessert made with layers of graham crackers, chocolate, and marshmallow?",S'mores
+728,Calculate: 3 x 3 ÷ 3 + 3 - 3,6
+729,Which game features a block-building and exploration gameplay?,Minecraft
+730,"Which actress starred in the film ""La La Land""?",Emma Stone
+731,"What is the name of the British singer who released the album ""Back to Black""?",Amy Winehouse
+732,Which Canadian city hosted the 2010 Winter Olympics?,Vancouver
+733,What is the smallest species of deer?,Pudu
+734,Who is the Greek goddess of love and beauty?,Aphrodite
+735,What is the national dish of Italy?,Pizza
+736,In what movie does a young girl befriend a flying robot and embark on an adventure?,The Iron Giant
+737,What is the national animal of India?,Bengal Tiger
+738,What is the largest species of bear?,Kodiak Bear
+739,"Who is the creator of the TV series ""Friends""?",David Crane
+740,"Who said, ""Life is like riding a bicycle. To keep your balance, you must keep moving""?",Albert Einstein
+741,"Who said, ""The only thing necessary for the triumph of evil is for good men to do nothing.""",Edmund Burke
+742,Which animal has the longest neck?,Giraffe
+743,What is the method of brewing coffee that involves pouring water over ground coffee in a filter?,Pour-over Coffee
+744,In what TV show does a high school teacher become a counselor for a group of troubled students?,13 Reasons Why
+745,"Which U.S. state is known as the ""Last Frontier""?",Alaska
+746,"What is the Italian cured meat made from pork, seasoned with salt and various spices, and aged for months?",Prosciutto
+747,In which game can players control a character named Marcus Fenix?,Gears of War
+748,Which country has won the most FIFA World Cups in men's soccer?,Brazil
+749,Which movie is about a man who can manipulate and control dreams?,Inception
+750,Who holds the record for the most home runs in baseball?,Barry Bonds
+751,"Which singer is known as the ""King of Pop""?",Michael Jackson
+752,Which game series is known for its open-world crime action gameplay?,Grand Theft Auto
+753,Which country hosted the 2021 G7 Summit?,United Kingdom
+754,What is the title of the debut studio album by Lady Gaga released in 2008?,"""The Fame"""
+755,Which country is the largest producer of oil in the world?,Saudi Arabia
+756,In which book does the character Atticus Finch appear?,To Kill a Mockingbird
+757,Which bird is famous for its courtship dance?,Bird of Paradise
+758,In what movie does a young girl befriend a group of monsters in a fantasy world?,"Monsters, Inc."
+759,What is the capital city of Australia?,Canberra
+760,Who is known for developing the theory of quantum mechanics?,Max Planck
+761,What is the smallest species of frog?,Paedophryne amauensis
+762,What is the world's largest land carnivore?,Polar Bear
+763,In which game do players control a character named Master Chief?,Halo
+764,"Who said, ""It does not matter how slowly you go as long as you do not stop.""",Confucius
+765,What is the speed of light in a vacuum?,"Approximately 299,792,458 meters per second"
+766,What is the national anthem of the United States?,"""The Star-Spangled Banner"""
+767,"Who is the iconic superhero known for the line, ""It's clobberin' time!""?",The Thing (Fantastic Four)
+768,Who is the Egyptian god of the sun?,"The Egyptian God, Ra"
+769,Which animal is known for its ability to echolocate?,Bat
+770,What is the title of the debut single by Billie Eilish released in 2015?,"""Ocean Eyes"""
+771,"What is the Italian pasta dish with a tomato-based sauce, typically including ground meat?",Bolognese
+772,What is the process of converting a gas directly into a solid called?,Deposition
+773,Who is credited with inventing the telephone?,Alexander Graham Bell
+774,Which mountain range stretches along the west coast of the United States?,Rocky Mountains
+775,Which game series is set in the fantasy world of Azeroth?,World of Warcraft
+776,"Which main actor(s) starred in the film ""La La Land""?","Ryan Gosling, Emma Stone"
+777,What is the fluid-filled sac that cushions and lubricates joints?,Synovial fluid
+778,What is the title of Beyoncé's visual album released in 2016?,"""Lemonade"""
+779,What is the primary function of a microscope?,Magnify small objects
+780,"What is the title of the first book in J.R.R. Tolkien's ""The Lord of the Rings"" trilogy?",The Fellowship of the Ring
+781,What is the deep-fried dough typically coated with sugar or cinnamon?,Donut
+782,"What is the popular Middle Eastern dessert made from filo pastry, nuts, and sweet syrup?",Baklava
+783,What is the phenomenon that causes the bending of light waves?,Refraction
+784,Which game series is set in the fictional city of Rapture?,BioShock
+785,Which sport is associated with the Stanley Cup?,Ice hockey
+786,Which TV show features the character Eleven?,Stranger Things
+787,What is the national bird of New Zealand?,Kiwi
+788,Which fruit is used to make lemon meringue pie?,Lemon
+789,What is the tallest bird in the world?,Ostrich
+790,"Who said, ""I'll be back""?",Arnold Schwarzenegger
+791,What is the largest species of pinniped?,Elephant Seal
+792,Who is credited with the discovery of the structure of DNA?,James Watson and Francis Crick
+793,Who won the 2021 Formula 1 World Championship?,Max Verstappen
+794,Which sport is played on a diamond-shaped field?,Baseball
+795,What is the objective of the game Portal?,Solve puzzles using a portal gun
+796,What major social media platform faced scrutiny over its handling of user data in 2021?,Facebook
+797,Which game franchise features a character named Nathan Drake?,Uncharted
+798,What is the smallest species of dolphin?,Maui's Dolphin
+799,What is the study of the Earth's rocks and minerals called?,Petrology
+800,"Which animal is known for its long, sticky tongue used to catch insects?",Anteater
+801,How many players are there in a volleyball team?,6
+802,"Who is the creator of the ""Game of Thrones"" book series?",George R.R. Martin
+803,"Who says, ""Do what you can, with what you have, where you are""?",Theodore Roosevelt
+804,"Who says, ""The purpose of our lives is to be happy""?",Dalai Lama
+805,What is the national animal of Australia?,Kangaroo
+806,What is the highest waterfall in the United States?,Yosemite Falls
+807,Who is known for proposing the laws of planetary motion?,Isaac Newton
+808,"Who said, ""Believe you can and you're halfway there.""",Theodore Roosevelt
+809,What is the type of pasta that is shaped like small ear-shaped shells?,Orecchiette
+810,Who is the Greek goddess of wisdom?,Athena
+811,What is the title of the debut studio album by Elvis Presley released in 1956?,"""Elvis Presley"""
+812,"In which sport can you score a ""try""?",Rugby
+813,"Who is known for the phrase, ""It's showtime!""?",Beetlejuice
+814,What is the scientific term for the thigh bone?,Femur
+815,"Who is known as the ""King of Rock and Roll""?",Elvis Presley
+816,Who is the current Prime Minister of India?,Narendra Modi
+817,What is the traditional Japanese noodle soup dish with wheat noodles and a soy-based broth?,Ramen
+818,Which city hosted the 2021 UEFA Champions League Final?,"Porto, Portugal"
+819,What is the traditional English tea-time treat made from two layers of sponge cake with jam and buttercream in the middle?,Victoria sponge
+820,"Which animated film features the song ""Let It Go""?",Frozen
+821,Who was the third President of the United States and the principal author of the United States Constitution?,James Madison
+822,What is the largest species of shark?,Whale Shark
+823,"What is the classic American dessert made from apples, sugar, and pastry crust?",Apple Pie
+824,"Which American pop star released the album ""Bad Romance"" in 2009?",Lady Gaga
+825,Which country is known for the Great Wall?,China
+826,What is the French dessert made from caramelized sugar on top of custard?,Crème brûlée
+827,Which TV show revolves around a genius eccentric physicist and his socially awkward friends?,The Big Bang Theory
+828,What movie is about a young girl who enters a magical world through a secret passage?,Coraline
+829,"Which U.S. state is known as the ""Granite State""?",New Hampshire
+830,"Who directed the film ""Black Panther""?",Ryan Coogler
+831,Which animal is known for its ability to climb trees headfirst and is insanely lazy?,Sloth
+832,"Which artist released the hit song ""Someone Like You""?",Adele
+833,What is the type of sausage often associated with Germany?,Bratwurst
+834,What is the name of the main character in the game BioShock?,Jack/Rapture
+835,What is the study of heredity called?,Genetics
+836,What is the tallest building in the world?,Burj Khalifa
+837,"What is the popular Thai spicy salad made with shredded unripe papaya, tomatoes, chili peppers, and lime juice?",Som Tum
+838,How many planets are there in our solar system?,8
+839,"Who is the protagonist of the ""Lord of the Rings"" trilogy?",Frodo Baggins
+840,What does 'RTS' mean in the context of video games?,Real Time Strategy
+841,"Which U.S. state is known as the ""Empire State""?",New York
+842,What is the term for a coffee made with equal parts espresso and steamed milk?,Cappuccino
+843,"Who painted the ""Last Supper""?",Leonardo da Vinci
+844,What is 50% of 100?,50
+845,In what movie does a man travel back in time to prevent a future disaster?,The Terminator
+846,What is the main ingredient in hummus?,Chickpeas
+847,How many bones are there in a human hand?,27
+848,In which sport is the Triple Crown a prestigious achievement?,Horse racing
+849,"Which American singer is known for the hit single ""Billie Jean""?",Michael Jackson
+850,What is the largest species of eagle?,Harpy Eagle
+851,What is the branch of science that studies the behavior and properties of matter?,Physics
+852,What is the fastest flying bird in level flight?,Common Swift
+853,In which city were the Summer Olympics held in 2008?,Beijing
+854,What is the best-selling album of all time?,"""Thriller"" by Michael Jackson"
+855,What is the square root of 16?,4
+856,What is the official motto of the United States?,"""In God We Trust"""
+857,What is the largest species of land snail?,Giant African Snail
+858,What is the highest score achievable in a single frame in bowling?,300
+859,"Who is the creator of the TV series ""Grey's Anatomy""?",Shonda Rhimes
+860,What is the technique of steaming milk to create a creamy texture for coffee beverages?,Milk frothing
+861,What is the title of the debut single by Rihanna released in 2005?,"""Pon de Replay"""
+862,Which country hosted the 2021 Summer Olympics?,Japan
+863,"What is the popular Mexican beverage made from lime juice, sweetener, and water?",Agua Fresca
+864,What is the title of the debut single by Post Malone released in 2015?,"""White Iverson"""
+865,Which movie is about a group of astronauts who embark on a mission to save Earth?,Interstellar
+866,Which country launched the world's first 6G satellite in 2021?,China
+867,"Who is known as the ""Father of Modern Physics""?",Albert Einstein
+868,Which TV show follows the lives of the Gallagher family?,Shameless
+869,"Who is the author of ""The Chronicles of Narnia""?",C.S. Lewis
+870,What is the largest planet in our solar system?,Jupiter
+871,What movie is about a boxer who fights his way to the top and becomes a champion?,Rocky
+872,What is the SI unit of force?,Newton
+873,"Who said, ""Life is what happens when you're busy making other plans.""",John Lennon
+874,Calculate: 2 x 2 x 2 x 2 x 2,32
+875,"Which band released the album ""Rumours""?",Fleetwood Mac
+876,Which film won the Best Picture award at the 2021 Oscars?,Nomadland
+877,"Who directed the film ""Inception""?",Christopher Nolan
+878,What movie follows the story of a man who ages in reverse and experiences life in a unique way?,The Curious Case of Benjamin Button
+879,What is the smallest unit of matter?,Atom
+880,Who won the UEFA Champions League in 2021?,Chelsea
+881,Who is credited with the discovery of radioactivity?,Marie Curie
+882,Which book features the character Holden Caulfield?,The Catcher in the Rye
+883,What is the tallest land animal?,Giraffe
+884,Who is the lead guitarist of the band Rolling Stones?,Keith Richards
+885,"Which singer released the hit song ""Hello"" in 2015?",Adele
+886,What is the title of the debut studio album by Lana Del Rey released in 2012?,"""Born to Die"""
+887,What is the traditional Japanese fermented soybean product used in cooking and as a condiment?,Natto
+888,Which TV show features the character Jon Snow?,Game of Thrones
+889,Which film franchise features the character Tony Stark/Iron Man?,Marvel Cinematic Universe
+890,"Which American singer-songwriter is known for the hit single ""Happy""?",Pharrell Williams
+891,Who is the lead vocalist of the band Pearl Jam?,Eddie Vedder
+892,Who invented the first practical camera?,Louis Daguerre
+893,"Which city is known as the ""Big Apple""?",New York City
+894,"In which sport is the term ""alley-oop"" commonly used?",Basketball
+895,What is the title of the debut studio album by Madonna released in 1983?,"""Madonna"""
+896,"In which sport would you use a foil, epee, or sabre?",Fencing
+897,What is the popular Italian appetizer made with sliced bread topped with various ingredients?,Bruschetta
+898,Calculate 10 - 5 x 2,0
+899,What is the official currency of Canada?,Canadian dollar
+900,Who painted the ceiling of the Sistine Chapel?,Michelangelo
+901,What is the branch of science that deals with the study of the behavior and mental processes of organisms?,Psychology
+902,"What is the traditional Thai soup with spicy, sour flavors, usually made with shrimp, lemongrass, and lime juice?",Tom yum
+903,What is the organ responsible for producing insulin?,Pancreas
+904,Which movie features a young lion prince who must reclaim his throne from his uncle?,The Lion King
+905,Which TV show features a forensic anthropologist who solves crimes using her expertise in bones?,Bones
+906,Which U.S. city is famous for its Golden Gate Bridge?,San Francisco
+907,Who holds the record for the most goals scored in soccer history?,Pelé
+908,Which animal is known for its ability to change color to blend with its surroundings?,Cuttlefish
+909,Which Canadian province is known for its vast oil sands reserves?,Alberta
+910,What major international agreement aims to limit global warming?,Paris Agreement
+911,Which U.S. city is famous for its iconic Space Needle?,Seattle
+912,What is the title of the debut studio album by Kanye West released in 2004?,"""The College Dropout"""
+913,Which creature is known for its ability to regrow its limbs?,Axolotl
+914,What is the smallest unit of an element?,Atom
+915,What is the protein responsible for muscle contraction?,Actin and Myosin
+916,"Which American rock band is known for the song ""Sweet Child o' Mine""?",Guns N' Roses
+917,What is the title of the debut studio album by Prince released in 1978?,"""For You"""

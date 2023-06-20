@@ -118,12 +118,10 @@ def generate_TTS_using_coqui(text_prompts):
         tts_files.append(file_name)
 
     return tts_files
-    
-
 
 # generate_TTS_using_bark(["hello world","how are you"])
 
-generate_TTS_using_coqui(["What do you call a bear with no teeth?", "A gummy bear"])
+# generate_TTS_using_coqui(["What do you call a bear with no teeth?", "A gummy bear"])
 
 
 

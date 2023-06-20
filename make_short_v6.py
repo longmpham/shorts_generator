@@ -61,8 +61,8 @@ def get_video_file(goal_name):
     background_video_file = os.path.join(background_video_dir, random.choice(background_video_files))
     return background_video_file
 
-def get_audio_file(goal_name):
-    background_audio_dir = os.path.join(os.getcwd(), "resources", "audio", f"{goal_name}")
+def get_audio_file(audio_type):
+    background_audio_dir = os.path.join(os.getcwd(), "resources", "audio", f"{audio_type}")
     background_audio_files  = [f for f in os.listdir(background_audio_dir) if f.endswith(".mp3")]
     background_audio_file = os.path.join(background_audio_dir, random.choice(background_audio_files))
     return background_audio_file
@@ -147,7 +147,7 @@ def generate_TTS_using_TikTok(sentences):
         
         return
     
-    delete_temp_audio()
+    # delete_temp_audio()
     
     path = os.getcwd() + "\\resources\\temp\\audio"
     tts_files = []
@@ -156,7 +156,7 @@ def generate_TTS_using_TikTok(sentences):
         
         success, tts_file = texttotiktoktts(sentence, "en_us_001", path, file_name=f"audio_tts_{i}")
         tts_files.append(tts_file)
-        print(tts_file)
+        # print(tts_file)
     
     if not success: exit()
     return tts_files
@@ -247,8 +247,63 @@ def generate_srt_from_audio_using_whisper(audio_file_path):
     
     return srt_file_path
 
+def add_text_clip(text="", font_name="Impact", font_size=30, font_color="white", bg_color="black", size=(int(720*0.9),None), method="label", start=0, total_duration=5, opacity=1.0, position_y=0.5):
+    text_clip = TextClip(text, fontsize=font_size, color=font_color, bg_color=bg_color, font=font_name, size=size, method=method)
+    text_clip = text_clip.set_position(("center",position_y), relative=True).set_start(start).set_duration(total_duration).set_opacity(opacity)
+    return text_clip
+
+def add_video_clip(path, start=0, total_duration=5, size=(720,1280)):
+    video_file = get_video_file(path)
+    video_clip = VideoFileClip(video_file, audio=True).loop(total_duration)
+    video_clip = video_clip.set_start(start).set_duration(total_duration).resize(size)
+    return video_clip
+
+def add_audio_tts_clip(audio_file, silence=1, start=0):
+    # print(audio_file)
+    audio_clip = AudioFileClip(audio_file)
+    clip_duration = audio_clip.duration + silence
+    audio_clip = audio_clip.set_start(start)
+    
+    return audio_clip, clip_duration
+
+def create_video_audio_text_clip(text, text_options={}, video_options={}, audio_options={}):
+    # Define text options
+    font_name = text_options['font_name']
+    font_size = text_options['font_size']
+    font_color = text_options['font_color']
+    bg_color = text_options['bg_color']
+    text_size = text_options['text_size']
+    method = text_options["method"]
+    opacity = text_options['opacity']
+    position_y = text_options["position_y"]
+    
+    # Define video options
+    video_file_path = video_options["video_file_path"]
+    video_size = video_options["video_size"]
+
+    # Define audio options
+    
+    silence = audio_options["silence"]
+    start = audio_options["start"]
+    total_duration = audio_options["total_duration"] # default 10 i guess?
+
+    print('generating video...')
+    tts_file = generate_TTS_using_TikTok([text])
+    tts_clip, clip_duration = add_audio_tts_clip(tts_file[0], silence=silence, start=start)
+    text_clip = add_text_clip(text=text, font_name=font_name, font_size=font_size, font_color=font_color, bg_color=bg_color, size=text_size, method=method, start=start, total_duration=clip_duration, opacity=opacity, position_y=position_y)
+    video_clip = add_video_clip(path="jokes", start=start, total_duration=clip_duration, size=video_size)
+    
+    final_video = CompositeVideoClip([video_clip, text_clip], use_bgclip=True)
+    final_video = final_video.set_audio(tts_clip)
+    # filename = "test.mp4"
+    # final_video.write_videofile(filename, fps=30, codec='libx264', audio_codec='aac', preset='ultrafast')
+    # final_video.write_videofile(filename, fps=30, preset='ultrafast')
+    # exit()
+    return final_video
+
 def create_video_from_csv(csv_data, goal_name, description_text, mp4_file_name):
     # Define video parameters
+    audio_type = "happy"
     mobile_screen_size = (720, 1280) # portrait aspect ratio for mobile phones
     text_color = "white"
     bg_color='black'
@@ -261,77 +316,97 @@ def create_video_from_csv(csv_data, goal_name, description_text, mp4_file_name):
         question = data[list(data.keys())[1]]  # Extract the second value dynamically
         answer = data[list(data.keys())[2]]  # Extract the third value dynamically
         
-        
-        # Add the TTS audio track to the video using CompositeAudioClip
-        # tts_audio_files = generate_TTS_using_coqui([question, answer])
-        # tts_audio_files = generate_TTS_using_GTTS([question, answer, ending_text])
-        tts_audio_files = generate_TTS_using_TikTok([question, answer, ending_text])
-        # tts_audio_files = ["output_0.wav", "output_1.wav"]
-        tts_audio_clip1 = AudioFileClip(tts_audio_files[0]) # question tts
-        tts_audio_clip2 = AudioFileClip(tts_audio_files[1]) # answer tts
-        tts_audio_clip3 = AudioFileClip(tts_audio_files[2]) # sub comment like for more tts
-        
-        clip1_duration = tts_audio_clip1.duration + 2 # add some suspense... 
-        clip2_duration = tts_audio_clip2.duration + 1
-        clip3_duration = tts_audio_clip3.duration + 0.5
-        video_duration = clip1_duration + clip2_duration + clip3_duration
-        
-        # set the duration of the voice
-        tts_audio_clip1 = tts_audio_clip1.set_start(0)
-        tts_audio_clip2 = tts_audio_clip2.set_start(clip1_duration)
-        tts_audio_clip3 = tts_audio_clip3.set_start(clip1_duration + clip2_duration)
-        
-        # generator = lambda txt: TextClip(txt, font='Arial', fontsize=50, color='white')
-        # subs = [((0, 2), 'subs1'),
-        #         ((2, 4), 'subs2'),
-        #         ((4, 6), 'subs3'),
-        #         ((6, 10), 'subs4')]
+        # Define options for video, text clips, and audio
+        text_options = {
+            'font_name': 'Impact',
+            'font_size': 50,
+            'font_color': 'white',
+            'bg_color': 'black',
+            'text_size': (mobile_text_screen_size[0],None),
+            'method': "caption",
+            'opacity': opacity,
+            'position_y': "center"
+        }
+        video_options = {
+            'video_file_path': goal_name,
+            'video_size': mobile_screen_size,
+        }
+        audio_options = {
+            'start': 0,
+            'silence': 2,
+            'total_duration': 10,
+        }
 
-        # subtitles = SubtitlesClip(subs, generator)
-        # subtitles = subtitles.set_position(("center", 0.2))
-
+        question_video = create_video_audio_text_clip(text=question, text_options=text_options, video_options=video_options, audio_options=audio_options)
+        
+        # Define options for video, text clips, and audio
+        text_options = {
+            'font_name': 'Impact',
+            'font_size': 50,
+            'font_color': 'white',
+            'bg_color': 'black',
+            'text_size': (mobile_text_screen_size[0],None),
+            'method': "caption",
+            'opacity': opacity,
+            'position_y': "center"
+        }
+        video_options = {
+            'video_file_path': goal_name,
+            'video_size': mobile_screen_size,
+        }
+        audio_options = {
+            'start': question_video.duration,
+            'silence': 1,
+            'total_duration': 10,
+        }
+        
+        answer_video = create_video_audio_text_clip(text=answer, text_options=text_options, video_options=video_options, audio_options=audio_options)
+        
+        # Define options for video, text clips, and audio
+        text_options = {
+            'font_name': 'Impact',
+            'font_size': 50,
+            'font_color': 'white',
+            'bg_color': 'black',
+            'text_size': (mobile_text_screen_size[0],None),
+            'method': "label",
+            'opacity': opacity,
+            'position_y': 0.1
+        }
+        video_options = {
+            'video_file_path': goal_name,
+            'video_size': mobile_screen_size,
+        }
+        audio_options = {
+            'start': question_video.duration + answer_video.duration,
+            'silence': 0.5,
+            'total_duration': 3,
+        }
+        
+        ending_video = create_video_audio_text_clip(text=description_text, text_options=text_options, video_options=video_options, audio_options=audio_options)
+        
+        video_duration = question_video.duration + answer_video.duration + ending_video.duration
+        
         # Create the clip for the description
-        hashtag_clip = TextClip(description_text, fontsize=30, color=text_color, bg_color=bg_color, font='Impact', size=(mobile_text_screen_size[0],None))
-        hashtag_clip = hashtag_clip.set_position(("center",0.8), relative=True).set_duration(video_duration).set_opacity(1)
-        
-        question_clip = TextClip(question, fontsize=50, color=text_color, bg_color=bg_color, font='Impact', size=(mobile_text_screen_size[0], None), method='caption')
-        question_clip = question_clip.set_position('center').set_start(0).set_duration(clip1_duration).set_opacity(opacity)
+        hashtag_clip = add_text_clip(text=description_text, font_name="Impact", font_size=30, font_color="white", 
+                                     bg_color="black", size=(mobile_text_screen_size[0],None), start=0, 
+                                     total_duration=video_duration, opacity=1.0, position_y=0.8,method="label")
 
-        answer_clip = TextClip(answer, fontsize=50, color=text_color, bg_color=bg_color, font='Impact', size=(mobile_text_screen_size[0], None), method='caption')
-        answer_clip = answer_clip.set_position('center').set_start(clip1_duration).set_duration(clip2_duration).set_opacity(opacity)
-
-        # Create the clip ending comments
-        ending_clip = TextClip(ending_text, fontsize=50, color=text_color, bg_color=bg_color, font='Impact', size=(mobile_text_screen_size[0],None), method='caption')
-        ending_clip = ending_clip.set_position(("center",0.1), relative=True).set_start(clip1_duration + clip2_duration).set_duration(clip3_duration).set_opacity(1)
-
-        # Create the background clip for question
-        bg_video_path = get_video_file(goal_name)
-        bg_question_clip = VideoFileClip(bg_video_path, audio=True).loop(clip1_duration)
-        bg_question_clip = bg_question_clip.set_start(0).set_duration(clip1_duration).resize(mobile_screen_size)
+        # Put the videos together
+        bg_video_full = concatenate_videoclips([question_video, answer_video, ending_video])
         
-        # Create the picture clip for answer
-        # bg_answer_clip = ImageClip(img=get_answer_picture(answer), duration=clip2_duration)
-        # bg_answer_clip = ImageClip(img="C:\\Users\\longp\\Documents\\Coding\\shorts_generator\\resources\\screenshots\\craiyon_232231_A_gummy_bear___not_a_person_but_a_place_or_thing__1080x1920.png", duration=clip2_duration)
-        bg_video_path2 = get_video_file(goal_name)
-        bg_answer_clip = VideoFileClip(bg_video_path2, audio=True).loop(clip2_duration)
-        bg_answer_clip = bg_answer_clip.set_start(clip1_duration).set_duration(clip2_duration + clip3_duration).resize(mobile_screen_size)
-        bg_video_full = concatenate_videoclips([bg_question_clip, bg_answer_clip])
-        # bg_video_full = CompositeVideoClip([bg_question_clip, bg_answer_clip])
-        
-        # Combine the video clips
-        # final_video = CompositeVideoClip([bg_video_full, question_clip, answer_clip, hashtag_clip, subtitles], use_bgclip=True)
-        final_video = CompositeVideoClip([bg_video_full, question_clip, answer_clip, hashtag_clip, ending_clip], use_bgclip=True)
-        final_video = final_video.set_duration(bg_video_full.duration)
+        # Combine the all the clips
+        final_video = CompositeVideoClip([bg_video_full, hashtag_clip], use_bgclip=True)
+        final_video = final_video.set_duration(video_duration)
 
         # Add the audio track to the video
         # background_music
-        # audio_path = os.path.join("resources", "audio", f"{goal_name}", f"{goal_name}.mp3")
-        audio_path = get_audio_file(goal_name)
+        audio_path = get_audio_file(audio_type)
         audio_clip = AudioFileClip(audio_path).set_duration(video_duration)
-        audio_clip = audio_clip.volumex(0.1)
+        audio_clip = audio_clip.volumex(0.1) # set volume of background_audio to 10%
         
         # mux the audios together
-        combined_audio = CompositeAudioClip([audio_clip, tts_audio_clip1, tts_audio_clip2, tts_audio_clip3])
+        combined_audio = CompositeAudioClip([audio_clip, final_video.audio])
         final_video = final_video.set_audio(combined_audio)
         
         # Write the video to a file
@@ -340,12 +415,27 @@ def create_video_from_csv(csv_data, goal_name, description_text, mp4_file_name):
         # final_video.write_videofile(filename, fps=30, codec='libx264', audio_codec='aac', preset='ultrafast')
         final_video.write_videofile(filename, fps=30, preset='ultrafast')
         # final_video.write_videofile(filename, verbose=True, write_logfile=True)
-        # break # for debug purposes only to generate 1 video.
+        
+        break # for debug purposes only to generate 1 video.
         # if i == 3: # generate 3 vids
         #     break
 
 def main():
+    # texts = [    "Once upon a time, in a charming little town,",    "Lived a cat named Oliver, with fur of golden brown.",    "And nearby, a dog named Max, full of playful zest,",    "With a wagging tail and a heart so blessed.",    "Oliver would perch on a windowsill high,",    "Watching the world with a curious eye.",    "Max would bound and chase his tail around,",    "With a barking joy, a joyful sound.",    "They met one day under a bright blue sky,",    "A cat and a dog, unlikely allies.",    "They played and explored, side by side,",    "Creating memories, their friendship amplified.",    "Through fields they roamed, a duo so true,",    "Sharing adventures, just Max and Oliver knew.",    "With every passing day, their bond grew strong,",    "A cat and a dog, proving friendships can't go wrong."]
 
+    
+    # video_clips = []
+    # for text in texts: 
+    #     video = create_video_audio_text_clip(text)
+    #     video_clips.append(video)
+    # final_video = concatenate_videoclips(video_clips)
+    # audio_path = get_audio_file("happy")
+    # background_audio_clip = AudioFileClip(audio_path).set_duration(final_video.duration)
+    # background_audio_clip = background_audio_clip.volumex(0.1) # set volume of background_audio to 10%
+    # combined_audio = CompositeAudioClip([background_audio_clip, final_video.audio])
+    # final_video = final_video.set_audio(combined_audio)
+    # final_video.write_videofile("temp.mp4", fps=30, preset='ultrafast')
+    # exit()
     goal_name = "jokes"
     description_text = "#Jokes"
     mp4_file_name = f"A Joke to Tell Your Friends _ #shorts #quiz #question #joke #jokes #random #silly #fyp" # _ will be replaced by a number

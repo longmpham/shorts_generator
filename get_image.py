@@ -35,6 +35,7 @@ def get_image_from_answer(keyword, description):
         "download.directory_upgrade": True,
         # "download.default_filename": filename,  # Specify the custom file name
     })
+    # chrome_options.add_argument("--headless")
 
     # Start the WebDriver
     driver = webdriver.Chrome(service=service,  options=chrome_options)
