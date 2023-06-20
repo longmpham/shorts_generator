@@ -43,18 +43,6 @@ def create_folder_if_not_exists(goal_name):
     temp_folder_path = os.path.join("resources", "temp")
     _create_folder_if_not_exists(temp_folder_path)
 
-def get_csv(csv_filename):
-    # Read the CSV file and extract the relationship data
-    data = []
-    with open(csv_filename, 'r', encoding="utf8") as csv_file:
-        csv_reader = csv.reader(csv_file)
-        next(csv_reader)  # skip the first row
-        for row in csv_reader:
-            category, statement, goal = row[:3]
-            print(category, statement, goal)
-            data.append({'category': category, 'statement': statement, 'goal': goal})
-    return data
-
 def get_video_file(goal_name):
     background_video_dir = os.path.join(os.getcwd(), "resources", "background_videos", f"{goal_name}")
     background_video_files = [f for f in os.listdir(background_video_dir) if f.endswith(".mp4")]
@@ -66,11 +54,6 @@ def get_audio_file(audio_type):
     background_audio_files  = [f for f in os.listdir(background_audio_dir) if f.endswith(".mp3")]
     background_audio_file = os.path.join(background_audio_dir, random.choice(background_audio_files))
     return background_audio_file
-
-def get_answer_picture(keyword):
-    print(f"getting... {keyword}, not a person but a place or thing, 1080x1920")
-    image_path = get_image_from_answer(keyword, description=", not a person but a place or thing, 1080x1920")
-    return image_path
 
 def generate_TTS_using_GTTS(sentences):
     def delete_temp_audio(folder_path="resources\\temp\\audio"):
@@ -161,50 +144,6 @@ def generate_TTS_using_TikTok(sentences):
     if not success: exit()
     return tts_files
 
-def generate_srt_from_audio(audio_file_path):
-    def format_timedelta(milliseconds):
-        delta = timedelta(milliseconds=milliseconds)
-        seconds = delta.total_seconds()
-        minutes, seconds = divmod(seconds, 60)
-        hours, minutes = divmod(minutes, 60)
-        milliseconds = delta.total_seconds() * 1000 % 1000
-        return f"{hours:02.0f}:{minutes:02.0f}:{seconds:02.0f},{milliseconds:03.0f}"
-    
-    # Load the audio file
-    audio = AudioSegment.from_file(audio_file_path, format="mp3")
-
-    # Split the audio into smaller chunks
-    chunk_length_ms = 10000  # Split audio into 10-second chunks
-    chunks = make_chunks(audio, chunk_length_ms)
-
-    # Initialize the speech recognizer
-    recognizer = sr.Recognizer()
-
-    # Create the SRT file path dynamically
-    audio_file_name = os.path.basename(audio_file_path)
-    srt_file_name = os.path.splitext(audio_file_name)[0] + ".srt"
-    srt_file_path = os.path.join(os.path.dirname(audio_file_path), srt_file_name)
-
-    # Create an SRT file
-    with open(srt_file_path, 'w') as srt_file:
-        for i, chunk in enumerate(chunks):
-            start_time = i * chunk_length_ms
-            end_time = (i + 1) * chunk_length_ms
-
-            # Save the chunk as a temporary WAV file
-            chunk.export("temp.wav", format="wav")
-
-            # Recognize speech from the temporary WAV file
-            with sr.AudioFile("temp.wav") as source:
-                audio_data = recognizer.record(source)
-                text = recognizer.recognize_google(audio_data)
-
-            # Write the subtitle to the SRT file
-            subtitle = f"{i+1}\n{format_timedelta(start_time)} --> {format_timedelta(end_time)}\n{text}\n\n"
-            srt_file.write(subtitle)
-
-    return srt_file_path
-
 def generate_srt_from_audio_using_whisper(audio_file_path):
     
     def format_timedelta(seconds):
@@ -259,102 +198,66 @@ def add_video_clip(path, start=0, total_duration=5, size=(720,1280)):
     return video_clip
 
 def add_audio_tts_clip(audio_file, silence=1, start=0):
+    # print(audio_file)
     audio_clip = AudioFileClip(audio_file)
     clip_duration = audio_clip.duration + silence
     audio_clip = audio_clip.set_start(start)
     
     return audio_clip, clip_duration
 
-def create_video_from_csv(csv_data, goal_name, description_text, mp4_file_name):
-    # Define video parameters
-    audio_type = "happy"
-    mobile_screen_size = (720, 1280) # portrait aspect ratio for mobile phones
-    text_color = "white"
-    bg_color='black'
-    opacity = 0.75
-    mobile_text_screen_size = (mobile_screen_size[0]*0.8,mobile_screen_size[1])
-    ending_text = "Sub, Comment, Like for More!"
+def create_video_audio_text_clip(text, text_options={}, video_options={}, audio_options={}):
+
+    print('generating video...')
+    tts_file = generate_TTS_using_TikTok([text])
+    tts_clip, clip_duration = add_audio_tts_clip(tts_file[0])
+    text_clip = add_text_clip(text=text, total_duration=clip_duration)
+    video_clip = add_video_clip(path="jokes", total_duration=clip_duration)
+    final_video = CompositeVideoClip([video_clip, text_clip], use_bgclip=True)
+    final_video = final_video.set_audio(tts_clip)
+    # filename = "test.mp4"
+    # final_video.write_videofile(filename, fps=30, codec='libx264', audio_codec='aac', preset='ultrafast')
+    # final_video.write_videofile(filename, fps=30, preset='ultrafast')
+    # exit()
+    return final_video
+
+# def create_final_video(video_clips):
     
-    for i, data in enumerate(csv_data, start=0):
-        question_num = data[list(data.keys())[0]]  # Extract the first value dynamically
-        question = data[list(data.keys())[1]]  # Extract the second value dynamically
-        answer = data[list(data.keys())[2]]  # Extract the third value dynamically
-        
-        
-        # Add the TTS audio track to the video using CompositeAudioClip
-        # tts_audio_files = generate_TTS_using_coqui([question, answer])
-        # tts_audio_files = generate_TTS_using_GTTS([question, answer, ending_text])
-        tts_audio_files = generate_TTS_using_TikTok([question, answer, ending_text])
-        tts_audio_clip1, clip1_duration = add_audio_tts_clip(audio_file=tts_audio_files[0], silence=2, start=0)
-        tts_audio_clip2, clip2_duration = add_audio_tts_clip(audio_file=tts_audio_files[1], silence=1, start=clip1_duration)
-        tts_audio_clip3, clip3_duration = add_audio_tts_clip(audio_file=tts_audio_files[2], silence=0.5, start=clip1_duration+clip2_duration)
-        video_duration = clip1_duration + clip2_duration + clip3_duration
-
-        # Create the clip for the description
-        hashtag_clip = add_text_clip(text=description_text, font_name="Impact", font_size=30, font_color="white", bg_color="black", size=(mobile_text_screen_size[0],None), start=0, total_duration=video_duration, opacity=1.0, position_y=0.8,method="label")
-
-        # Create the clip for the question
-        question_clip = add_text_clip(text=question, font_name="Impact", font_size=50, font_color="white", bg_color="black", size=(mobile_text_screen_size[0],None), method="caption", start=0, total_duration=clip1_duration, opacity=opacity, position_y="center")
-
-        # Create the clip for the answer
-        answer_clip = add_text_clip(text=answer, font_name="Impact", font_size=50, font_color="white", bg_color="black", size=(mobile_text_screen_size[0],None), method="caption", start=clip1_duration, total_duration=clip2_duration, opacity=opacity, position_y="center")
-        
-        # Create the clip ending comments
-        ending_clip = add_text_clip(text=ending_text, font_name="Impact", font_size=50, font_color="white", bg_color="black", size=(mobile_text_screen_size[0],None), start=clip1_duration + clip2_duration, total_duration=clip3_duration, opacity=1.0, position_y=0.1,method="label")
-        
-        # Create the video clip for question
-        bg_question_clip = add_video_clip(path=goal_name, start=0, total_duration=clip1_duration, size=mobile_screen_size)
-        
-        # Create the video clip for answer
-        bg_answer_clip = add_video_clip(path=goal_name, start=clip1_duration, total_duration=clip2_duration+clip3_duration, size=mobile_screen_size)
-        
-        # Put the videos together
-        bg_video_full = concatenate_videoclips([bg_question_clip, bg_answer_clip])
-        
-        # Combine the all the clips
-        final_video = CompositeVideoClip([bg_video_full, question_clip, answer_clip, hashtag_clip, ending_clip], use_bgclip=True)
-        final_video = final_video.set_duration(video_duration)
-
-        # Add the audio track to the video
-        # background_music
-        audio_path = get_audio_file(audio_type)
-        audio_clip = AudioFileClip(audio_path).set_duration(video_duration)
-        audio_clip = audio_clip.volumex(0.1) # set volume of background_audio to 10%
-        
-        # mux the audios together
-        combined_audio = CompositeAudioClip([audio_clip, tts_audio_clip1, tts_audio_clip2, tts_audio_clip3])
-        final_video = final_video.set_audio(combined_audio)
-        
-        # Write the video to a file
-        fname = mp4_file_name.replace("_", str(i+1))
-        filename = os.path.join("resources", "uploaded_videos", f"{goal_name}", f"{fname}.mp4")
-        # final_video.write_videofile(filename, fps=30, codec='libx264', audio_codec='aac', preset='ultrafast')
-        final_video.write_videofile(filename, fps=30, preset='ultrafast')
-        # final_video.write_videofile(filename, verbose=True, write_logfile=True)
-        
-        # break # for debug purposes only to generate 1 video.
-        # if i == 3: # generate 3 vids
-        #     break
+#     return final_video
 
 def main():
+    texts = [    "Once upon a time, in a charming little town,",    
+             "Lived a cat named Oliver, with fur of golden brown.",    
+             "And nearby, a dog named Max, full of playful zest,",    
+             "With a wagging tail and a heart so blessed.",    
+             "Oliver would perch on a windowsill high,",    
+             "Watching the world with a curious eye.",    
+             "Max would bound and chase his tail around,",    
+             "With a barking joy, a joyful sound.",    
+             "They met one day under a bright blue sky,",    
+             "A cat and a dog, unlikely allies.",    
+             "They played and explored, side by side,",    
+             "Creating memories, their friendship amplified.",    
+             "Through fields they roamed, a duo so true,",    
+             "Sharing adventures, just Max and Oliver knew.",    
+             "With every passing day, their bond grew strong,",    
+             "A cat and a dog, proving friendships can't go wrong."]
+
+    # generate the video including the sentence, and tts
+    video_clips = []
+    for text in texts: 
+        video = create_video_audio_text_clip(text)
+        video_clips.append(video)
+    final_video = concatenate_videoclips(video_clips)
     
-    goal_name = "jokes"
-    description_text = "#Jokes"
-    mp4_file_name = f"A Joke to Tell Your Friends _ #shorts #quiz #question #joke #jokes #random #silly #fyp" # _ will be replaced by a number
+    # Set the background audio music
+    audio_path = get_audio_file("happy")
+    background_audio_clip = AudioFileClip(audio_path).set_duration(final_video.duration)
+    background_audio_clip = background_audio_clip.volumex(0.1) # set volume of background_audio to 10%
+    combined_audio = CompositeAudioClip([background_audio_clip, final_video.audio])
+    
+    final_video = final_video.set_audio(combined_audio)
+    final_video.write_videofile("story.mp4", fps=30, preset='ultrafast')
 
-    # Follow the naming convention for csv file:
-    # number | question | answer (1 word)
-
-    # make dirs if not existing
-    create_folder_if_not_exists(goal_name)
-
-    # read csv file
-    csv_file = f"{goal_name}.csv"
-    csv_path = os.path.join("resources", "data", csv_file)
-    data = get_csv(csv_path) # takes csv with 3 fields, category, statement, and goal
-
-    # create shorts!
-    create_video_from_csv(data, goal_name, description_text, mp4_file_name)
     return
 
 if __name__ == "__main__":
