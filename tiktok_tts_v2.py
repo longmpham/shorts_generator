@@ -4,6 +4,12 @@ import base64
 import re
 import os
 
+# en_us_001 ∙ Female
+# en_us_006 ∙ Male 1
+# en_us_007 ∙ Male 2
+# en_us_009 ∙ Male 3
+# en_us_010 ∙ Male 4
+
 def texttotiktoktts(text, voice="en_us_001", path="", file_name="tts_audio.mp3"):
     try:
         response = requests.post('https://tiktok-tts.weilnet.workers.dev/api/generation',

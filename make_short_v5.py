@@ -153,10 +153,8 @@ def generate_TTS_using_TikTok(sentences):
     tts_files = []
     success = False
     for i, sentence in enumerate(sentences):
-        
         success, tts_file = texttotiktoktts(sentence, "en_us_001", path, file_name=f"audio_tts_{i}")
         tts_files.append(tts_file)
-        # print(tts_file)
     
     if not success: exit()
     return tts_files
@@ -322,7 +320,7 @@ def create_video_from_csv(csv_data, goal_name, description_text, mp4_file_name):
         final_video.write_videofile(filename, fps=30, preset='ultrafast')
         # final_video.write_videofile(filename, verbose=True, write_logfile=True)
         
-        # break # for debug purposes only to generate 1 video.
+        break # for debug purposes only to generate 1 video.
         # if i == 3: # generate 3 vids
         #     break
 
