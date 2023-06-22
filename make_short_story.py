@@ -18,6 +18,7 @@ from tqdm import tqdm
 from faster_whisper import WhisperModel
 from gtts import gTTS
 from tiktok_tts_v2 import texttotiktoktts
+from moviepy.editor import concatenate_audioclips
 
 counter = 0
 
@@ -121,8 +122,6 @@ def generate_TTS_using_GTTS(sentences):
     audio_segment_3.export("resources\\temp\\audio\\post_text_2.wav", format="wav")
 
     return output_files
-
-from moviepy.editor import concatenate_audioclips
 
 def generate_a_TTS_using_TikTok(sentence):
     # delete_temp_audio()
