@@ -47,7 +47,7 @@ def scrape_pexels_videos(search_term, max_num_videos=10):
     # video_tags = soup.find_all('video')
     # print(video_tags)
     # Create directory to save videos
-    save_directory = 'resources\\background_videos\\videos_from_scraper'
+    save_directory = f"resources\\background_videos\\scraper\\{''.join(search_term.split())}"
     os.makedirs(save_directory, exist_ok=True)
 
     # Download the videos

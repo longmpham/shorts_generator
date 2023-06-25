@@ -18,7 +18,6 @@ from tqdm import tqdm
 from faster_whisper import WhisperModel
 from gtts import gTTS
 from tiktok_tts_v2 import texttotiktoktts
-from moviepy.editor import concatenate_audioclips
 
 counter = 0
 
@@ -123,55 +122,29 @@ def generate_TTS_using_GTTS(sentences):
 
     return output_files
 
-def generate_a_TTS_using_TikTok(sentence):
-    # delete_temp_audio()
-    path = os.getcwd() + "\\resources\\temp\\audio"
-    success = False
-    tts_files = []
-    
-    words = sentence.split()
-    chunk_size = 6
-    if len(words) > chunk_size:
-        chunked_sentences = [words[i:i+chunk_size] for i in range(0, len(words), chunk_size)]
-        
-        for j, chunk in enumerate(chunked_sentences):
-            chunk_sentence = " ".join(chunk)
-            print(chunk_sentence)
-            success, tts_file = texttotiktoktts(chunk_sentence, "en_us_001", path, file_name=f"audio_tts_{j}")
-            tts_files.append(tts_file)
-    else:
-        print(sentence)
-        success, tts_file = texttotiktoktts(sentence, "en_us_001", path, file_name=f"audio_tts")
-        tts_files.append(tts_file)
-    
-    if not success:
-        exit()
-    
-    # Concatenate audio files
-    audio_clips = [AudioFileClip(file) for file in tts_files]
-    combined_audio = concatenate_audioclips(audio_clips)
-    
-    # combined_audio = CompositeAudioClip([background_audio_clip, final_video.audio])
-    # Write the concatenated audio to a file
-    combined_audio_path = os.path.join(path, "combined_audio.mp3")
-    combined_audio = combined_audio.set_fps(44100)
-    combined_audio.write_audiofile(combined_audio_path)
-    
-    return combined_audio_path
-
 def generate_TTS_using_TikTok(sentences):
     # delete_temp_audio()
     global counter
+    voices = [
+        "en_us_001", # Female
+        "en_us_006", # Male 1 # sucks
+        "en_us_007", # Male 2 # better
+        "en_us_009", # Male 3
+        "en_us_010", # Male 4 # best
+    ]
     
     path = os.getcwd() + "\\resources\\temp\\audio"
     success = False
     tts_files = []
     for i, sentence in enumerate(sentences):
-        success, tts_file = texttotiktoktts(sentence, "en_us_001", path, file_name=f"audio_tts_{counter}")
+
+        
+        
+        success, tts_file = texttotiktoktts(sentence, voices[0], path, file_name=f"audio_tts_{counter}")
         tts_files.append(tts_file)
         counter += 1
         # print(tts_file)
-    
+    # exit()
     if not success: exit()
     return tts_files
 
@@ -223,13 +196,17 @@ def add_text_clip(text="", font_name="Impact", font_size=50, font_color="white",
     return text_clip
 
 def add_video_clip(path, start=0, total_duration=5, size=(720,1280)):
-    blur = True
+    blur = False
     
     video_file = get_video_file(path)
     video_clip = VideoFileClip(video_file, audio=True).loop(total_duration)
     video_clip = video_clip.set_start(start).set_duration(total_duration).resize(size)
+    # video_clip = video_clip.set_start(start).set_duration(total_duration).resize(height=size[1]).crop(x1=780, width=720, height=1280)
+#     resize(height=1920)
+#       crop(x_center=960, y_center=960, width=1080, height=1920)
     
-    def blur(image, blur_level=4):
+    
+    def blur(image, blur_level=5):
         """ Returns a blurred (blur_level=radius=3 pixels) version of the image """
         return gaussian(image.astype(float), sigma=blur_level)
     
@@ -266,10 +243,6 @@ def create_video_audio_text_clip(text, video_path="jokes"):
     # exit()
     return final_video
 
-# def create_final_video(video_clips):
-    
-#     return final_video
-
 def delete_temp_audio(folder_path="resources\\temp\\audio"):
     # If temp folder is found, delete it
     if os.path.exists(folder_path):
@@ -288,15 +261,18 @@ def get_todays_date():
 
 def main():
     delete_temp_audio()
-    video_path = "jokes"
+    video_path = "genshin"
     audio_type = "happy"
     today = get_todays_date()
-    title = f"Your Diablo 4 updates for {today}"
+    title = f"Upcoming Genshin 3.8 New Content"
     texts = [   
                 f"{title}",
-                "Fixed an issue where Necromancer players would sometimes be stuck at the character selection screen.",
-                "Fixed an issue where control inputs would stop responding when a player teleports or zones in and out of a dungeon.",
-                "Fixed a graphical issue where black textures would flash after teleporting into specific towns.",
+                "The Kaeya Outfit, Sailwind Shadow, can be obtained from the Secret Summer Paradise event",
+                "the Klee Outfit, Blossoming Starlight, will be available for sale in the shop.",
+                "There will also be a PvE mode added to the Genius Invokation TGC",
+                "It is called 'The Forge Realms Temper: Endless Swarm'",
+                "This features waves of enemies for players to defeat, ",
+                "Finally, Character Cards for Candace, Yanfei, and Kazuha will be added. ",
                 "Sub, Comment, Like for more!",
             ]
     
@@ -309,15 +285,27 @@ def main():
         video_clips.append(video)
     final_video = concatenate_videoclips(video_clips)
     
+    # add title clip
+    title_text = "Genshin 3.8 New Content"
+    text_title_clip = add_text_clip(text=title_text, position_y=0.1, start=0, total_duration=final_video.duration)
+    
     # Set the background audio music
     audio_path = get_audio_file(audio_type)
     background_audio_clip = AudioFileClip(audio_path).set_duration(final_video.duration)
     background_audio_clip = background_audio_clip.volumex(0.1) # set volume of background_audio to 10%
     combined_audio = CompositeAudioClip([background_audio_clip, final_video.audio])
-    final_video = final_video.set_audio(combined_audio)
+    # final_video = final_video.set_audio(combined_audio)
     
+    vid = CompositeVideoClip([final_video, text_title_clip], use_bgclip=True)
+    vid = vid.set_audio(combined_audio)
     # Write the final video
-    final_video.write_videofile(f"{title}.mp4", fps=30, preset='ultrafast')
+    vid.write_videofile(f"{title}.mp4", fps=30, preset='ultrafast')
+    
+    # background_audio_clip.close()
+    combined_audio.close()
+    for clip in video_clips:
+        clip.close()
+    # final_video.write_videofile(f"{title}.mp4", fps=30, preset='ultrafast')
 
     return
 
