@@ -137,9 +137,6 @@ def generate_TTS_using_TikTok(sentences):
     success = False
     tts_files = []
     for i, sentence in enumerate(sentences):
-
-        
-        
         success, tts_file = texttotiktoktts(sentence, voices[0], path, file_name=f"audio_tts_{counter}")
         tts_files.append(tts_file)
         counter += 1

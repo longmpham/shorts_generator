@@ -1,6 +1,7 @@
 import shutil
 import datetime
 import random
+from moviepy import *
 from moviepy.editor import *
 from moviepy.video.fx.all import *
 from tiktok_tts_v2 import texttotiktoktts
@@ -10,6 +11,7 @@ from datetime import timedelta
 # from tqdm import tqdm
 from faster_whisper import WhisperModel
 from moviepy.video.tools.subtitles import SubtitlesClip
+from moviepy.video.tools.drawing import circle
 
 counter = 0
 size = (1280, 720)
@@ -134,9 +136,8 @@ def add_text_clip(text="", font_name="Impact", font_size=50, font_color="white",
     text_clip = text_clip.set_position(position).set_start(start).set_duration(total_duration).set_opacity(opacity)
     return text_clip
 
-# works
 def add_video_clip(category, start=0, total_duration=5, size=(720,1280)):
-    blur = False
+    blur_image = False
     
     video_file = get_video_file(category)
     video_clip = VideoFileClip(video_file, audio=True).loop(total_duration)
@@ -150,10 +151,10 @@ def add_video_clip(category, start=0, total_duration=5, size=(720,1280)):
         """ Returns a blurred (blur_level=radius=3 pixels) version of the image """
         return gaussian(image.astype(float), sigma=blur_level)
     
-    if blur == True:
-        print(f'blurring image because blur is {blur}')
-        video_clip = video_clip.fl_image(blur)
-    
+    if blur_image == True:
+        print(f'blurring image because blur is {blur_image}')
+        # video_clip = video_clip.fl_image(blur)
+        video_clip = video_clip.fl_image(lambda image: blur(image, blur_level=5))
     return video_clip
 
 def add_audio_tts_clip(audio_file, silence=2, start=0):
@@ -164,13 +165,15 @@ def add_audio_tts_clip(audio_file, silence=2, start=0):
     
     return audio_clip, clip_duration
 
-def generate_final_video(top_text, bottom_text):
+def generate_169_video(top_text, bottom_text):
 
     useSRT = True
     # generate tts
     tts_file = generate_TTS_using_TikTok(bottom_text)
-    tts_clip, clip_duration = add_audio_tts_clip(tts_file)
     print("TTS generated!")
+    tts_clip, clip_duration = add_audio_tts_clip(tts_file)
+    print("TTS clips done!")
+    
     
     # generate text
     top_text_clip = add_text_clip(text=top_text, font_size=100, position=("center", "center"), total_duration=clip_duration)
@@ -236,7 +239,7 @@ def main():
     video_clips = []
     for text in texts:
         print("generating video clip...")
-        video_clip = generate_final_video(title, text)
+        video_clip = generate_169_video(title, text)
         video_clips.append(video_clip)
     final_video = concatenate_videoclips(video_clips)
 
@@ -246,16 +249,14 @@ def main():
     background_audio_clip = AudioFileClip(audio_path).set_duration(final_video.duration)
     background_audio_clip = background_audio_clip.volumex(0.1) # set volume of background_audio to 10%
     combined_audio = CompositeAudioClip([background_audio_clip, final_video.audio])
-
+    final_video = final_video.set_audio(combined_audio)
+    
     # Write the final video
     # final_video.save_frame("frame.png", t=1)
     final_video.write_videofile(final_video_path, fps=30, preset='ultrafast')
 
     # final_video.write_videofile(final_video_path)    
     return
-
-
-
 
 if __name__ == "__main__":
     main()
