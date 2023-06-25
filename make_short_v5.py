@@ -324,6 +324,8 @@ def create_video_from_csv(csv_data, goal_name, description_text, mp4_file_name):
         # if i == 3: # generate 3 vids
         #     break
 
+
+
 def main():
     
     goal_name = "jokes"
