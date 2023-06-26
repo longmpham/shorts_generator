@@ -17,6 +17,7 @@ from faster_whisper import WhisperModel
 from gtts import gTTS
 from tiktok_tts_v2 import texttotiktoktts
 
+counter = 0
 
 def create_folder_if_not_exists(goal_name):
 
@@ -136,28 +137,15 @@ def generate_TTS_using_GTTS(sentences):
 
     return output_files
 
-def generate_TTS_using_TikTok(sentences):
-    def delete_temp_audio(folder_path="resources\\temp\\audio"):
-        # If temp folder is found, delete it
-        if os.path.exists(folder_path):
-            shutil.rmtree(folder_path)
-
-        # Create the folder
-        os.mkdir(folder_path)
-        
-        return
-    
-    # delete_temp_audio()
+def generate_TTS_using_TikTok(sentence):
+    global counter
     
     path = os.getcwd() + "\\resources\\temp\\audio"
-    tts_files = []
-    success = False
-    for i, sentence in enumerate(sentences):
-        success, tts_file = texttotiktoktts(sentence, "en_us_001", path, file_name=f"audio_tts_{i}")
-        tts_files.append(tts_file)
+    success, tts_file = texttotiktoktts(sentence, "en_us_001", path, file_name=f"audio_tts_{counter}")
+    counter += 1
     
     if not success: exit()
-    return tts_files
+    return tts_file
 
 def generate_srt_from_audio(audio_file_path):
     def format_timedelta(milliseconds):
@@ -245,9 +233,12 @@ def generate_srt_from_audio_using_whisper(audio_file_path):
     
     return srt_file_path
 
-def add_text_clip(text="", font_name="Impact", font_size=30, font_color="white", bg_color="black", size=(int(720*0.9),None), method="label", start=0, total_duration=5, opacity=1.0, position_y=0.5):
+def add_text_clip(text="", font_name="Impact", font_size=50, font_color="white", bg_color="black", size=(int(720*0.9),None), method="caption", start=0, total_duration=5, opacity=1.0, position=("center"), relative=False):
     text_clip = TextClip(text, fontsize=font_size, color=font_color, bg_color=bg_color, font=font_name, size=size, method=method)
-    text_clip = text_clip.set_position(("center",position_y), relative=True).set_start(start).set_duration(total_duration).set_opacity(opacity)
+    if relative==True:
+        text_clip = text_clip.set_position(position, relative=True).set_start(start).set_duration(total_duration).set_opacity(opacity)
+    else:   
+        text_clip = text_clip.set_position(position).set_start(start).set_duration(total_duration).set_opacity(opacity)
     return text_clip
 
 def add_video_clip(path, start=0, total_duration=5, size=(720,1280)):
@@ -282,17 +273,19 @@ def create_video_from_csv(csv_data, goal_name, description_text, mp4_file_name):
         # Add the TTS audio track to the video using CompositeAudioClip
         # tts_audio_files = generate_TTS_using_coqui([question, answer])
         # tts_audio_files = generate_TTS_using_GTTS([question, answer, ending_text])
-        tts_audio_files = generate_TTS_using_TikTok([question, answer, ending_text])
-        tts_audio_clip1, clip1_duration = add_audio_tts_clip(audio_file=tts_audio_files[0], silence=2, start=0)
-        tts_audio_clip2, clip2_duration = add_audio_tts_clip(audio_file=tts_audio_files[1], silence=1, start=clip1_duration)
-        tts_audio_clip3, clip3_duration = add_audio_tts_clip(audio_file=tts_audio_files[2], silence=0.5, start=clip1_duration+clip2_duration)
+        tts_audio_file1 = generate_TTS_using_TikTok(question)
+        tts_audio_file2 = generate_TTS_using_TikTok(answer)
+        tts_audio_file3 = generate_TTS_using_TikTok(ending_text)
+        tts_audio_clip1, clip1_duration = add_audio_tts_clip(audio_file=tts_audio_file1, silence=2, start=0)
+        tts_audio_clip2, clip2_duration = add_audio_tts_clip(audio_file=tts_audio_file2, silence=1, start=clip1_duration)
+        tts_audio_clip3, clip3_duration = add_audio_tts_clip(audio_file=tts_audio_file3, silence=0.5, start=clip1_duration+clip2_duration)
         video_duration = clip1_duration + clip2_duration + clip3_duration
 
         # Create the text clips
-        hashtag_clip = add_text_clip(text=description_text, font_name="Impact", font_size=30, font_color="white", bg_color="black", size=(mobile_text_screen_size[0],None), start=0, total_duration=video_duration, opacity=1.0, position_y=0.8,method="label")
-        question_clip = add_text_clip(text=question, font_name="Impact", font_size=50, font_color="white", bg_color="black", size=(mobile_text_screen_size[0],None), method="caption", start=0, total_duration=clip1_duration, opacity=opacity, position_y="center")
-        answer_clip = add_text_clip(text=answer, font_name="Impact", font_size=50, font_color="white", bg_color="black", size=(mobile_text_screen_size[0],None), method="caption", start=clip1_duration, total_duration=clip2_duration, opacity=opacity, position_y="center")
-        ending_clip = add_text_clip(text=ending_text, font_name="Impact", font_size=50, font_color="white", bg_color="black", size=(mobile_text_screen_size[0],None), start=clip1_duration + clip2_duration, total_duration=clip3_duration, opacity=1.0, position_y=0.1,method="label")
+        hashtag_clip = add_text_clip(text=description_text, font_name="Impact", font_size=30, font_color="white", bg_color="black", size=(mobile_text_screen_size[0],None), method="label", start=0, total_duration=video_duration, opacity=1.0, position=("center", 0.8), relative=True)
+        question_clip = add_text_clip(text=question, font_name="Impact", font_size=50, font_color="white", bg_color="black", size=(mobile_text_screen_size[0],None), method="caption", start=0, total_duration=clip1_duration, opacity=opacity, position="center")
+        answer_clip = add_text_clip(text=answer, font_name="Impact", font_size=50, font_color="white", bg_color="black", size=(mobile_text_screen_size[0],None), method="caption", start=clip1_duration, total_duration=clip2_duration, opacity=opacity, position="center")
+        ending_clip = add_text_clip(text=ending_text, font_name="Impact", font_size=50, font_color="white", bg_color="black", size=(mobile_text_screen_size[0],None), method="label", start=clip1_duration + clip2_duration, total_duration=clip3_duration, opacity=1.0, position=("center", 0.1), relative=True)
 
         # Create the video clips
         bg_question_clip = add_video_clip(path=goal_name, start=0, total_duration=clip1_duration, size=mobile_screen_size)
@@ -320,11 +313,14 @@ def create_video_from_csv(csv_data, goal_name, description_text, mp4_file_name):
         final_video.write_videofile(filename, fps=30, preset='ultrafast')
         # final_video.write_videofile(filename, verbose=True, write_logfile=True)
         
-        break # for debug purposes only to generate 1 video.
-        # if i == 3: # generate 3 vids
-        #     break
-
-
+        
+        # close clips
+        # bg_video_full.close()
+        # combined_audio.close()
+        
+        # break # for debug purposes only to generate 1 video.
+        if i == 3: # generate 3 vids
+            break
 
 def main():
     
@@ -345,7 +341,20 @@ def main():
 
     # create shorts!
     create_video_from_csv(data, goal_name, description_text, mp4_file_name)
+    
     return
 
 if __name__ == "__main__":
     main()
+    
+# +------------+
+# |            |
+# |   Title    |
+# |            |
+# |            |
+# |    Text    |
+# |            |
+# |            |
+# |            |
+# |            |
+# +------------+

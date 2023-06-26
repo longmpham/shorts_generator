@@ -21,6 +21,22 @@ from tiktok_tts_v2 import texttotiktoktts
 
 counter = 0
 
+def delete_temp_audio(folder_path="resources\\temp\\audio"):
+    # If temp folder is found, delete it
+    if os.path.exists(folder_path):
+        print(f"deleting {folder_path}")
+        shutil.rmtree(folder_path)
+        print("removed")
+    # Create the folder
+    os.makedirs(folder_path)
+    
+    return
+    
+def get_todays_date():
+    today = datetime.date.today()
+    formatted_date = today.strftime("%B %d")
+    return formatted_date
+
 def create_folder_if_not_exists(goal_name):
 
     def _create_folder_if_not_exists(folder_path):
@@ -122,8 +138,7 @@ def generate_TTS_using_GTTS(sentences):
 
     return output_files
 
-def generate_TTS_using_TikTok(sentences):
-    # delete_temp_audio()
+def generate_TTS_using_TikTok(sentence):
     global counter
     voices = [
         "en_us_001", # Female
@@ -132,20 +147,14 @@ def generate_TTS_using_TikTok(sentences):
         "en_us_009", # Male 3
         "en_us_010", # Male 4 # best
     ]
-    
+        
     path = os.getcwd() + "\\resources\\temp\\audio"
-    success = False
-    tts_files = []
-    for i, sentence in enumerate(sentences):
-        success, tts_file = texttotiktoktts(sentence, voices[0], path, file_name=f"audio_tts_{counter}")
-        tts_files.append(tts_file)
-        counter += 1
-        # print(tts_file)
-    # exit()
-    if not success: exit()
-    return tts_files
+    success, tts_file = texttotiktoktts(sentence, voices[0], path, file_name=f"tts_audio_file_{counter}")
+    counter += 1
+    # if not success: exit()
+    return tts_file
 
-def generate_srt_from_audio_using_whisper(audio_file_path):
+def generate_srt_from_audio_using_whisper(audio_file_path, method="sentence"):
     
     def format_timedelta(seconds):
         delta = timedelta(seconds=seconds)
@@ -158,8 +167,9 @@ def generate_srt_from_audio_using_whisper(audio_file_path):
     # use large-v2 model and transcribe the audio file
     model_size = "large-v2"
     model = WhisperModel(model_size, device="cpu", compute_type="int8")
+        # model = WhisperModel(model_size, device="cuda", compute_type="float16")
     # print(audio_file_path)
-    segments, info = model.transcribe(audio_file_path, beam_size=5)
+    segments, info = model.transcribe(audio_file_path, beam_size=5, word_timestamps=True)
     segments = list(segments)
     # segments, _ = model.transcribe(
     #     "audio.mp3",
@@ -175,27 +185,54 @@ def generate_srt_from_audio_using_whisper(audio_file_path):
     
     # open a new srt file and save the output from each segment
     with open(srt_file_path, "w") as srt_file:
-        # Write each segment to the SRT file
-        for index, segment in enumerate(segments, start=1):
-        # for index, segment in tqdm(enumerate(segments, start=1), desc="Writing SRT", total=len(segments)):
-            print("[%.2fs -> %.2fs] %s" % (segment.start, segment.end, segment.text))
-            # print("[%.2fs -> %.2fs] %s" % (segment.start, segment.end, censor_keywords(segment.text)))
-            srt_file.write(f"{index}\n")
-            # srt_file.write(f"{segment.start:.2f} --> {segment.end:.2f}\n")
-            srt_file.write(f"{format_timedelta(segment.start)} --> {format_timedelta(segment.end)}\n")
-            srt_file.write(f"{segment.text}\n\n")
+        # for per word srt
+        if method == "perword": 
+            print("using per word")
+            for segment in segments:
+                for index, word in enumerate(segment.words):
+                    print("[%.2fs -> %.2fs] %s" % (word.start, word.end, word.word))
+                    srt_file.write(f"{index}\n")
+                    # srt_file.write(f"{word.start:.2f} --> {word.end:.2f}\n")
+                    srt_file.write(f"{format_timedelta(word.start)} --> {format_timedelta(word.end)}\n")
+                    srt_file.write(f"{word.word}\n\n")
+        
+        # for sentence srt
+        elif method == "continuous":
+            print("using per word")
+            for segment in segments:
+                words = ""
+                for index, word in enumerate(segment.words):
+                    print("[%.2fs -> %.2fs] %s" % (word.start, word.end, word.word))
+                    srt_file.write(f"{index}\n")
+                    # srt_file.write(f"{word.start:.2f} --> {word.end:.2f}\n")
+                    srt_file.write(f"{format_timedelta(word.start)} --> {format_timedelta(word.end)}\n")
+                    srt_file.write(f"{words + word.word}\n\n")
+                    words = f"{words}{word.word}"    
+        else:
+            print("using per sentence")
+            for index, segment in enumerate(segments, start=1):
+            # for index, segment in tqdm(enumerate(segments, start=1), desc="Writing SRT", total=len(segments)):
+                print("[%.2fs -> %.2fs] %s" % (segment.start, segment.end, segment.text))
+                # print("[%.2fs -> %.2fs] %s" % (segment.start, segment.end, censor_keywords(segment.text)))
+                srt_file.write(f"{index}\n")
+                # srt_file.write(f"{segment.start:.2f} --> {segment.end:.2f}\n")
+                srt_file.write(f"{format_timedelta(segment.start)} --> {format_timedelta(segment.end)}\n")
+                srt_file.write(f"{segment.text}\n\n")
     
     return srt_file_path
 
-def add_text_clip(text="", font_name="Impact", font_size=50, font_color="white", bg_color="black", size=(int(720*0.9),None), method="caption", start=0, total_duration=5, opacity=1.0, position_y=0.5):
+def add_text_clip(text="", font_name="Impact", font_size=50, font_color="white", bg_color="black", size=(int(720*0.9),None), method="caption", start=0, total_duration=5, opacity=1.0, position=("center"), relative=False):
     text_clip = TextClip(text, fontsize=font_size, color=font_color, bg_color=bg_color, font=font_name, size=size, method=method)
-    text_clip = text_clip.set_position(("center",position_y), relative=True).set_start(start).set_duration(total_duration).set_opacity(opacity)
+    if relative==True:
+        text_clip = text_clip.set_position(position, relative=True).set_start(start).set_duration(total_duration).set_opacity(opacity)
+    else:   
+        text_clip = text_clip.set_position(position).set_start(start).set_duration(total_duration).set_opacity(opacity)
     return text_clip
 
-def add_video_clip(path, start=0, total_duration=5, size=(720,1280)):
-    blur = False
+def add_video_clip(category, start=0, total_duration=5, size=(720,1280)):
+    blur_image = False
     
-    video_file = get_video_file(path)
+    video_file = get_video_file(category)
     video_clip = VideoFileClip(video_file, audio=True).loop(total_duration)
     video_clip = video_clip.set_start(start).set_duration(total_duration).resize(size)
     # video_clip = video_clip.set_start(start).set_duration(total_duration).resize(height=size[1]).crop(x1=780, width=720, height=1280)
@@ -207,11 +244,10 @@ def add_video_clip(path, start=0, total_duration=5, size=(720,1280)):
         """ Returns a blurred (blur_level=radius=3 pixels) version of the image """
         return gaussian(image.astype(float), sigma=blur_level)
     
-    if blur:
-        video_clip = video_clip.fl_image(blur)
-        # Apply blur effect to the video clip
-        # video_clip = video_clip.fx(headblur(video_clip, fx=(0,0), fy=(720, 1280), r_zone=1))
-    
+    if blur_image == True:
+        print(f'blurring image because blur is {blur_image}')
+        # video_clip = video_clip.fl_image(blur)
+        video_clip = video_clip.fl_image(lambda image: blur(image, blur_level=5))
     return video_clip
 
 def add_audio_tts_clip(audio_file, silence=2, start=0):
@@ -222,84 +258,108 @@ def add_audio_tts_clip(audio_file, silence=2, start=0):
     
     return audio_clip, clip_duration
 
-def create_video_audio_text_clip(text, video_path="jokes"):
+def add_background_audio(final_video, audio_type):    
+    audio_path = get_audio_file(audio_type)
+    background_audio_clip = AudioFileClip(audio_path)
+    background_audio_clip = background_audio_clip.volumex(0.1) # set volume of background_audio to 10%
+    combined_audio = CompositeAudioClip([background_audio_clip, final_video.audio])
+    combined_audio = afx.audio_loop(combined_audio, duration=final_video.duration)
+    final_video = final_video.set_audio(combined_audio)
+    
+    return final_video
 
+def create_video_audio_text_clip(text, category="jokes"):
     print('generating video...')
     # tts_file = generate_a_TTS_using_TikTok(text)
     # tts_clip, clip_duration = add_audio_tts_clip(tts_file)
-    tts_files = generate_TTS_using_TikTok([text])
-    tts_clip, clip_duration = add_audio_tts_clip(tts_files[0])
-    text_clip = add_text_clip(text=text, total_duration=clip_duration)
-    video_clip = add_video_clip(path=video_path, total_duration=clip_duration)
+    tts_file = generate_TTS_using_TikTok(text)
+    tts_clip, clip_duration = add_audio_tts_clip(tts_file)
+    text_clip = add_text_clip(text=text, total_duration=clip_duration, position=("center", "center"), relative=True)
+    video_clip = add_video_clip(category=category, total_duration=clip_duration)
     final_video = CompositeVideoClip([video_clip, text_clip], use_bgclip=True)
     final_video = final_video.set_audio(tts_clip)
     
     # filename = "test.mp4"
     # final_video.write_videofile(filename, fps=30, codec='libx264', audio_codec='aac', preset='ultrafast')
-    # final_video.write_videofile(filename, fps=30, preset='ultrafast')
+    # final_video.write_videofile("test.mp4", fps=30, preset='ultrafast')
     # exit()
     return final_video
 
-def delete_temp_audio(folder_path="resources\\temp\\audio"):
-    # If temp folder is found, delete it
-    if os.path.exists(folder_path):
-        print(f"deleting {folder_path}")
-        shutil.rmtree(folder_path)
-        print("removed")
-    # Create the folder
-    os.makedirs(folder_path)
-    
-    return
-    
-def get_todays_date():
-    today = datetime.date.today()
-    formatted_date = today.strftime("%B %d")
-    return formatted_date
 
 def main():
     delete_temp_audio()
-    video_path = "genshin"
+    category = "scraper\\tigers"
     audio_type = "happy"
     today = get_todays_date()
-    title = f"Upcoming Genshin 3.8 New Content"
-    texts = [   
-                f"{title}",
-                "The Kaeya Outfit, Sailwind Shadow, can be obtained from the Secret Summer Paradise event",
-                "the Klee Outfit, Blossoming Starlight, will be available for sale in the shop.",
-                "There will also be a PvE mode added to the Genius Invokation TGC",
-                "It is called 'The Forge Realms Temper: Endless Swarm'",
-                "This features waves of enemies for players to defeat, ",
-                "Finally, Character Cards for Candace, Yanfei, and Kazuha will be added. ",
-                "Sub, Comment, Like for more!",
-            ]
+    title = f"Thrilling Tiger Tidbits"
+    texts = [
+        f"{title}",
+        "Tigers are the largest cats.",
+        "They have orange fur with black stripes.",
+        # "Tigers are found in Asia.",
+        # "There are six subspecies.",
+        # "Tigers are solitary and territorial.",
+        # "They are excellent swimmers.",
+        # "Tigers have unique striped fur.",
+        # "They have powerful claws.",
+        # "Tigers are carnivorous predators.",
+        # "They can eat up to 88 pounds of meat at once.",
+        # "Tigers have exceptional night vision.",
+        # "They can leap up to 30 feet.",
+        # "Tigers live for 10-15 years in the wild.",
+        # "Females give birth to 2-6 cubs.",
+        # "Cubs stay with their mother for about 2 years.",
+        # "Tigers communicate through vocalizations and scent markings.",
+        # "They are apex predators.",
+        # "Tigers face habitat loss and poaching threats.",
+        # "Efforts are made to conserve tiger populations.",
+        # "Tigers play a vital role in ecosystems.",
+        # "They are listed as endangered by the IUCN.",
+        # "Tigers can run up to 40 mph.",
+        # "They have a distinctive roar.",
+        # "Tigers are part of various cultures and myths.",
+        # "They inhabit diverse habitats.",
+        # "Tigers have retractable claws.",
+        # "They mark territory with scent and scratches.",
+        # "Tigers are strong hunters.",
+        # "They adapt to different climates.",
+        # "Tigers benefit other species in their habitats.",
+        # "They have keen hearing.",
+        # "Tigers are active at dawn and dusk."
+    ]
     
     # delete_temp_audio()
     
     # generate the video including the sentence, and tts
     video_clips = []
     for text in texts: 
-        video = create_video_audio_text_clip(text, video_path)
+        video = create_video_audio_text_clip(text, category)
         video_clips.append(video)
     final_video = concatenate_videoclips(video_clips)
-    
+    print(final_video.audio)
     # add title clip
-    title_text = "Genshin 3.8 New Content"
-    text_title_clip = add_text_clip(text=title_text, position_y=0.1, start=0, total_duration=final_video.duration)
+    # title_text = "Genshin 3.8 New Content"
+    text_title_clip = add_text_clip(text=title, position=("center", 0.2), relative=True, start=0, total_duration=final_video.duration)
     
     # Set the background audio music
-    audio_path = get_audio_file(audio_type)
-    background_audio_clip = AudioFileClip(audio_path).set_duration(final_video.duration)
-    background_audio_clip = background_audio_clip.volumex(0.1) # set volume of background_audio to 10%
-    combined_audio = CompositeAudioClip([background_audio_clip, final_video.audio])
+    
+    # audio_path = get_audio_file(audio_type)
+    # background_audio_clip = AudioFileClip(audio_path).set_duration(final_video.duration)
+    # background_audio_clip = background_audio_clip.volumex(0.1) # set volume of background_audio to 10%
+    # combined_audio = CompositeAudioClip([background_audio_clip, final_video.audio])
+    # combined_audio = afx.audio_loop(combined_audio, duration=final_video.duration)
     # final_video = final_video.set_audio(combined_audio)
     
-    vid = CompositeVideoClip([final_video, text_title_clip], use_bgclip=True)
-    vid = vid.set_audio(combined_audio)
+    # combined_video = CompositeVideoClip([final_video, text_title_clip], use_bgclip=True) # use for no audio on the clip, just tts?
+    combined_video = CompositeVideoClip([final_video, text_title_clip])
+    final_video = add_background_audio(combined_video, audio_type)
+
+    # combined_video = combined_video.set_audio(combined_audio)
     # Write the final video
-    vid.write_videofile(f"{title}.mp4", fps=30, preset='ultrafast')
+    final_video.write_videofile(f"{title}.mp4", fps=30, preset='ultrafast')
     
     # background_audio_clip.close()
-    combined_audio.close()
+    # combined_audio.close()
     for clip in video_clips:
         clip.close()
     # final_video.write_videofile(f"{title}.mp4", fps=30, preset='ultrafast')
@@ -309,7 +369,18 @@ def main():
 if __name__ == "__main__":
     main()
     
-    
+# +------------+
+# |            |
+# |   Title    |
+# |            |
+# |            |
+# |            |
+# |            |
+# |            |
+# |    Text    |
+# |            |
+# +------------+
+
     
     # texts = [
     #         "Once upon a time, in a charming little town,",

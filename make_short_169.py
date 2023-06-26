@@ -44,7 +44,7 @@ def get_audio_file(audio_type):
     return background_audio_file
 
 def generate_TTS_using_TikTok(sentence):
-    # delete_temp_audio()
+
     global counter
     voices = [
         "en_us_001", # Female
@@ -55,7 +55,6 @@ def generate_TTS_using_TikTok(sentence):
     ]
     
     path = os.getcwd() + "\\resources\\temp\\audio"
-    success = False
     success, tts_file = texttotiktoktts(sentence, voices[0], path, file_name=f"tts_audio_file_{counter}")
     counter += 1
     if not success: exit()
@@ -92,8 +91,6 @@ def generate_srt_from_audio_using_whisper(audio_file_path, method="sentence"):
     
     # open a new srt file and save the output from each segment
     with open(srt_file_path, "w") as srt_file:
-        # Write each segment to the SRT file
-        
         # for per word srt
         if method == "perword": 
             print("using per word")
@@ -130,10 +127,12 @@ def generate_srt_from_audio_using_whisper(audio_file_path, method="sentence"):
     
     return srt_file_path
 
-def add_text_clip(text="", font_name="Impact", font_size=50, font_color="white", bg_color="transparent", size=(size[0]*0.8,None), method="caption", align="center", start=0, total_duration=5, opacity=1.0, position=("center")):
-    text_clip = TextClip(text, fontsize=font_size, color=font_color, bg_color=bg_color, font=font_name, size=size, method=method, align=align)
-    # text_clip = text_clip.set_position(("center",position_y), relative=True).set_start(start).set_duration(total_duration).set_opacity(opacity)
-    text_clip = text_clip.set_position(position).set_start(start).set_duration(total_duration).set_opacity(opacity)
+def add_text_clip(text="", font_name="Impact", font_size=50, font_color="white", bg_color="black", size=(int(720*0.9),None), method="caption", start=0, total_duration=5, opacity=1.0, position=("center"), relative=False):
+    text_clip = TextClip(text, fontsize=font_size, color=font_color, bg_color=bg_color, font=font_name, size=size, method=method)
+    if relative==True:
+        text_clip = text_clip.set_position(position, relative=True).set_start(start).set_duration(total_duration).set_opacity(opacity)
+    else:   
+        text_clip = text_clip.set_position(position).set_start(start).set_duration(total_duration).set_opacity(opacity)
     return text_clip
 
 def add_video_clip(category, start=0, total_duration=5, size=(720,1280)):
@@ -156,6 +155,17 @@ def add_video_clip(category, start=0, total_duration=5, size=(720,1280)):
         # video_clip = video_clip.fl_image(blur)
         video_clip = video_clip.fl_image(lambda image: blur(image, blur_level=5))
     return video_clip
+
+def add_background_audio(final_video, audio_type):
+    
+    audio_path = get_audio_file(audio_type)
+    background_audio_clip = AudioFileClip(audio_path)
+    background_audio_clip = background_audio_clip.volumex(0.1) # set volume of background_audio to 10%
+    combined_audio = CompositeAudioClip([background_audio_clip, final_video.audio])
+    combined_audio = afx.audio_loop(combined_audio, duration=final_video.duration)
+    final_video = final_video.set_audio(combined_audio)
+    
+    return final_video
 
 def add_audio_tts_clip(audio_file, silence=2, start=0):
     # print(audio_file)
@@ -196,7 +206,7 @@ def generate_169_video(top_text, bottom_text):
     bottom_black_bar = ImageClip(black_image_path).set_duration(clip_duration).set_position(("center","bottom")).resize(size)
 
     # generate video clip
-    video_category = "genshin"
+    video_category = "scraper\\tigers"
     video_clip = add_video_clip(video_category, start=0, total_duration=clip_duration, size=size)
 
     # combine text and black bar
@@ -218,21 +228,44 @@ def generate_169_video(top_text, bottom_text):
     return combined_video
     
 def main():
+    audio_type = "happy"
     final_video_path = "C:\\Users\\longp\\Documents\\Coding\\shorts_generator\\final_video_test.mp4"
-    title = "Genshin Updates for 3.8"
-    texts = [   
-                "He Holds The Title Of 'Top Candidate For Grandson-In-Law' In Mondstadt",
-                "Kaeya Had an Eyepatch in the Manga",
-                "Rosaria Likes to Trick Kaeya",
-                "Diluc is His Brother",
-                "He Obtains His Vision During A Fight Against His Adopted Brother, Diluc",
-                "He Hates Grape Juice",
-                "Kaeya's Specialty Food, Fruity Skewers, Doesn't Contain Any Fruit At All",
-                "Kaeya's Favorite Flower Is A Lily",
-                "Kaeya Was Born On November 30",
-                "He is the Cavalry Captain in the Knights of Favonius",
-                "Sub, Comment, Like for more!",
-            ]
+    title = f"Thrilling Tiger Tidbits"
+    texts = [
+        f"{title}",
+        "Tigers are the largest cats.",
+        "They have orange fur with black stripes.",
+        "Tigers are found in Asia.",
+        "There are six subspecies.",
+        "Tigers are solitary and territorial.",
+        "They are excellent swimmers.",
+        "Tigers have unique striped fur.",
+        "They have powerful claws.",
+        "Tigers are carnivorous predators.",
+        "They can eat up to 88 pounds of meat at once.",
+        "Tigers have exceptional night vision.",
+        "They can leap up to 30 feet.",
+        "Tigers live for 10-15 years in the wild.",
+        "Females give birth to 2-6 cubs.",
+        "Cubs stay with their mother for about 2 years.",
+        "Tigers communicate through vocalizations and scent markings.",
+        "They are apex predators.",
+        "Tigers face habitat loss and poaching threats.",
+        "Efforts are made to conserve tiger populations.",
+        "Tigers play a vital role in ecosystems.",
+        "They are listed as endangered by the IUCN.",
+        "Tigers can run up to 40 mph.",
+        "They have a distinctive roar.",
+        "Tigers are part of various cultures and myths.",
+        "They inhabit diverse habitats.",
+        "Tigers have retractable claws.",
+        "They mark territory with scent and scratches.",
+        "Tigers are strong hunters.",
+        "They adapt to different climates.",
+        "Tigers benefit other species in their habitats.",
+        "They have keen hearing.",
+        "Tigers are active at dawn and dusk."
+    ]
 
     # generate the clips and put them together. 
     # these clips contain tts, text, and the video.
@@ -244,12 +277,7 @@ def main():
     final_video = concatenate_videoclips(video_clips)
 
     # Set the final background audio music
-    audio_type = "happy"
-    audio_path = get_audio_file(audio_type)
-    background_audio_clip = AudioFileClip(audio_path).set_duration(final_video.duration)
-    background_audio_clip = background_audio_clip.volumex(0.1) # set volume of background_audio to 10%
-    combined_audio = CompositeAudioClip([background_audio_clip, final_video.audio])
-    final_video = final_video.set_audio(combined_audio)
+    final_video = add_background_audio(final_video, audio_type)
     
     # Write the final video
     # final_video.save_frame("frame.png", t=1)
@@ -261,3 +289,16 @@ def main():
 if __name__ == "__main__":
     main()
     
+# +------------+
+# |            |
+# |   Title    |
+# |            |
+# +------------+
+# |            |
+# |   Video    |
+# |            |
+# +------------+
+# |    Text    |
+# |            |
+# |            |
+# +------------+
