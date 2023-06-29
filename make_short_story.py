@@ -146,10 +146,12 @@ def generate_TTS_using_TikTok(sentence):
         "en_us_007", # Male 2 # better
         "en_us_009", # Male 3
         "en_us_010", # Male 4 # best
+        "en_uk_001",
+        "en_uk_003",
     ]
         
     path = os.getcwd() + "\\resources\\temp\\audio"
-    success, tts_file = texttotiktoktts(sentence, voices[0], path, file_name=f"tts_audio_file_{counter}")
+    success, tts_file = texttotiktoktts(sentence, voices[6], path, file_name=f"tts_audio_file_{counter}")
     counter += 1
     # if not success: exit()
     return tts_file
@@ -221,23 +223,24 @@ def generate_srt_from_audio_using_whisper(audio_file_path, method="sentence"):
     
     return srt_file_path
 
-def add_text_clip(text="", font_name="Impact", font_size=50, font_color="white", bg_color="black", size=(int(720*0.9),None), method="caption", start=0, total_duration=5, opacity=1.0, position=("center"), relative=False):
-    text_clip = TextClip(text, fontsize=font_size, color=font_color, bg_color=bg_color, font=font_name, size=size, method=method)
+def add_text_clip(text="", font_name="Impact", font_size=50, font_color="white", bg_color="transparent", stroke_color=None, stroke_width=1, size=(int(720*0.9),None), method="caption", start=0, total_duration=5, opacity=1.0, position=("center"), relative=False):
+    text_clip = TextClip(text, stroke_color=stroke_color, stroke_width=stroke_width, fontsize=font_size, color=font_color, bg_color=bg_color, font=font_name, size=size, method=method)
     if relative==True:
         text_clip = text_clip.set_position(position, relative=True).set_start(start).set_duration(total_duration).set_opacity(opacity)
     else:   
         text_clip = text_clip.set_position(position).set_start(start).set_duration(total_duration).set_opacity(opacity)
     return text_clip
 
-def add_video_clip(category, start=0, total_duration=5, size=(720,1280)):
-    blur_image = False
+def add_video_clip(category, start=0, total_duration=5, size=(720,1280), blur_image=False, crop=False):
     
     video_file = get_video_file(category)
     video_clip = VideoFileClip(video_file, audio=True).loop(total_duration)
-    video_clip = video_clip.set_start(start).set_duration(total_duration).resize(size)
-    # video_clip = video_clip.set_start(start).set_duration(total_duration).resize(height=size[1]).crop(x1=780, width=720, height=1280)
-#     resize(height=1920)
-#       crop(x_center=960, y_center=960, width=1080, height=1920)
+    
+    if crop == True:
+        video_clip = video_clip.set_start(start).set_duration(total_duration).resize(height=size[1]).crop(x1=780, width=720, height=1280)
+        # resize(height=1920).crop(x_center=960, y_center=960, width=1080, height=1920)
+    else: 
+        video_clip = video_clip.set_start(start).set_duration(total_duration).resize(size)
     
     
     def blur(image, blur_level=5):
@@ -268,101 +271,145 @@ def add_background_audio(final_video, audio_type):
     
     return final_video
 
-def create_video_audio_text_clip(text, category="jokes"):
+def create_video_audio_text_clip(top_text, bottom_text, video_category="jokes", crop=False):
     print('generating video...')
+    
+    # Generate TTS
     # tts_file = generate_a_TTS_using_TikTok(text)
     # tts_clip, clip_duration = add_audio_tts_clip(tts_file)
-    tts_file = generate_TTS_using_TikTok(text)
+    tts_file = generate_TTS_using_TikTok(bottom_text)
     tts_clip, clip_duration = add_audio_tts_clip(tts_file)
-    text_clip = add_text_clip(text=text, total_duration=clip_duration, position=("center", "center"), relative=True)
-    video_clip = add_video_clip(category=category, total_duration=clip_duration)
-    final_video = CompositeVideoClip([video_clip, text_clip], use_bgclip=True)
+    
+    # Generate Texts
+    text_clip_top = None
+    if top_text and top_text.strip(): # takes care of None and "" 
+        text_clip_top = add_text_clip(text=top_text, position=("center", 0.2), relative=True, start=0, total_duration=clip_duration)
+        
+    # text_clip = add_text_clip(text=text, total_duration=clip_duration, bg_color="transparent", position=("center", "center"), relative=True) # original
+    # text_clip = add_text_clip(text=text, total_duration=clip_duration, font_name="Montserrat Semibold", bg_color="transparent", stroke_color="black", stroke_width=3, position=("center", "center"), relative=True)
+    # text_clip_top = add_text_clip(text=top_text, position=("center", 0.2), relative=True, start=0, total_duration=clip_duration)
+    text_clip_bottom = add_text_clip(text=bottom_text, stroke_color="black", stroke_width=2, position=("center", "center"), relative=True, total_duration=clip_duration)
+    
+    # Add background video
+    video_clip = add_video_clip(category=video_category, total_duration=clip_duration, crop=crop)
+    
+    # Finally, create the video
+    if text_clip_top:
+        final_video = CompositeVideoClip([video_clip, text_clip_bottom, text_clip_top], use_bgclip=True)
+    else:
+        final_video = CompositeVideoClip([video_clip, text_clip_bottom], use_bgclip=True)
+        
+    
+    # Combine to final video
+    # final_video = CompositeVideoClip([video_clip, text_clip_bottom], use_bgclip=True)
+    # final_video = CompositeVideoClip([video_clip, text_clip_top, text_clip_bottom], use_bgclip=True)
     final_video = final_video.set_audio(tts_clip)
     
+    
+    # Debug
     # filename = "test.mp4"
     # final_video.write_videofile(filename, fps=30, codec='libx264', audio_codec='aac', preset='ultrafast')
     # final_video.write_videofile("test.mp4", fps=30, preset='ultrafast')
     # exit()
     return final_video
 
+def generate_169_video(top_text, bottom_text, video_category="jokes"):
+
+    size=(720,1280)
+    useSRT = True
+    # generate tts
+    tts_file = generate_TTS_using_TikTok(bottom_text)
+    print("TTS generated!")
+    tts_clip, clip_duration = add_audio_tts_clip(tts_file)
+    print("TTS clips done!")
+    
+    
+    # generate text
+    top_text_clip = add_text_clip(text=top_text, font_size=100, position=("center", "center"), total_duration=clip_duration)
+    bottom_text_clip = add_text_clip(text=bottom_text, position=("center", "top"), total_duration=clip_duration)
+    
+    # generate SRT (per word)
+    if useSRT == True: 
+        srt_file = generate_srt_from_audio_using_whisper(tts_file, method="continuous")
+        generator = lambda txt: TextClip(txt=txt, fontsize=50, color="white", font="Impact", method="caption", size=(size[0]*0.8, None))
+        # generator = lambda txt: add_text_clip(text=txt, position=("center"), total_duration=clip_duration)
+        subtitles = SubtitlesClip(srt_file, generator)
+        subtitles = subtitles.set_position(("center", "top")).set_duration(clip_duration)
+        print("Subtitles Set...")    
+    
+        bottom_text_clip = subtitles
+    
+    # generate black bars (top and bottom)
+    black_image_path = "resources\\black_image.png"
+    top_black_bar = ImageClip(black_image_path).set_duration(clip_duration).set_position(("center","top")).resize(size)
+    bottom_black_bar = ImageClip(black_image_path).set_duration(clip_duration).set_position(("center","bottom")).resize(size)
+
+    # generate video clip
+    video_clip = add_video_clip(video_category, start=0, total_duration=clip_duration, size=size)
+
+    # combine text and black bar
+    final_top_video_text_clip = CompositeVideoClip([top_black_bar, top_text_clip])
+    final_top_video_text_clip = final_top_video_text_clip.set_duration(clip_duration)
+    final_bottom_video_text_clip = CompositeVideoClip([bottom_black_bar, bottom_text_clip])
+    final_bottom_video_text_clip = final_bottom_video_text_clip.set_duration(clip_duration)
+
+    # create the entire clip
+    combined_video = clips_array([[final_top_video_text_clip], [video_clip], [final_bottom_video_text_clip]])
+    
+    # Set Audio
+    combined_video = combined_video.set_audio(tts_clip)
+    # combined_video.save_frame("frame.png", t=1)
+    # combined_video.write_videofile(final_video_path)
+    print("Videos and banner, and TTS set!")
+
+    # combined_video.close()
+    return combined_video
+
 
 def main():
     delete_temp_audio()
-    category = "scraper\\tigers"
+    
+    
+    category = "genshin"
     audio_type = "happy"
     today = get_todays_date()
-    title = f"Thrilling Tiger Tidbits"
+    title = f"Genshin Stuff"
     texts = [
-        f"{title}",
-        "Tigers are the largest cats.",
-        "They have orange fur with black stripes.",
-        # "Tigers are found in Asia.",
-        # "There are six subspecies.",
-        # "Tigers are solitary and territorial.",
-        # "They are excellent swimmers.",
-        # "Tigers have unique striped fur.",
-        # "They have powerful claws.",
-        # "Tigers are carnivorous predators.",
-        # "They can eat up to 88 pounds of meat at once.",
-        # "Tigers have exceptional night vision.",
-        # "They can leap up to 30 feet.",
-        # "Tigers live for 10-15 years in the wild.",
-        # "Females give birth to 2-6 cubs.",
-        # "Cubs stay with their mother for about 2 years.",
-        # "Tigers communicate through vocalizations and scent markings.",
-        # "They are apex predators.",
-        # "Tigers face habitat loss and poaching threats.",
-        # "Efforts are made to conserve tiger populations.",
-        # "Tigers play a vital role in ecosystems.",
-        # "They are listed as endangered by the IUCN.",
-        # "Tigers can run up to 40 mph.",
-        # "They have a distinctive roar.",
-        # "Tigers are part of various cultures and myths.",
-        # "They inhabit diverse habitats.",
-        # "Tigers have retractable claws.",
-        # "They mark territory with scent and scratches.",
-        # "Tigers are strong hunters.",
-        # "They adapt to different climates.",
-        # "Tigers benefit other species in their habitats.",
-        # "They have keen hearing.",
-        # "Tigers are active at dawn and dusk."
+        "Did you know this about Alhaitham...",
+        "They significantly increased the experience awarded for completing Nightmare Dungeons.",
+        "They significantly increased the experience gained from killing monsters in Nightmare Dungeons.",
+        "Helltide chests now provide substantially more bonus experience when opened.",
+        "They significantly increased rewarded experience from completing individual Whispers across the board.",
+        "Finally, nightmare dungeons are worth it now..."
+        "Sub, Comment, Like for More!",
     ]
-    
-    # delete_temp_audio()
-    
+
     # generate the video including the sentence, and tts
     video_clips = []
-    for text in texts: 
-        video = create_video_audio_text_clip(text, category)
+    for bottom_text in texts: 
+        video = create_video_audio_text_clip("", bottom_text, category, crop=True)
+        # video = generate_169_video(title, bottom_text, category)
         video_clips.append(video)
     final_video = concatenate_videoclips(video_clips)
-    print(final_video.audio)
+    
     # add title clip
     # title_text = "Genshin 3.8 New Content"
-    text_title_clip = add_text_clip(text=title, position=("center", 0.2), relative=True, start=0, total_duration=final_video.duration)
+    # text_title_clip = add_text_clip(text=title, position=("center", 0.2), relative=True, start=0, total_duration=final_video.duration)
+    
+    # combine title and combined clip
+    # combined_video = CompositeVideoClip([final_video, text_title_clip], use_bgclip=True) # use for no audio on the clip, just tts?
+    # final_video = CompositeVideoClip([final_video, text_title_clip])
     
     # Set the background audio music
-    
-    # audio_path = get_audio_file(audio_type)
-    # background_audio_clip = AudioFileClip(audio_path).set_duration(final_video.duration)
-    # background_audio_clip = background_audio_clip.volumex(0.1) # set volume of background_audio to 10%
-    # combined_audio = CompositeAudioClip([background_audio_clip, final_video.audio])
-    # combined_audio = afx.audio_loop(combined_audio, duration=final_video.duration)
-    # final_video = final_video.set_audio(combined_audio)
-    
-    # combined_video = CompositeVideoClip([final_video, text_title_clip], use_bgclip=True) # use for no audio on the clip, just tts?
-    combined_video = CompositeVideoClip([final_video, text_title_clip])
-    final_video = add_background_audio(combined_video, audio_type)
+    final_video = add_background_audio(final_video, audio_type)
 
-    # combined_video = combined_video.set_audio(combined_audio)
     # Write the final video
     final_video.write_videofile(f"{title}.mp4", fps=30, preset='ultrafast')
     
     # background_audio_clip.close()
     # combined_audio.close()
-    for clip in video_clips:
-        clip.close()
-    # final_video.write_videofile(f"{title}.mp4", fps=30, preset='ultrafast')
+    # for clip in video_clips:
+    #     clip.close()
 
     return
 

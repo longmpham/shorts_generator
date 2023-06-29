@@ -11,7 +11,6 @@ from datetime import timedelta
 # from tqdm import tqdm
 from faster_whisper import WhisperModel
 from moviepy.video.tools.subtitles import SubtitlesClip
-from moviepy.video.tools.drawing import circle
 
 counter = 0
 size = (1280, 720)
@@ -52,10 +51,12 @@ def generate_TTS_using_TikTok(sentence):
         "en_us_007", # Male 2 # better
         "en_us_009", # Male 3
         "en_us_010", # Male 4 # best
+        "en_uk_001",
+        "en_uk_003",
     ]
-    
+        
     path = os.getcwd() + "\\resources\\temp\\audio"
-    success, tts_file = texttotiktoktts(sentence, voices[0], path, file_name=f"tts_audio_file_{counter}")
+    success, tts_file = texttotiktoktts(sentence, voices[6], path, file_name=f"tts_audio_file_{counter}")
     counter += 1
     if not success: exit()
     return tts_file
@@ -175,7 +176,7 @@ def add_audio_tts_clip(audio_file, silence=2, start=0):
     
     return audio_clip, clip_duration
 
-def generate_169_video(top_text, bottom_text):
+def generate_169_video(top_text, bottom_text, video_category="jokes"):
 
     useSRT = True
     # generate tts
@@ -206,7 +207,6 @@ def generate_169_video(top_text, bottom_text):
     bottom_black_bar = ImageClip(black_image_path).set_duration(clip_duration).set_position(("center","bottom")).resize(size)
 
     # generate video clip
-    video_category = "scraper\\tigers"
     video_clip = add_video_clip(video_category, start=0, total_duration=clip_duration, size=size)
 
     # combine text and black bar
@@ -229,42 +229,16 @@ def generate_169_video(top_text, bottom_text):
     
 def main():
     audio_type = "happy"
-    final_video_path = "C:\\Users\\longp\\Documents\\Coding\\shorts_generator\\final_video_test.mp4"
-    title = f"Thrilling Tiger Tidbits"
+    video_category = "genshin"
+    final_video_path = "C:\\Users\\longp\\Documents\\Coding\\shorts_generator\\final_video_169.mp4"
+    title = f"Genshin Impact Facts"
     texts = [
-        f"{title}",
-        "Tigers are the largest cats.",
-        "They have orange fur with black stripes.",
-        "Tigers are found in Asia.",
-        "There are six subspecies.",
-        "Tigers are solitary and territorial.",
-        "They are excellent swimmers.",
-        "Tigers have unique striped fur.",
-        "They have powerful claws.",
-        "Tigers are carnivorous predators.",
-        "They can eat up to 88 pounds of meat at once.",
-        "Tigers have exceptional night vision.",
-        "They can leap up to 30 feet.",
-        "Tigers live for 10-15 years in the wild.",
-        "Females give birth to 2-6 cubs.",
-        "Cubs stay with their mother for about 2 years.",
-        "Tigers communicate through vocalizations and scent markings.",
-        "They are apex predators.",
-        "Tigers face habitat loss and poaching threats.",
-        "Efforts are made to conserve tiger populations.",
-        "Tigers play a vital role in ecosystems.",
-        "They are listed as endangered by the IUCN.",
-        "Tigers can run up to 40 mph.",
-        "They have a distinctive roar.",
-        "Tigers are part of various cultures and myths.",
-        "They inhabit diverse habitats.",
-        "Tigers have retractable claws.",
-        "They mark territory with scent and scratches.",
-        "Tigers are strong hunters.",
-        "They adapt to different climates.",
-        "Tigers benefit other species in their habitats.",
-        "They have keen hearing.",
-        "Tigers are active at dawn and dusk."
+        "Did you know about these facts about Kazuha?",
+        "He loves to write poetry, specifically Haikus",
+        "He had a wealthy family met with a tragic fate",
+        "He loves to sit by the rain and listen to the sounds of them falling",
+        "He plays a flute that ties together his love for poetry",
+        "Sub, Comment, Like for More!"
     ]
 
     # generate the clips and put them together. 
@@ -272,7 +246,7 @@ def main():
     video_clips = []
     for text in texts:
         print("generating video clip...")
-        video_clip = generate_169_video(title, text)
+        video_clip = generate_169_video(title, text, video_category)
         video_clips.append(video_clip)
     final_video = concatenate_videoclips(video_clips)
 
@@ -282,8 +256,7 @@ def main():
     # Write the final video
     # final_video.save_frame("frame.png", t=1)
     final_video.write_videofile(final_video_path, fps=30, preset='ultrafast')
-
-    # final_video.write_videofile(final_video_path)    
+  
     return
 
 if __name__ == "__main__":

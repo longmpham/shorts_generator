@@ -303,3 +303,4 @@ cython_debug/
 *.wav
 *.png
 *.srt
+*.gif
