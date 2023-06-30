@@ -10,7 +10,7 @@ from pydub import AudioSegment
 from pydub.utils import make_chunks
 from datetime import timedelta
 import os
-from tts import generate_TTS_using_bark, generate_TTS_using_coqui
+from coqui_tts import generate_TTS_using_bark, generate_TTS_using_coqui
 import shutil
 from tqdm import tqdm
 from faster_whisper import WhisperModel
@@ -57,7 +57,8 @@ def get_csv(csv_filename):
     return data
 
 def get_video_file(goal_name):
-    background_video_dir = os.path.join(os.getcwd(), "resources", "background_videos", f"{goal_name}")
+    # background_video_dir = os.path.join(os.getcwd(), "resources", "background_videos", f"{goal_name}")
+    background_video_dir = os.path.join(os.getcwd(), "resources", "background_videos", "scraper", "catsdogsanimalspetsvertical", "vertical")
     background_video_files = [f for f in os.listdir(background_video_dir) if f.endswith(".mp4")]
     background_video_file = os.path.join(background_video_dir, random.choice(background_video_files))
     return background_video_file
@@ -264,7 +265,7 @@ def create_video_from_csv(csv_data, goal_name, description_text, mp4_file_name):
     mobile_text_screen_size = (mobile_screen_size[0]*0.8,mobile_screen_size[1])
     ending_text = "Sub, Comment, Like for More!"
     
-    for i, data in enumerate(csv_data, start=0):
+    for i, data in enumerate(csv_data, start=323):
         question_num = data[list(data.keys())[0]]  # Extract the first value dynamically
         question = data[list(data.keys())[1]]  # Extract the second value dynamically
         answer = data[list(data.keys())[2]]  # Extract the third value dynamically
@@ -282,7 +283,7 @@ def create_video_from_csv(csv_data, goal_name, description_text, mp4_file_name):
         video_duration = clip1_duration + clip2_duration + clip3_duration
 
         # Create the text clips
-        hashtag_clip = add_text_clip(text=description_text, font_name="Impact", font_size=30, font_color="white", bg_color="black", size=(mobile_text_screen_size[0],None), method="label", start=0, total_duration=video_duration, opacity=1.0, position=("center", 0.8), relative=True)
+        # hashtag_clip = add_text_clip(text=description_text, font_name="Impact", font_size=30, font_color="white", bg_color="black", size=(mobile_text_screen_size[0],None), method="label", start=0, total_duration=video_duration, opacity=1.0, position=("center", 0.8), relative=True)
         question_clip = add_text_clip(text=question, font_name="Impact", font_size=50, font_color="white", bg_color="black", size=(mobile_text_screen_size[0],None), method="caption", start=0, total_duration=clip1_duration, opacity=opacity, position="center")
         answer_clip = add_text_clip(text=answer, font_name="Impact", font_size=50, font_color="white", bg_color="black", size=(mobile_text_screen_size[0],None), method="caption", start=clip1_duration, total_duration=clip2_duration, opacity=opacity, position="center")
         ending_clip = add_text_clip(text=ending_text, font_name="Impact", font_size=50, font_color="white", bg_color="black", size=(mobile_text_screen_size[0],None), method="label", start=clip1_duration + clip2_duration, total_duration=clip3_duration, opacity=1.0, position=("center", 0.1), relative=True)
@@ -293,7 +294,8 @@ def create_video_from_csv(csv_data, goal_name, description_text, mp4_file_name):
         bg_video_full = concatenate_videoclips([bg_question_clip, bg_answer_clip])
         
         # Combine the all the clips
-        final_video = CompositeVideoClip([bg_video_full, question_clip, answer_clip, hashtag_clip, ending_clip], use_bgclip=True)
+        # final_video = CompositeVideoClip([bg_video_full, question_clip, answer_clip, hashtag_clip, ending_clip], use_bgclip=True)
+        final_video = CompositeVideoClip([bg_video_full, question_clip, answer_clip, ending_clip], use_bgclip=True)
         final_video = final_video.set_duration(video_duration)
 
         # Add the audio track to the video
@@ -319,14 +321,14 @@ def create_video_from_csv(csv_data, goal_name, description_text, mp4_file_name):
         # combined_audio.close()
         
         # break # for debug purposes only to generate 1 video.
-        if i == 3: # generate 3 vids
-            break
+        # if i == 3: # generate 3 vids
+        #     break
 
 def main():
     
-    goal_name = "jokes"
+    goal_name = "quiz"
     description_text = "#Jokes"
-    mp4_file_name = f"A Joke to Tell Your Friends _ #shorts #quiz #question #joke #jokes #random #silly #fyp" # _ will be replaced by a number
+    mp4_file_name = f"Bet you didnt know this... _ #shorts #quiz #question #animals #pets #dogs #cats #random #fyp" # _ will be replaced by a number
 
     # Follow the naming convention for csv file:
     # number | question | answer (1 word)

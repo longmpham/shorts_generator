@@ -12,14 +12,17 @@ from pydub import AudioSegment
 from pydub.utils import make_chunks
 from datetime import timedelta
 import os
-from tts import generate_TTS_using_bark, generate_TTS_using_coqui
+from coqui_tts import generate_TTS_using_bark, generate_TTS_using_coqui
 import shutil
 from tqdm import tqdm
 from faster_whisper import WhisperModel
 from gtts import gTTS
 from tiktok_tts_v2 import texttotiktoktts
+from natsort import natsorted
 
-counter = 0
+# counter = 0
+video_files_list = []
+audio_files_list = []
 
 def delete_temp_audio(folder_path="resources\\temp\\audio"):
     # If temp folder is found, delete it
@@ -62,17 +65,60 @@ def create_folder_if_not_exists(goal_name):
     temp_folder_path = os.path.join("resources", "temp")
     _create_folder_if_not_exists(temp_folder_path)
 
-def get_video_file(goal_name):
-    background_video_dir = os.path.join(os.getcwd(), "resources", "background_videos", f"{goal_name}")
-    background_video_files = [f for f in os.listdir(background_video_dir) if f.endswith(".mp4")]
-    background_video_file = os.path.join(background_video_dir, random.choice(background_video_files))
-    return background_video_file
+def get_video_files(path):
+    global video_files_list
+    background_video_dir = os.path.join(os.getcwd(), f"{path}")
+    video_files_list = [os.path.join(background_video_dir, f) for f in os.listdir(background_video_dir) if f.endswith(".mp4")]
+    # video_files_list.sort()  # Sort the video files alphabetically
+    video_files_list = natsorted(video_files_list)  # Sort the video files naturally
+    # for file in video_files_list:
+    #     print(file)
+    # exit()
+    return video_files_list
 
-def get_audio_file(audio_type):
-    background_audio_dir = os.path.join(os.getcwd(), "resources", "audio", f"{audio_type}")
-    background_audio_files  = [f for f in os.listdir(background_audio_dir) if f.endswith(".mp3")]
-    background_audio_file = os.path.join(background_audio_dir, random.choice(background_audio_files))
-    return background_audio_file
+def get_video_file(index):
+    global video_files_list
+    # print(index, len(video_files_list))
+    
+    if index < 0 or index >= len(video_files_list): 
+        print("Video index out of range, using a random video instead!")
+        return random.choice(video_files_list)
+    
+    return video_files_list[index]
+
+# def get_video_file_random(goal_name):
+#     background_video_dir = os.path.join(os.getcwd(), "resources", "background_videos", f"{goal_name}")
+#     background_video_files = [f for f in os.listdir(background_video_dir) if f.endswith(".mp4")]
+#     background_video_file = os.path.join(background_video_dir, random.choice(background_video_files))
+#     return background_video_file
+
+def get_audio_files(path):
+    global audio_files_list
+    background_audio_dir = os.path.join(os.getcwd(), f"{path}")
+    audio_files_list = [os.path.join(background_audio_dir, f) for f in os.listdir(background_audio_dir) if f.endswith(".mp3")]
+    # audio_files_list.sort()  # Sort the audio files alphabetically
+    audio_files_list = natsorted(audio_files_list)  # Sort the audio files naturally
+    # for file in audio_files_list:
+    #     print(file)
+    # exit()
+    return audio_files_list
+
+def get_audio_file(index):
+    global audio_files_list
+    # print(index, len(audio_files_list))
+    
+    if index < 0 or index >= len(audio_files_list): 
+        print("Audio index out of range, using a random audio instead!")
+        rand = random.choice(audio_files_list)
+        # return random.choice(audio_files_list)
+        return rand
+    return audio_files_list[index]
+
+# def get_audio_file(audio_type):
+#     background_audio_dir = os.path.join(os.getcwd(), "resources", "audio", f"{audio_type}")
+#     background_audio_files  = [f for f in os.listdir(background_audio_dir) if f.endswith(".mp3")]
+#     background_audio_file = os.path.join(background_audio_dir, random.choice(background_audio_files))
+#     return background_audio_file
 
 def generate_TTS_using_GTTS(sentences):
     def delete_temp_audio(folder_path="resources\\temp\\audio"):
@@ -139,7 +185,7 @@ def generate_TTS_using_GTTS(sentences):
     return output_files
 
 def generate_TTS_using_TikTok(sentence):
-    global counter
+    # global counter
     voices = [
         "en_us_001", # Female
         "en_us_006", # Male 1 # sucks
@@ -149,11 +195,18 @@ def generate_TTS_using_TikTok(sentence):
         "en_uk_001",
         "en_uk_003",
     ]
-        
+    
+    # create a dynamic path for file generation
     path = os.getcwd() + "\\resources\\temp\\audio"
-    success, tts_file = texttotiktoktts(sentence, voices[6], path, file_name=f"tts_audio_file_{counter}")
-    counter += 1
-    # if not success: exit()
+    existing_files = [f for f in os.listdir(path) if f.startswith("tts_audio_file_")]
+    counter = len(existing_files) + 1
+    file_name = f"tts_audio_file_{counter}"
+    
+    # call TikTok API
+    success, tts_file = texttotiktoktts(sentence, voices[6], path, file_name=file_name)
+    # counter += 1
+    
+    if not success: exit()
     return tts_file
 
 def generate_srt_from_audio_using_whisper(audio_file_path, method="sentence"):
@@ -231,9 +284,9 @@ def add_text_clip(text="", font_name="Impact", font_size=50, font_color="white",
         text_clip = text_clip.set_position(position).set_start(start).set_duration(total_duration).set_opacity(opacity)
     return text_clip
 
-def add_video_clip(category, start=0, total_duration=5, size=(720,1280), blur_image=False, crop=False):
+def add_video_clip(start=0, total_duration=5, size=(720,1280), blur_image=False, crop=False, index=-1):
     
-    video_file = get_video_file(category)
+    video_file = get_video_file(index) # -int is random, otherwise, pick a number any number.
     video_clip = VideoFileClip(video_file, audio=True).loop(total_duration)
     
     if crop == True:
@@ -261,8 +314,8 @@ def add_audio_tts_clip(audio_file, silence=2, start=0):
     
     return audio_clip, clip_duration
 
-def add_background_audio(final_video, audio_type):    
-    audio_path = get_audio_file(audio_type)
+def add_background_audio(final_video, index=-1):    
+    audio_path = get_audio_file(index) # random
     background_audio_clip = AudioFileClip(audio_path)
     background_audio_clip = background_audio_clip.volumex(0.1) # set volume of background_audio to 10%
     combined_audio = CompositeAudioClip([background_audio_clip, final_video.audio])
@@ -271,7 +324,28 @@ def add_background_audio(final_video, audio_type):
     
     return final_video
 
-def create_video_audio_text_clip(top_text, bottom_text, video_category="jokes", crop=False):
+def create_video_audio_text_sequential_clip(top_text, bottom_text, crop=False, index=0):
+    tts_file = generate_TTS_using_TikTok(bottom_text)
+    tts_clip, clip_duration = add_audio_tts_clip(tts_file)
+    
+    text_clip_top = None
+    if top_text and top_text.strip(): # takes care of None and "" 
+        text_clip_top = add_text_clip(text=top_text, position=("center", 0.2), relative=True, start=0, total_duration=clip_duration)
+    text_clip_bottom = add_text_clip(text=bottom_text, stroke_color="black", stroke_width=2, position=("center", "center"), relative=True, total_duration=clip_duration)
+
+    # Add background video
+    video_clip = add_video_clip(total_duration=clip_duration, crop=crop, index=index)
+    
+    # Finally, create the video
+    if text_clip_top:
+        final_video = CompositeVideoClip([video_clip, text_clip_bottom, text_clip_top], use_bgclip=True)
+    else:
+        final_video = CompositeVideoClip([video_clip, text_clip_bottom], use_bgclip=True)
+    final_video = final_video.set_audio(tts_clip)
+    
+    return final_video
+
+def create_video_audio_text_clip(top_text, bottom_text, crop=False):
     print('generating video...')
     
     # Generate TTS
@@ -291,7 +365,7 @@ def create_video_audio_text_clip(top_text, bottom_text, video_category="jokes", 
     text_clip_bottom = add_text_clip(text=bottom_text, stroke_color="black", stroke_width=2, position=("center", "center"), relative=True, total_duration=clip_duration)
     
     # Add background video
-    video_clip = add_video_clip(category=video_category, total_duration=clip_duration, crop=crop)
+    video_clip = add_video_clip(total_duration=clip_duration, crop=crop) # random
     
     # Finally, create the video
     if text_clip_top:
@@ -305,6 +379,9 @@ def create_video_audio_text_clip(top_text, bottom_text, video_category="jokes", 
     # final_video = CompositeVideoClip([video_clip, text_clip_top, text_clip_bottom], use_bgclip=True)
     final_video = final_video.set_audio(tts_clip)
     
+    # close partial clips (audiofileclips and videofileclips)
+    # tts_clip.close()
+    # video_clip.close()
     
     # Debug
     # filename = "test.mp4"
@@ -313,7 +390,7 @@ def create_video_audio_text_clip(top_text, bottom_text, video_category="jokes", 
     # exit()
     return final_video
 
-def generate_169_video(top_text, bottom_text, video_category="jokes"):
+def generate_169_video(top_text, bottom_text, crop):
 
     size=(720,1280)
     useSRT = True
@@ -345,7 +422,7 @@ def generate_169_video(top_text, bottom_text, video_category="jokes"):
     bottom_black_bar = ImageClip(black_image_path).set_duration(clip_duration).set_position(("center","bottom")).resize(size)
 
     # generate video clip
-    video_clip = add_video_clip(video_category, start=0, total_duration=clip_duration, size=size)
+    video_clip = add_video_clip(start=0, total_duration=clip_duration, size=size, crop=crop)
 
     # combine text and black bar
     final_top_video_text_clip = CompositeVideoClip([top_black_bar, top_text_clip])
@@ -362,54 +439,69 @@ def generate_169_video(top_text, bottom_text, video_category="jokes"):
     # combined_video.write_videofile(final_video_path)
     print("Videos and banner, and TTS set!")
 
+    # close partial clips (audiofileclips and videofileclips)
+    # tts_clip.close()
+    # video_clip.close()
+
     # combined_video.close()
     return combined_video
+
 
 
 def main():
     delete_temp_audio()
     
+    audio_type = "happy" # change this to categories eventually, look up music dmca stuff
+    audio_path = f"resources\\audio\\{audio_type}"
+    video_path = "resources\\background_videos\\genshin"
+    get_video_files(video_path)
+    get_audio_files(audio_path)
     
-    category = "genshin"
-    audio_type = "happy"
-    today = get_todays_date()
-    title = f"Genshin Stuff"
+    
+    # today = get_todays_date()
+    
+    title = f"" # must be blank if no title is needed!!!
     texts = [
         "Did you know this about Alhaitham...",
-        "They significantly increased the experience awarded for completing Nightmare Dungeons.",
-        "They significantly increased the experience gained from killing monsters in Nightmare Dungeons.",
-        "Helltide chests now provide substantially more bonus experience when opened.",
-        "They significantly increased rewarded experience from completing individual Whispers across the board.",
-        "Finally, nightmare dungeons are worth it now..."
+        # "They significantly increased the experience awarded for completing Nightmare Dungeons.",
+        # "They significantly increased the experience gained from killing monsters in Nightmare Dungeons.",
+        # "Helltide chests now provide substantially more bonus experience when opened.",
+        # "They significantly increased rewarded experience from completing individual Whispers across the board.",
+        "Finally, nightmare dungeons are worth it now...",
         "Sub, Comment, Like for More!",
     ]
+    crop = True
+    
+    # 0, # vertical, 
+    # 1, # 16:9 black bars, requires top and bottom text
+    # 2, # sequential, requires more setup such as organizing video data and audio data (alphanumeric sorted)
+    mode = 0
 
-    # generate the video including the sentence, and tts
+    
+    
+    
+    # should hide this logic and throw in a function... we'll decide later
     video_clips = []
-    for bottom_text in texts: 
-        video = create_video_audio_text_clip("", bottom_text, category, crop=True)
-        # video = generate_169_video(title, bottom_text, category)
+    for i, bottom_text in enumerate(texts):
+        if mode == 0:
+            video = create_video_audio_text_clip(title, bottom_text, crop=crop)
+        elif mode == 1: 
+            video = generate_169_video(title, bottom_text, crop=crop)
+        else: 
+            video = create_video_audio_text_sequential_clip(title, bottom_text, crop=crop, index=i+1)
         video_clips.append(video)
     final_video = concatenate_videoclips(video_clips)
     
-    # add title clip
-    # title_text = "Genshin 3.8 New Content"
-    # text_title_clip = add_text_clip(text=title, position=("center", 0.2), relative=True, start=0, total_duration=final_video.duration)
-    
-    # combine title and combined clip
-    # combined_video = CompositeVideoClip([final_video, text_title_clip], use_bgclip=True) # use for no audio on the clip, just tts?
-    # final_video = CompositeVideoClip([final_video, text_title_clip])
-    
     # Set the background audio music
-    final_video = add_background_audio(final_video, audio_type)
+    final_video = add_background_audio(final_video)
 
     # Write the final video
     final_video.write_videofile(f"{title}.mp4", fps=30, preset='ultrafast')
     
     # background_audio_clip.close()
     # combined_audio.close()
-    # for clip in video_clips:
-    #     clip.close()
+    for clip in video_clips:
+        clip.close()
 
     return
 
