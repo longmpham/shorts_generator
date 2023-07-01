@@ -2,6 +2,7 @@ import os
 import random
 import time
 import math
+import csv
 import datetime
 from moviepy.editor import *
 from moviepy.video.tools.subtitles import SubtitlesClip
@@ -11,7 +12,6 @@ import speech_recognition as sr
 from pydub import AudioSegment
 from pydub.utils import make_chunks
 from datetime import timedelta
-import os
 from coqui_tts import generate_TTS_using_bark, generate_TTS_using_coqui
 import shutil
 from tqdm import tqdm
@@ -23,6 +23,18 @@ from natsort import natsorted
 # counter = 0
 video_files_list = []
 audio_files_list = []
+
+def get_csv(csv_filename):
+    # Read the CSV file and extract the relationship data
+    data = []
+    with open(csv_filename, 'r', encoding="utf8") as csv_file:
+        csv_reader = csv.reader(csv_file)
+        next(csv_reader)  # skip the first row
+        for row in csv_reader:
+            category, statement, goal = row[:3]
+            print(category, statement, goal)
+            data.append({'category': category, 'statement': statement, 'goal': goal})
+    return data
 
 def delete_temp_audio(folder_path="resources\\temp\\audio"):
     # If temp folder is found, delete it
@@ -76,7 +88,7 @@ def get_video_files(path):
     # exit()
     return video_files_list
 
-def get_video_file(index):
+def get_video_file(index=-1):
     global video_files_list
     # print(index, len(video_files_list))
     
@@ -103,7 +115,7 @@ def get_audio_files(path):
     # exit()
     return audio_files_list
 
-def get_audio_file(index):
+def get_audio_file(index=-1):
     global audio_files_list
     # print(index, len(audio_files_list))
     
@@ -187,13 +199,41 @@ def generate_TTS_using_GTTS(sentences):
 def generate_TTS_using_TikTok(sentence):
     # global counter
     voices = [
-        "en_us_001", # Female
-        "en_us_006", # Male 1 # sucks
-        "en_us_007", # Male 2 # better
-        "en_us_009", # Male 3
-        "en_us_010", # Male 4 # best
-        "en_uk_001",
-        "en_uk_003",
+        # ENG VOICES
+        "en_us_001",            # 0 Female
+        "en_us_006",            # Male 1 # sucks
+        "en_us_007",            # Male 2 # better
+        "en_us_009",            # Male 3
+        "en_us_010",            # Male 4 # best
+        "en_male_narration",    # 5
+        "en_male_funny",        # 6
+        "en_female_emotional",  # 7
+        "en_male_cody",         # 8
+        
+        # DISNEY VOICES
+        "en_us_ghostface",          # 9
+        "en_us_chewbacca",          # 10
+        "en_us_c3po",               # 11
+        "en_us_stitch",             # 12
+        "en_us_stormtrooper",       # 13
+        "en_us_rocket",             # 14
+        "en_female_madam_leota",    # 15 # this one is funny.
+        "en_male_ghosthost",        # 16
+        "en_male_pirate",           # 17 # this one is funny
+        
+        # UK VOICES
+        "en_uk_001", # 18 meh UK voice
+        "en_uk_003", # 19 better UK voice
+        
+        # VOCALS VOICES
+        "en_female_f08_salut_damour",       # 20 # Alto
+        "en_male_m03_lobby",                # 21 # Tenor
+        "en_male_m03_sunshine_soon",        # 22 # Sunshine SOon
+        "en_female_f08_warmy_breeze",       # 23 # Warmy Breeze
+        "en_female_ht_f08_glorious",        # 24 # Glorious
+        "en_male_sing_funny_it_goes_up",    # 25 # It Goes Up
+        "en_male_m2_xhxs_m03_silly",        # 26 # Chipmunk
+        "en_female_ht_f08_wonderful_world", # 27 # Dramatic
     ]
     
     # create a dynamic path for file generation
@@ -203,7 +243,7 @@ def generate_TTS_using_TikTok(sentence):
     file_name = f"tts_audio_file_{counter}"
     
     # call TikTok API
-    success, tts_file = texttotiktoktts(sentence, voices[6], path, file_name=file_name)
+    success, tts_file = texttotiktoktts(sentence, voices[0], path, file_name=file_name)
     # counter += 1
     
     if not success: exit()
@@ -392,7 +432,7 @@ def create_video_audio_text_clip(top_text, bottom_text, crop=False):
 
 def generate_169_video(top_text, bottom_text, crop):
 
-    size=(720,1280)
+    size=(1280,720)
     useSRT = True
     # generate tts
     tts_file = generate_TTS_using_TikTok(bottom_text)
@@ -446,39 +486,116 @@ def generate_169_video(top_text, bottom_text, crop):
     # combined_video.close()
     return combined_video
 
+def create_video_from_csv(csv_data, mp4_file_name):
+    
+    csv_type = "quiz"
+    csv_file = f"{csv_type}.csv"
+    csv_path = os.path.join("resources", "data", csv_file)
+    csv_data = get_csv(csv_path) # takes csv with 3 fields, category, statement, and goal
+    
+    ending_text = "Sub, Comment, Like for More!"
+    
+    # iterate through the CSV data
+    for i, data in enumerate(csv_data, start=649):
+        # get csv data fields per row
+        question_num = data[list(data.keys())[0]]  # Extract the first value dynamically
+        question = data[list(data.keys())[1]]  # Extract the second value dynamically
+        answer = data[list(data.keys())[2]]  # Extract the third value dynamically
+        
+        # generate TTS files and TTS Clips
+        tts_audio_file1 = generate_TTS_using_TikTok(question)
+        tts_audio_file2 = generate_TTS_using_TikTok(answer)
+        tts_audio_file3 = generate_TTS_using_TikTok(ending_text)
+        tts_audio_clip1, clip1_duration = add_audio_tts_clip(audio_file=tts_audio_file1, silence=2, start=0)
+        tts_audio_clip2, clip2_duration = add_audio_tts_clip(audio_file=tts_audio_file2, silence=1, start=clip1_duration)
+        tts_audio_clip3, clip3_duration = add_audio_tts_clip(audio_file=tts_audio_file3, silence=0.5, start=clip1_duration+clip2_duration)
+        video_duration = clip1_duration + clip2_duration + clip3_duration        
+        
+        # generate the texts for the video
+        # hashtag_clip = add_text_clip(text=description_text, font_name="Impact", font_size=30, font_color="white", bg_color="black", method="label", start=0, total_duration=video_duration, opacity=1.0, position=("center", 0.8), relative=True)
+        question_clip = add_text_clip(text=question, font_name="Impact", font_size=50, font_color="white", bg_color="black", method="caption", start=0, total_duration=clip1_duration, opacity=0.8, position="center")
+        answer_clip = add_text_clip(text=answer, font_name="Impact", font_size=50, font_color="white", bg_color="black", method="caption", start=clip1_duration, total_duration=clip2_duration, opacity=0.8, position="center")
+        ending_clip = add_text_clip(text=ending_text, font_name="Impact", font_size=50, font_color="white", bg_color="black", method="label", start=clip1_duration + clip2_duration, total_duration=clip3_duration, opacity=1.0, position=("center", 0.1), relative=True)
 
+        # generate the video clips
+        bg_question_clip = add_video_clip(start=0, total_duration=clip1_duration)
+        bg_answer_clip = add_video_clip(start=clip1_duration, total_duration=clip2_duration+clip3_duration)
+        bg_video_full = concatenate_videoclips([bg_question_clip, bg_answer_clip])
+                
+        # Combine the all the clips
+        # final_video = CompositeVideoClip([bg_video_full, question_clip, answer_clip, hashtag_clip, ending_clip], use_bgclip=True)
+        final_video = CompositeVideoClip([bg_video_full, question_clip, answer_clip, ending_clip], use_bgclip=True)
+        final_video = final_video.set_duration(video_duration)        
+        
+        # background_music
+        audio_path = get_audio_file()
+        audio_clip = AudioFileClip(audio_path).set_duration(video_duration)
+        audio_clip = audio_clip.volumex(0.1) # set volume of background_audio to 10%
+        
+        # mux the audios together
+        combined_audio = CompositeAudioClip([audio_clip, tts_audio_clip1, tts_audio_clip2, tts_audio_clip3])
+        final_video = final_video.set_audio(combined_audio)
+        
+        # Write the video to a file
+        fname = mp4_file_name.replace("_", str(i+1))
+        filename = os.path.join("resources", "uploaded_videos", f"{csv_type}", f"{fname}.mp4")
+        # final_video.write_videofile(filename, fps=30, codec='libx264', audio_codec='aac', preset='ultrafast')
+        final_video.write_videofile(filename, fps=30, preset='ultrafast')
+        # final_video.write_videofile(filename, verbose=True, write_logfile=True)
+        
+        
+        # close clips
+        # bg_video_full.close()
+        # combined_audio.close()
+        
+        # break # for debug purposes only to generate 1 video.
+        # if i == 3: # generate 3 vids
+        #     break        
+        
+    
+    return
 
 def main():
     delete_temp_audio()
     
     audio_type = "happy" # change this to categories eventually, look up music dmca stuff
     audio_path = f"resources\\audio\\{audio_type}"
-    video_path = "resources\\background_videos\\genshin"
+    video_path = "resources\\background_videos\\scraper\\tigers"
     get_video_files(video_path)
     get_audio_files(audio_path)
     
     
     # today = get_todays_date()
     
-    title = f"" # must be blank if no title is needed!!!
+    title = f"Non-Triggering Tiger Trivia" # must be blank if no title is needed!!!
     texts = [
-        "Did you know this about Alhaitham...",
-        # "They significantly increased the experience awarded for completing Nightmare Dungeons.",
-        # "They significantly increased the experience gained from killing monsters in Nightmare Dungeons.",
-        # "Helltide chests now provide substantially more bonus experience when opened.",
-        # "They significantly increased rewarded experience from completing individual Whispers across the board.",
-        "Finally, nightmare dungeons are worth it now...",
-        "Sub, Comment, Like for More!",
+        "Milo and Rory are big doofuses and they love to pee for 20 minutes long."
+        # "Tigers are the largest species of cats in the world.",
+        # "Tigers have unique patterns of stripes on their fur, similar to human fingerprints.",
+        # "Tigers are excellent swimmers and enjoy spending time in water.",
+        # "Tigers are solitary animals and are known for their territorial behavior.",
+        # "Tigers have powerful hind legs that enable them to leap distances of up to 30 feet in a single jump.",
+        # "Sub, Comment, Like for More!",
     ]
-    crop = True
-    
+    crop = False
+    mode = 1
     # 0, # vertical, 
     # 1, # 16:9 black bars, requires top and bottom text
     # 2, # sequential, requires more setup such as organizing video data and audio data (alphanumeric sorted)
-    mode = 0
+    # 4, # from csv, csv file required
+
+
+
 
     
-    
+    if mode == 4:
+        file_name = f"Bet you didnt know this... _ #shorts #quiz #question #animals #pets #dogs #cats #random #fyp" # _ will be replaced by number
+        csv_type = "quiz"
+        csv_file = f"{csv_type}.csv"
+        csv_path = os.path.join("resources", "data", csv_file)
+        csv_data = get_csv(csv_path) # takes csv with 3 fields, category, statement, and goal
+        create_video_from_csv(csv_data, file_name)
+        return
     
     # should hide this logic and throw in a function... we'll decide later
     video_clips = []
