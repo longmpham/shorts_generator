@@ -77,6 +77,8 @@ def create_folder_if_not_exists(goal_name):
     temp_folder_path = os.path.join("resources", "temp")
     _create_folder_if_not_exists(temp_folder_path)
 
+    return
+
 def get_video_files(path):
     global video_files_list
     background_video_dir = os.path.join(os.getcwd(), f"{path}")
@@ -196,7 +198,7 @@ def generate_TTS_using_GTTS(sentences):
 
     return output_files
 
-def generate_TTS_using_TikTok(sentence):
+def generate_TTS_using_TikTok(sentence, voice=1):
     # global counter
     voices = [
         # ENG VOICES
@@ -243,8 +245,7 @@ def generate_TTS_using_TikTok(sentence):
     file_name = f"tts_audio_file_{counter}"
     
     # call TikTok API
-    success, tts_file = texttotiktoktts(sentence, voices[0], path, file_name=file_name)
-    # counter += 1
+    success, tts_file = texttotiktoktts(sentence, voices[voice], path, file_name=file_name)
     
     if not success: exit()
     return tts_file
@@ -431,9 +432,64 @@ def create_video_audio_text_clip(top_text, bottom_text, crop=False):
     return final_video
 
 def generate_169_video(top_text, bottom_text, crop):
+    
+    size=(1280,720)
+    useSRT = False
+    # generate tts
+    tts_file = generate_TTS_using_TikTok(bottom_text)
+    print("TTS generated!")
+    tts_clip, clip_duration = add_audio_tts_clip(tts_file)
+    print("TTS clips done!")
+    
+    # Generate Texts
+    top_text_clip = None
+    if top_text and top_text.strip(): # takes care of None and "" 
+        top_text_clip = add_text_clip(text=top_text, font_size=100, bg_color="black", opacity=0.7, position=("center", "center"), total_duration=clip_duration, size=(size[0]*0.9,None))
+    
+    bottom_text_clip = add_text_clip(text=bottom_text, position=("center", "bottom"), total_duration=clip_duration, size=(size[0]*0.9,None), stroke_color="black", stroke_width=1)
+    
+    # generate SRT (per word)
+    if useSRT == True: 
+        srt_file = generate_srt_from_audio_using_whisper(tts_file, method="continuous")
+        generator = lambda txt: TextClip(txt=txt, fontsize=50, color="white", font="Impact", method="caption", size=(size[0]*0.8, None))
+        # generator = lambda txt: add_text_clip(text=txt, position=("center"), total_duration=clip_duration)
+        subtitles = SubtitlesClip(srt_file, generator)
+        subtitles = subtitles.set_position(("center", "bottom")).set_duration(clip_duration)
+        print("Subtitles Set...")    
+    
+        bottom_text_clip = subtitles
+
+    # generate video clip
+    video_clip = add_video_clip(start=0, total_duration=clip_duration, size=size, crop=crop)
+    
+    # Finally, create the video
+    if top_text_clip:
+        final_video_clip = CompositeVideoClip([video_clip, top_text_clip, bottom_text_clip], use_bgclip=True)
+    else:
+        final_video_clip = CompositeVideoClip([video_clip, bottom_text_clip], use_bgclip=True)
+        
+    # combine text and black bar
+    # final_video_clip = CompositeVideoClip([video_clip, top_text_clip, bottom_text_clip], use_bgclip=True)
+    final_video_clip = final_video_clip.set_duration(clip_duration)
+
+    # Set Audio
+    final_video_clip = final_video_clip.set_audio(tts_clip)
+    # final_video_clip.save_frame("frame.png", t=3)
+    # exit()
+    # final_video_clip.write_videofile(final_video_path)
+    print("Videos and banner, and TTS set!")
+
+    # close partial clips (audiofileclips and videofileclips)
+    # tts_clip.close()
+    # video_clip.close()
+
+    # combined_video.close()
+    return final_video_clip
+
+def generate_169_vertical_video(top_text, bottom_text, crop):
 
     size=(1280,720)
-    useSRT = True
+    useSRT = False
     # generate tts
     tts_file = generate_TTS_using_TikTok(bottom_text)
     print("TTS generated!")
@@ -442,8 +498,8 @@ def generate_169_video(top_text, bottom_text, crop):
     
     
     # generate text
-    top_text_clip = add_text_clip(text=top_text, font_size=100, position=("center", "center"), total_duration=clip_duration)
-    bottom_text_clip = add_text_clip(text=bottom_text, position=("center", "top"), total_duration=clip_duration)
+    top_text_clip = add_text_clip(text=top_text, font_size=100, position=("center", "center"), total_duration=clip_duration, size=(size[0]*0.9,None))
+    bottom_text_clip = add_text_clip(text=bottom_text, position=("center", "top"), total_duration=clip_duration, size=(size[0]*0.9,None))
     
     # generate SRT (per word)
     if useSRT == True: 
@@ -555,38 +611,84 @@ def create_video_from_csv(csv_data, mp4_file_name):
     
     return
 
+def generate_meme_video(top_text, bottom_text, meme_file):
+    # Generate TTS
+    text = f"{top_text}, {bottom_text}"
+    # tts_file = generate_TTS_using_TikTok(top_text)
+    # tts_clip, clip_duration = add_audio_tts_clip(tts_file)
+    tts_file = generate_TTS_using_TikTok(text, voice=5)
+    tts_clip, clip_duration = add_audio_tts_clip(tts_file)
+    
+    video_clip = VideoFileClip(meme_file, audio=True).loop(clip_duration)
+
+    size = video_clip.size
+
+    # Generate Texts
+    text_clip_top = None
+    if top_text and top_text.strip(): # takes care of None and "" 
+        text_clip_top = add_text_clip(text=top_text, font_size=30, stroke_color="black", stroke_width=1, position=("center", 0.1), relative=True, start=0, total_duration=clip_duration, size=(size[0], None))
+        
+    text_clip_bottom = add_text_clip(text=bottom_text, font_size=30, stroke_color="black", stroke_width=1, position=("center", 0.8), relative=True, start=0, total_duration=clip_duration, size=(size[0], None))
+    
+    # Add background video
+    
+    # text_clip_bottom = TextClip("hello world", size=size)
+    # text_clip_bottom = text_clip_bottom.set_duration(clip_duration).set_position(("center", "bottom"), relative=True)
+    
+    # Finally, create the video
+    if text_clip_top:
+        final_video = CompositeVideoClip([video_clip, text_clip_bottom, text_clip_top], use_bgclip=True)
+    else:
+        final_video = CompositeVideoClip([video_clip, text_clip_bottom], use_bgclip=True)
+        
+    # Combine to final video
+    final_video = final_video.set_audio(tts_clip)
+    final_video.write_videofile("test.mp4", fps=30, preset='ultrafast')
+
+    
+    # close partial clips (audiofileclips and videofileclips)
+    # tts_clip.close()
+    # video_clip.close()
+    
+    # Debug
+    # filename = "test.mp4"
+    # final_video.save_frame("frame.png", t=1)
+    # final_video.write_videofile(filename, fps=30, codec='libx264', audio_codec='aac', preset='ultrafast')
+    # final_video.write_videofile("test.mp4", fps=30, preset='ultrafast')
+    # exit()
+    return final_video
+    
 def main():
     delete_temp_audio()
     
-    audio_type = "happy" # change this to categories eventually, look up music dmca stuff
+    audio_type = "dark" # change this to categories eventually, look up music dmca stuff
     audio_path = f"resources\\audio\\{audio_type}"
-    video_path = "resources\\background_videos\\scraper\\tigers"
+    video_path = "resources\\background_videos\\diablo4" #scraper\\verticalyoga"
     get_video_files(video_path)
     get_audio_files(audio_path)
     
-    
+    # exit()
     # today = get_todays_date()
     
-    title = f"Non-Triggering Tiger Trivia" # must be blank if no title is needed!!!
+    title = f"Diablo 4 upcoming Livestream details on July 6th 2023" # must be blank if no title is needed!!!
     texts = [
-        "Milo and Rory are big doofuses and they love to pee for 20 minutes long."
-        # "Tigers are the largest species of cats in the world.",
-        # "Tigers have unique patterns of stripes on their fur, similar to human fingerprints.",
-        # "Tigers are excellent swimmers and enjoy spending time in water.",
-        # "Tigers are solitary animals and are known for their territorial behavior.",
-        # "Tigers have powerful hind legs that enable them to leap distances of up to 30 feet in a single jump.",
-        # "Sub, Comment, Like for More!",
+        "Diablo 4's team is going to talk about these on July 6th.",
     ]
     crop = False
-    mode = 1
+    mode = 5
     # 0, # vertical, 
-    # 1, # 16:9 black bars, requires top and bottom text
-    # 2, # sequential, requires more setup such as organizing video data and audio data (alphanumeric sorted)
+    # 1, # 16:9 vertical black bars, requires top and bottom text
+    # 2, # 16:9 horizontal video, requires top and bottom text
+    # 3, # sequential, requires more setup such as organizing video data and audio data (alphanumeric sorted)
     # 4, # from csv, csv file required
-
-
-
-
+    # 5, # a gif in vertical format
+    
+    if mode == 5: 
+        
+        meme_file = "sweating_profusely.gif"
+        meme_path = os.path.join(os.getcwd(), "resources", "background_videos", "memes", f"{meme_file}")
+        generate_meme_video("when there is", "someone knocking on your door...", meme_path)
+        return
     
     if mode == 4:
         file_name = f"Bet you didnt know this... _ #shorts #quiz #question #animals #pets #dogs #cats #random #fyp" # _ will be replaced by number
@@ -603,6 +705,10 @@ def main():
         if mode == 0:
             video = create_video_audio_text_clip(title, bottom_text, crop=crop)
         elif mode == 1: 
+            video = generate_169_vertical_video(title, bottom_text, crop=crop)
+        elif mode == 2:
+            if i >= 1: 
+                title = ""
             video = generate_169_video(title, bottom_text, crop=crop)
         else: 
             video = create_video_audio_text_sequential_clip(title, bottom_text, crop=crop, index=i+1)
@@ -613,6 +719,9 @@ def main():
     final_video = add_background_audio(final_video)
 
     # Write the final video
+    if title=="": title = "yt_short"
+    # final_video.save_frame("frame.png", t=1)
+    # exit()
     final_video.write_videofile(f"{title}.mp4", fps=30, preset='ultrafast')
     
     # background_audio_clip.close()
@@ -636,23 +745,3 @@ if __name__ == "__main__":
 # |    Text    |
 # |            |
 # +------------+
-
-    
-    # texts = [
-    #         "Once upon a time, in a charming little town,",
-    #         "Lived a cat named Oliver, with fur of golden brown.",
-    #         "And nearby, a dog named Max, full of playful zest,",
-    #         "With a wagging tail and a heart so blessed.",
-    #         "Oliver would perch on a windowsill high,",
-    #         "Watching the world with a curious eye.",
-    #         "Max would bound and chase his tail around,",
-    #         "With a barking joy, a joyful sound.",
-    #         "They met one day under a bright blue sky,",
-    #         "A cat and a dog, unlikely allies.",
-    #         "They played and explored, side by side,",
-    #         "Creating memories, their friendship amplified.",
-    #         "Through fields they roamed, a duo so true,",
-    #         "Sharing adventures, just Max and Oliver knew.",
-    #         "With every passing day, their bond grew strong,",
-    #         "A cat and a dog, proving friendships can't go wrong."
-    #         ]
