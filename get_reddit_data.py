@@ -176,7 +176,7 @@ def combine_post_comments(post, comments, post_index):
     json_data = load_json_file(file_name)
     return json_data
 
-def get_reddit_data():
+def get_reddit_data(num_posts=1, num_comments=10):
   
     # Variables to choose from...
     # url = "https://www.reddit.com/r/AmItheAsshole/top.json?t=day"
@@ -184,8 +184,6 @@ def get_reddit_data():
     # url = "https://www.reddit.com/r/mildlyinfuriating/top.json?t=day"
     # url = "https://www.reddit.com/subreddits/popular.json"
     # post_num = 0  # first (top most post) (usually <25 posts)
-    number_of_posts = 2
-    num_of_comments = 10
     
     # Get Reddit posts from url
     reddit_posts = get_posts(url)
@@ -193,9 +191,9 @@ def get_reddit_data():
     # get all posts and their comments
     json_posts = []
     for i, post in enumerate(reddit_posts):
-        if i >= number_of_posts:
+        if i >= num_posts:
             break
-        post_comment = get_comments(post['url'], num_of_comments)
+        post_comment = get_comments(post['url'], num_comments)
         combined_post = combine_post_comments(post, post_comment, i)
         json_posts.append(combined_post)
     return json_posts

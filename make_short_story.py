@@ -294,16 +294,20 @@ def generate_srt_from_audio_using_whisper(audio_file_path, method="sentence"):
         
         # for sentence srt
         elif method == "continuous":
-            print("using per word")
+            print("using appending words")
             for segment in segments:
                 words = ""
                 for index, word in enumerate(segment.words):
                     print("[%.2fs -> %.2fs] %s" % (word.start, word.end, word.word))
                     srt_file.write(f"{index}\n")
                     # srt_file.write(f"{word.start:.2f} --> {word.end:.2f}\n")
-                    srt_file.write(f"{format_timedelta(word.start)} --> {format_timedelta(word.end)}\n")
+                    # srt_file.write(f"{format_timedelta(word.start)} --> {format_timedelta(word.end)}\n")
+                    if index < len(segment.words) - 1:
+                        srt_file.write(f"{format_timedelta(word.start)} --> {format_timedelta(word.end)}\n")
+                    else:
+                        srt_file.write(f"{format_timedelta(word.start)} --> {format_timedelta(word.end + 2)}\n")
                     srt_file.write(f"{words + word.word}\n\n")
-                    words = f"{words}{word.word}"    
+                    words = f"{words}{word.word}"
         else:
             print("using per sentence")
             for index, segment in enumerate(segments, start=1):
@@ -662,7 +666,7 @@ def generate_meme_video(top_text, bottom_text, meme_file):
     # exit()
     return final_video
 
-def generate_reddit_video():
+def generate_reddit_video(crop=False):
     
     def make_sentences(post):
         sentences = []
@@ -684,15 +688,17 @@ def generate_reddit_video():
                 continue
             
             sentences.append(f"{comment_author} said {comment_body}")
+
+        sentences.append("Sub, Comment, Like for More!")
     
         return sentences
     
     size = (720, 1280)
     useSRT = True
-    crop = False
+    crop = crop # False if using vertical videos, True if using landscape to crop.
     
     # Get each post for each post that comes back
-    posts = get_reddit_data()
+    posts = get_reddit_data(num_posts=10, num_comments=10)
     for i, post in enumerate(posts): 
         
         # Generate sentences to break up the chunks
@@ -717,7 +723,7 @@ def generate_reddit_video():
             # generate SRT (per word)
             if useSRT == True: 
                 srt_file = generate_srt_from_audio_using_whisper(tts_file, method="continuous")
-                generator = lambda txt: TextClip(txt=txt, fontsize=40, color="white", font="Impact", method="caption", size=(size[0]*0.9, None))
+                generator = lambda txt: TextClip(txt=txt, fontsize=40, color="white", font="Impact", stroke_color="black", method="caption", size=(size[0]*0.9, None))
                 # generator = lambda txt: add_text_clip(text=txt, position=("center"), total_duration=clip_duration)
                 subtitles = SubtitlesClip(srt_file, generator)
                 subtitles = subtitles.set_position(("center", "center")).set_duration(clip_duration)
@@ -765,13 +771,10 @@ def main():
     
     audio_type = "happy" # change this to categories eventually, look up music dmca stuff
     audio_path = f"resources\\audio\\{audio_type}"
-    video_path = "resources\\background_videos\\genshin" #scraper\\verticalyoga"
+    video_path = "resources\\background_videos\\scraper\\catsdogsanimalspetsvertical\\vertical" #scraper\\verticalyoga"
     get_video_files(video_path)
     get_audio_files(audio_path)
     
-    generate_reddit_video()
-    
-    exit()
     # exit()
     # today = get_todays_date()
     
@@ -785,7 +788,7 @@ def main():
         "Jellyfish have inspired artists, scientists, and even fashion designers with their ethereal beauty.",
         "Sub, Comment, Like for More!",
     ]
-    crop = True
+    crop = False
     use_title = False
     mode = 2
     # 0, # vertical, 
@@ -794,6 +797,11 @@ def main():
     # 3, # sequential, requires more setup such as organizing video data and audio data (alphanumeric sorted)
     # 4, # from csv, csv file required
     # 5, # a gif in vertical format
+    # 6, # reddit. It calls reddit, builds the list, no input necessary other than the video library (crop or not)
+    
+    if mode == 6:
+        generate_reddit_video(crop)
+        return
     
     if mode == 5: 
         meme_file = "shaq_shake.gif"
