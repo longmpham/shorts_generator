@@ -19,6 +19,7 @@ from faster_whisper import WhisperModel
 from gtts import gTTS
 from tiktok_tts_v2 import texttotiktoktts
 from natsort import natsorted
+from get_reddit_data import get_reddit_data
 
 # counter = 0
 video_files_list = []
@@ -660,7 +661,105 @@ def generate_meme_video(top_text, bottom_text, meme_file):
     # final_video.write_videofile("test.mp4", fps=30, preset='ultrafast')
     # exit()
     return final_video
+
+def generate_reddit_video():
     
+    def make_sentences(post):
+        sentences = []
+        post_author = post["author"]
+        post_title = post["title"]
+        post_body = post["selftext"]
+        post_comments = post["comments"]
+    
+        sentences.append(f"{post_author} said {post_title}")
+        if post_body.strip(): sentences.append(post_body)
+    
+        # Generate Textclips for the comments
+        for i, post_comment in enumerate(post_comments):
+            comment_author = post_comment["author"]
+            comment_body = post_comment["comment"]
+            
+            word_count = len(comment_body.split())
+            if word_count > 20:
+                continue
+            
+            sentences.append(f"{comment_author} said {comment_body}")
+    
+        return sentences
+    
+    size = (720, 1280)
+    useSRT = True
+    crop = False
+    
+    # Get each post for each post that comes back
+    posts = get_reddit_data()
+    for i, post in enumerate(posts): 
+        
+        # Generate sentences to break up the chunks
+        sentences = make_sentences(post)
+
+        # for each sentence, make a TTS, video and merge them
+        video_clips = []
+        for sentence in sentences:
+            print(sentence)
+            tts_file = generate_TTS_using_TikTok(sentence)
+            tts_clip, clip_duration = add_audio_tts_clip(tts_file)
+
+            # Generate TextClips
+            title = post['title']
+            text_clip_title = add_text_clip(text=title, bg_color="black", opacity=0.8, position=("center", 0.1), relative=True, total_duration=clip_duration, size=(size[0]*0.9,None))
+            # text_clips.append(text_clip_title) # intro text
+        
+            # text_clips = []
+            text_clip_body = add_text_clip(text=sentence, font_size=40, position=("center", "center"), relative=True, total_duration=clip_duration, size=(size[0]*0.9,None), stroke_color="black", stroke_width=1)
+            # text_clips.append(text_clip_body)
+            
+            # generate SRT (per word)
+            if useSRT == True: 
+                srt_file = generate_srt_from_audio_using_whisper(tts_file, method="continuous")
+                generator = lambda txt: TextClip(txt=txt, fontsize=40, color="white", font="Impact", method="caption", size=(size[0]*0.9, None))
+                # generator = lambda txt: add_text_clip(text=txt, position=("center"), total_duration=clip_duration)
+                subtitles = SubtitlesClip(srt_file, generator)
+                subtitles = subtitles.set_position(("center", "center")).set_duration(clip_duration)
+                print("Subtitles Set...")
+            
+                text_clip_body = subtitles
+
+            # generate video clip
+            video_clip = add_video_clip(start=0, total_duration=clip_duration, size=size, crop=crop)
+            
+            # Finally, create the video
+            final_video_clip = CompositeVideoClip([video_clip, text_clip_body, text_clip_title], use_bgclip=True)
+            final_video_clip = final_video_clip.set_duration(clip_duration)
+
+            # Set Audio
+            final_video_clip = final_video_clip.set_audio(tts_clip)
+            print("Videos and banner, and TTS set!")
+
+            # Debug
+            # final_video_clip.save_frame("frame.png", t=3)
+            # exit()
+            # final_video_clip.write_videofile(final_video_path)
+
+            # close partial clips (audiofileclips and videofileclips)
+            # tts_clip.close()
+            # video_clip.close()
+
+            # combined_video.close()
+            video_clips.append(final_video_clip)
+        
+        final_video = concatenate_videoclips(video_clips)
+        # Set the background audio music
+        final_video = add_background_audio(final_video)
+
+        # Write the final video
+        title = f"reddit_{i}"
+        # final_video.save_frame("frame.png", t=1)
+        # exit()
+        final_video.write_videofile(f"{title}.mp4", fps=30, preset='ultrafast')
+        
+        final_video.close()        
+
 def main():
     delete_temp_audio()
     
@@ -670,6 +769,9 @@ def main():
     get_video_files(video_path)
     get_audio_files(audio_path)
     
+    generate_reddit_video()
+    
+    exit()
     # exit()
     # today = get_todays_date()
     

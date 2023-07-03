@@ -63,13 +63,11 @@ def clean_json_file(input_file, output_file):
         cleaned_dictionary = {}
         for key, value in dictionary.items():
             if isinstance(value, str):
-                print(f"the value before cleaning: {value}")
                 cleaned_value = re.sub(r'\\[nrt]', '', value)  # Remove escape characters (\n, \r, \t)
                 cleaned_value = re.sub(r'\s+', ' ', cleaned_value)  # Remove extra white spaces
                 cleaned_value = cleaned_value.strip()  # Remove leading/trailing white spaces
                 cleaned_value = clean_text(value)
                 cleaned_dictionary[key] = cleaned_value
-                print(f"the value after cleaning: {value}")
             else:
                 cleaned_dictionary[key] = value
         return cleaned_dictionary
@@ -178,7 +176,7 @@ def combine_post_comments(post, comments, post_index):
     json_data = load_json_file(file_name)
     return json_data
 
-def main():
+def get_reddit_data():
   
     # Variables to choose from...
     # url = "https://www.reddit.com/r/AmItheAsshole/top.json?t=day"
@@ -187,7 +185,7 @@ def main():
     # url = "https://www.reddit.com/subreddits/popular.json"
     # post_num = 0  # first (top most post) (usually <25 posts)
     number_of_posts = 2
-    num_of_comments = 3
+    num_of_comments = 10
     
     # Get Reddit posts from url
     reddit_posts = get_posts(url)
@@ -200,7 +198,7 @@ def main():
         post_comment = get_comments(post['url'], num_of_comments)
         combined_post = combine_post_comments(post, post_comment, i)
         json_posts.append(combined_post)
-    return
-    
+    return json_posts
+  
 if __name__ == "__main__":
-    main()
+    get_reddit_data()
