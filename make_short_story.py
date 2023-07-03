@@ -198,8 +198,7 @@ def generate_TTS_using_GTTS(sentences):
 
     return output_files
 
-def generate_TTS_using_TikTok(sentence, voice=1):
-    # global counter
+def generate_TTS_using_TikTok(sentence, voice=0):
     voices = [
         # ENG VOICES
         "en_us_001",            # 0 Female
@@ -432,8 +431,10 @@ def create_video_audio_text_clip(top_text, bottom_text, crop=False):
     return final_video
 
 def generate_169_video(top_text, bottom_text, crop):
+    # if crop == True: size = (1280,720)
+    # else: 
+    size = (720, 1280)
     
-    size=(1280,720)
     useSRT = False
     # generate tts
     tts_file = generate_TTS_using_TikTok(bottom_text)
@@ -444,9 +445,9 @@ def generate_169_video(top_text, bottom_text, crop):
     # Generate Texts
     top_text_clip = None
     if top_text and top_text.strip(): # takes care of None and "" 
-        top_text_clip = add_text_clip(text=top_text, font_size=100, bg_color="black", opacity=0.7, position=("center", "center"), total_duration=clip_duration, size=(size[0]*0.9,None))
+        top_text_clip = add_text_clip(text=top_text, font_size=100, bg_color="black", opacity=0.7, position=("center", 0.05), relative=True, total_duration=clip_duration, size=(size[0]*0.9,None))
     
-    bottom_text_clip = add_text_clip(text=bottom_text, position=("center", "bottom"), total_duration=clip_duration, size=(size[0]*0.9,None), stroke_color="black", stroke_width=1)
+    bottom_text_clip = add_text_clip(text=bottom_text, position=("center", "center"), relative=True, total_duration=clip_duration, size=(size[0]*0.9,None), stroke_color="black", stroke_width=1)
     
     # generate SRT (per word)
     if useSRT == True: 
@@ -474,10 +475,12 @@ def generate_169_video(top_text, bottom_text, crop):
 
     # Set Audio
     final_video_clip = final_video_clip.set_audio(tts_clip)
+    print("Videos and banner, and TTS set!")
+
+    # Debug
     # final_video_clip.save_frame("frame.png", t=3)
     # exit()
     # final_video_clip.write_videofile(final_video_path)
-    print("Videos and banner, and TTS set!")
 
     # close partial clips (audiofileclips and videofileclips)
     # tts_clip.close()
@@ -486,7 +489,7 @@ def generate_169_video(top_text, bottom_text, crop):
     # combined_video.close()
     return final_video_clip
 
-def generate_169_vertical_video(top_text, bottom_text, crop):
+def generate_169_vertical_black_bars_video(top_text, bottom_text, crop):
 
     size=(1280,720)
     useSRT = False
@@ -616,7 +619,7 @@ def generate_meme_video(top_text, bottom_text, meme_file):
     text = f"{top_text}, {bottom_text}"
     # tts_file = generate_TTS_using_TikTok(top_text)
     # tts_clip, clip_duration = add_audio_tts_clip(tts_file)
-    tts_file = generate_TTS_using_TikTok(text, voice=5)
+    tts_file = generate_TTS_using_TikTok(text, voice=9) # 17 is ok, 9 is ok
     tts_clip, clip_duration = add_audio_tts_clip(tts_file)
     
     video_clip = VideoFileClip(meme_file, audio=True).loop(clip_duration)
@@ -626,9 +629,9 @@ def generate_meme_video(top_text, bottom_text, meme_file):
     # Generate Texts
     text_clip_top = None
     if top_text and top_text.strip(): # takes care of None and "" 
-        text_clip_top = add_text_clip(text=top_text, font_size=30, stroke_color="black", stroke_width=1, position=("center", 0.1), relative=True, start=0, total_duration=clip_duration, size=(size[0], None))
+        text_clip_top = add_text_clip(text=top_text, font_size=30, stroke_color="black", stroke_width=1, position=("center", 0.05), relative=True, start=0, total_duration=clip_duration, size=(size[0], None))
         
-    text_clip_bottom = add_text_clip(text=bottom_text, font_size=30, stroke_color="black", stroke_width=1, position=("center", 0.8), relative=True, start=0, total_duration=clip_duration, size=(size[0], None))
+    text_clip_bottom = add_text_clip(text=bottom_text, font_size=30, stroke_color="black", stroke_width=1, position=("center", 0.75), relative=True, start=0, total_duration=clip_duration, size=(size[0], None))
     
     # Add background video
     
@@ -661,21 +664,28 @@ def generate_meme_video(top_text, bottom_text, meme_file):
 def main():
     delete_temp_audio()
     
-    audio_type = "dark" # change this to categories eventually, look up music dmca stuff
+    audio_type = "happy" # change this to categories eventually, look up music dmca stuff
     audio_path = f"resources\\audio\\{audio_type}"
-    video_path = "resources\\background_videos\\diablo4" #scraper\\verticalyoga"
+    video_path = "resources\\background_videos\\genshin" #scraper\\verticalyoga"
     get_video_files(video_path)
     get_audio_files(audio_path)
     
     # exit()
     # today = get_todays_date()
     
-    title = f"Diablo 4 upcoming Livestream details on July 6th 2023" # must be blank if no title is needed!!!
+    title = f"You Should Know These About Jellfish!" # must be blank if no title is needed!!!
     texts = [
-        "Diablo 4's team is going to talk about these on July 6th.",
+        "Bet you didn't know this about jellyfish...",
+        "Jellyfish have a unique pulsing motion, resembling a mesmerizing underwater dance.",
+        "Some jellyfish have long, trailing tentacles that gracefully flow behind them.",
+        "Jellyfish can vary in size, from as small as a pinhead to as large as a human.",
+        "Jellyfish populations can undergo rapid blooms, forming what is known as a 'jellyfish swarm.'",
+        "Jellyfish have inspired artists, scientists, and even fashion designers with their ethereal beauty.",
+        "Sub, Comment, Like for More!",
     ]
-    crop = False
-    mode = 5
+    crop = True
+    use_title = False
+    mode = 2
     # 0, # vertical, 
     # 1, # 16:9 vertical black bars, requires top and bottom text
     # 2, # 16:9 horizontal video, requires top and bottom text
@@ -684,8 +694,7 @@ def main():
     # 5, # a gif in vertical format
     
     if mode == 5: 
-        
-        meme_file = "sweating_profusely.gif"
+        meme_file = "shaq_shake.gif"
         meme_path = os.path.join(os.getcwd(), "resources", "background_videos", "memes", f"{meme_file}")
         generate_meme_video("when there is", "someone knocking on your door...", meme_path)
         return
@@ -705,10 +714,11 @@ def main():
         if mode == 0:
             video = create_video_audio_text_clip(title, bottom_text, crop=crop)
         elif mode == 1: 
-            video = generate_169_vertical_video(title, bottom_text, crop=crop)
+            video = generate_169_vertical_black_bars_video(title, bottom_text, crop=crop)
         elif mode == 2:
-            if i >= 1: 
-                title = ""
+            if use_title == False:
+                if i >= 1: 
+                    title = ""
             video = generate_169_video(title, bottom_text, crop=crop)
         else: 
             video = create_video_audio_text_sequential_clip(title, bottom_text, crop=crop, index=i+1)
@@ -724,6 +734,7 @@ def main():
     # exit()
     final_video.write_videofile(f"{title}.mp4", fps=30, preset='ultrafast')
     
+    final_video.close()
     # background_audio_clip.close()
     # combined_audio.close()
     for clip in video_clips:
