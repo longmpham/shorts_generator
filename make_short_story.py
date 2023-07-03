@@ -21,7 +21,6 @@ from tiktok_tts_v2 import texttotiktoktts
 from natsort import natsorted
 from get_reddit_data import get_reddit_data
 
-# counter = 0
 video_files_list = []
 audio_files_list = []
 
@@ -262,7 +261,7 @@ def generate_srt_from_audio_using_whisper(audio_file_path, method="sentence"):
     
     # use large-v2 model and transcribe the audio file
     model_size = "large-v2"
-    model = WhisperModel(model_size, device="cpu", compute_type="int8")
+    model = WhisperModel(model_size, device="cpu", compute_type="int8", num_workers=2) # num_workers = default 1
         # model = WhisperModel(model_size, device="cuda", compute_type="float16")
     # print(audio_file_path)
     segments, info = model.transcribe(audio_file_path, beam_size=5, word_timestamps=True)
@@ -321,6 +320,8 @@ def generate_srt_from_audio_using_whisper(audio_file_path, method="sentence"):
     
     return srt_file_path
 
+
+
 def add_text_clip(text="", font_name="Impact", font_size=50, font_color="white", bg_color="transparent", stroke_color=None, stroke_width=1, size=(int(720*0.9),None), method="caption", start=0, total_duration=5, opacity=1.0, position=("center"), relative=False):
     text_clip = TextClip(text, stroke_color=stroke_color, stroke_width=stroke_width, fontsize=font_size, color=font_color, bg_color=bg_color, font=font_name, size=size, method=method)
     if relative==True:
@@ -368,6 +369,10 @@ def add_background_audio(final_video, index=-1):
     final_video = final_video.set_audio(combined_audio)
     
     return final_video
+
+
+
+
 
 def create_video_audio_text_sequential_clip(top_text, bottom_text, crop=False, index=0):
     tts_file = generate_TTS_using_TikTok(bottom_text)
@@ -771,21 +776,21 @@ def main():
     
     audio_type = "happy" # change this to categories eventually, look up music dmca stuff
     audio_path = f"resources\\audio\\{audio_type}"
-    video_path = "resources\\background_videos\\scraper\\catsdogsanimalspetsvertical\\vertical" #scraper\\verticalyoga"
+    video_path = "resources\\background_videos\\scraper\\verticalgym" #scraper\\verticalyoga"
     get_video_files(video_path)
     get_audio_files(audio_path)
     
     # exit()
     # today = get_todays_date()
     
-    title = f"You Should Know These About Jellfish!" # must be blank if no title is needed!!!
+    title = f"'Sweat' Success in the Gym" # must be blank if no title is needed!!!
     texts = [
-        "Bet you didn't know this about jellyfish...",
-        "Jellyfish have a unique pulsing motion, resembling a mesmerizing underwater dance.",
-        "Some jellyfish have long, trailing tentacles that gracefully flow behind them.",
-        "Jellyfish can vary in size, from as small as a pinhead to as large as a human.",
-        "Jellyfish populations can undergo rapid blooms, forming what is known as a 'jellyfish swarm.'",
-        "Jellyfish have inspired artists, scientists, and even fashion designers with their ethereal beauty.",
+        "5 reasons why you should be hittin' up the gym...",
+        "Regular gym workouts improve cardiovascular health and build muscle strength.",
+        "Exercise releases endorphins, promoting a positive mood and reducing stress.",
+        "Strength training can increase bone density, reducing the risk of osteoporosis.",
+        "Physical activity helps maintain a healthy weight and improves overall body composition.",
+        "Regular exercise improves cognitive function and boosts energy levels.",
         "Sub, Comment, Like for More!",
     ]
     crop = False
@@ -793,7 +798,7 @@ def main():
     mode = 2
     # 0, # vertical, 
     # 1, # 16:9 vertical black bars, requires top and bottom text
-    # 2, # 16:9 horizontal video, requires top and bottom text
+    # 2, # 16:9 vertical video, requires top and bottom text and crop
     # 3, # sequential, requires more setup such as organizing video data and audio data (alphanumeric sorted)
     # 4, # from csv, csv file required
     # 5, # a gif in vertical format

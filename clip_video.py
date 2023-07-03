@@ -70,11 +70,7 @@ def main():
     output_path = path
     # create_subclips(mp4_file, output_path, subclip_duration)
     # create_random_subclips(mp4_file, output_path, subclip_duration, num_clips)
-    
-    
-    
-    
-    
+
     subclip_times = [
         (0,10),
         (10,20),

@@ -63,7 +63,7 @@ def scrape_pexels_videos(search_term, max_num_videos=10):
         with open(save_path, 'wb') as f:
             f.write(response.content)
           
-        if i == max_num_videos: 
+        if i >= max_num_videos: 
           break
 
 
@@ -73,4 +73,4 @@ def scrape_pexels_videos(search_term, max_num_videos=10):
 # Example usage
 search_term = input("Enter the search term: ")
 max_num = input("Enter the number of videos: ")
-scrape_pexels_videos(search_term, max_num)
+scrape_pexels_videos(search_term, int(max_num))
