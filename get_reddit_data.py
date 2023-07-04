@@ -176,7 +176,7 @@ def combine_post_comments(post, comments, post_index):
     json_data = load_json_file(file_name)
     return json_data
 
-def get_reddit_data(num_posts=1, num_comments=10):
+def get_reddit_data(num_posts=1, num_comments=25):
   
     # Variables to choose from...
     # url = "https://www.reddit.com/r/AmItheAsshole/top.json?t=day"

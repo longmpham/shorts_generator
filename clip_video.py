@@ -63,21 +63,27 @@ def main():
     # Example usage
     subclip_duration = 5  # Duration of each subclip in seconds
     num_clips = 50
-    category = "genshin"
+    fname = "4trailer.mp4"
     # path = f"resources\\background_videos\\genshin\\{category}"
-    path = f"resources\\background_videos\\{category}"
-    mp4_file = f"{path}\\genshin_full.mp4"
-    output_path = path
+    mp4_file_path = f"resources\\background_videos\\genshin\\full"
+    input_mp4_file = f"{mp4_file_path}\\{fname}"
+    output_path = "resources\\background_videos\\genshin\\trailers"
     # create_subclips(mp4_file, output_path, subclip_duration)
     # create_random_subclips(mp4_file, output_path, subclip_duration, num_clips)
 
     subclip_times = [
-        (0,10),
-        (10,20),
-        (20,30),
-        (30,40),
+        (188,192),
+        # (64,81),
+        # (81,95),
+        # (103,124),
+        # (124,173),
+        # (178,208),
+        # (132,144),
+        # (144,158),
+        # (158,173),
+        
     ]
-    create_subclips_at_time(mp4_file, output_path, subclip_times)
+    create_subclips_at_time(input_mp4_file, output_path, subclip_times)
     
     return
 

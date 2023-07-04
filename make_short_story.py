@@ -671,9 +671,9 @@ def generate_meme_video(top_text, bottom_text, meme_file):
     # exit()
     return final_video
 
-def generate_reddit_video(crop=False):
+def generate_reddit_video(num_posts=10, num_comments=3, crop=False):
     
-    def make_sentences(post):
+    def make_sentences(post, num_comments=3):
         sentences = []
         post_author = post["author"]
         post_title = post["title"]
@@ -693,6 +693,8 @@ def generate_reddit_video(crop=False):
                 continue
             
             sentences.append(f"{comment_author} said {comment_body}")
+            if len(sentences) >= num_comments:
+                break
 
         sentences.append("Sub, Comment, Like for More!")
     
@@ -703,11 +705,14 @@ def generate_reddit_video(crop=False):
     crop = crop # False if using vertical videos, True if using landscape to crop.
     
     # Get each post for each post that comes back
-    posts = get_reddit_data(num_posts=10, num_comments=10)
+    posts = get_reddit_data(num_posts=num_posts)
     for i, post in enumerate(posts): 
         
+        # 
+        start_time = time.time()
+        
         # Generate sentences to break up the chunks
-        sentences = make_sentences(post)
+        sentences = make_sentences(post, num_comments)
 
         # for each sentence, make a TTS, video and merge them
         video_clips = []
@@ -769,33 +774,34 @@ def generate_reddit_video(crop=False):
         # exit()
         final_video.write_videofile(f"{title}.mp4", fps=30, preset='ultrafast')
         
-        final_video.close()        
-
+        final_video.close()      
+        
+        end_time = time.time()  
+        execution_time = end_time - start_time
+        print(f"Execution time: {execution_time} seconds")
 def main():
     delete_temp_audio()
     
     audio_type = "happy" # change this to categories eventually, look up music dmca stuff
     audio_path = f"resources\\audio\\{audio_type}"
-    video_path = "resources\\background_videos\\scraper\\verticalgym" #scraper\\verticalyoga"
+    video_path = "resources\\background_videos\\quiz" #scraper\\verticalyoga"
     get_video_files(video_path)
     get_audio_files(audio_path)
     
-    # exit()
     # today = get_todays_date()
     
-    title = f"'Sweat' Success in the Gym" # must be blank if no title is needed!!!
+    title = f"New 4.0 Genshin Characters - Furina" # must be blank if no title is needed!!!
     texts = [
-        "5 reasons why you should be hittin' up the gym...",
-        "Regular gym workouts improve cardiovascular health and build muscle strength.",
-        "Exercise releases endorphins, promoting a positive mood and reducing stress.",
-        "Strength training can increase bone density, reducing the risk of osteoporosis.",
-        "Physical activity helps maintain a healthy weight and improves overall body composition.",
-        "Regular exercise improves cognitive function and boosts energy levels.",
+        "Could this be the next archon in Genshin?",
+        "Furina has fair skin and heterochromic eyes with light blue on her right eye and dark blue on her left.",
+        "Furina has mostly grayish-white shoulder-length hair that ends in a curl on its end with several blue streaks.",
+        "Furina wears a dark blue suit-like outfit with accessories that resemble water droplet and a top hat with ribbon and white frills.",
+        "Furina wears a black glove on her right hand and white on her left.",
         "Sub, Comment, Like for More!",
     ]
     crop = False
     use_title = False
-    mode = 2
+    mode = 6
     # 0, # vertical, 
     # 1, # 16:9 vertical black bars, requires top and bottom text
     # 2, # 16:9 vertical video, requires top and bottom text and crop
@@ -804,8 +810,12 @@ def main():
     # 5, # a gif in vertical format
     # 6, # reddit. It calls reddit, builds the list, no input necessary other than the video library (crop or not)
     
+    
+    
+    
+    
     if mode == 6:
-        generate_reddit_video(crop)
+        generate_reddit_video(num_posts=10, num_comments=3, crop=crop)
         return
     
     if mode == 5: 
