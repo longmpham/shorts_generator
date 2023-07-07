@@ -259,10 +259,12 @@ def generate_srt_from_audio_using_whisper(audio_file_path, method="sentence"):
         milliseconds = delta.microseconds // 1000
         return f"{hours:02.0f}:{minutes:02.0f}:{seconds:02.0f},{milliseconds:03.0f}"
     
+    start = time.time()
+    
     # use large-v2 model and transcribe the audio file
     model_size = "large-v2"
-    model = WhisperModel(model_size, device="cpu", compute_type="int8", num_workers=2) # num_workers = default 1
-        # model = WhisperModel(model_size, device="cuda", compute_type="float16")
+    # model = WhisperModel(model_size, device="cpu", compute_type="int8", num_workers=2) # num_workers = default 1
+    model = WhisperModel(model_size, device="cuda", compute_type="float16", num_workers=2)
     # print(audio_file_path)
     segments, info = model.transcribe(audio_file_path, beam_size=5, word_timestamps=True)
     segments = list(segments)
@@ -317,6 +319,11 @@ def generate_srt_from_audio_using_whisper(audio_file_path, method="sentence"):
                 # srt_file.write(f"{segment.start:.2f} --> {segment.end:.2f}\n")
                 srt_file.write(f"{format_timedelta(segment.start)} --> {format_timedelta(segment.end)}\n")
                 srt_file.write(f"{segment.text}\n\n")
+    
+    end = time.time()
+    
+    execution_time = end - start
+    print(f"Execution time: {execution_time} seconds")
     
     return srt_file_path
 
@@ -502,7 +509,7 @@ def generate_169_video(top_text, bottom_text, crop):
 def generate_169_vertical_black_bars_video(top_text, bottom_text, crop):
 
     size=(1280,720)
-    useSRT = False
+    useSRT = True
     # generate tts
     tts_file = generate_TTS_using_TikTok(bottom_text)
     print("TTS generated!")
@@ -555,17 +562,12 @@ def generate_169_vertical_black_bars_video(top_text, bottom_text, crop):
     # combined_video.close()
     return combined_video
 
-def create_video_from_csv(csv_data, mp4_file_name):
-    
-    csv_type = "quiz"
-    csv_file = f"{csv_type}.csv"
-    csv_path = os.path.join("resources", "data", csv_file)
-    csv_data = get_csv(csv_path) # takes csv with 3 fields, category, statement, and goal
+def create_video_from_csv(csv_type, csv_data, mp4_file_name):
     
     ending_text = "Sub, Comment, Like for More!"
     
     # iterate through the CSV data
-    for i, data in enumerate(csv_data, start=649):
+    for i, data in enumerate(csv_data, start=0):
         # get csv data fields per row
         question_num = data[list(data.keys())[0]]  # Extract the first value dynamically
         question = data[list(data.keys())[1]]  # Extract the second value dynamically
@@ -582,9 +584,10 @@ def create_video_from_csv(csv_data, mp4_file_name):
         
         # generate the texts for the video
         # hashtag_clip = add_text_clip(text=description_text, font_name="Impact", font_size=30, font_color="white", bg_color="black", method="label", start=0, total_duration=video_duration, opacity=1.0, position=("center", 0.8), relative=True)
-        question_clip = add_text_clip(text=question, font_name="Impact", font_size=50, font_color="white", bg_color="black", method="caption", start=0, total_duration=clip1_duration, opacity=0.8, position="center")
-        answer_clip = add_text_clip(text=answer, font_name="Impact", font_size=50, font_color="white", bg_color="black", method="caption", start=clip1_duration, total_duration=clip2_duration, opacity=0.8, position="center")
-        ending_clip = add_text_clip(text=ending_text, font_name="Impact", font_size=50, font_color="white", bg_color="black", method="label", start=clip1_duration + clip2_duration, total_duration=clip3_duration, opacity=1.0, position=("center", 0.1), relative=True)
+        question_clip = add_text_clip(text=question, font_name="Impact", font_size=50, font_color="white", stroke_color="black", method="caption", start=0, total_duration=clip1_duration, opacity=0.8, position="center")
+        answer_clip = add_text_clip(text=answer, font_name="Impact", font_size=50, font_color="white", stroke_color="black", method="caption", start=clip1_duration, total_duration=clip2_duration, opacity=0.8, position="center")
+        ending_clip = add_text_clip(text=ending_text, font_name="Impact", font_size=50, font_color="white", stroke_color="black", method="label", start=clip1_duration + clip2_duration, total_duration=clip3_duration, opacity=1.0, position=("center", "center"), relative=True)
+        title_clip = add_text_clip(text="#LifeProTips", font_name="Impact", font_size=50, font_color="white", bg_color="black", method="label", start=0, total_duration=video_duration, opacity=1.0, position=("center", 0.1), relative=True)
 
         # generate the video clips
         bg_question_clip = add_video_clip(start=0, total_duration=clip1_duration)
@@ -593,7 +596,7 @@ def create_video_from_csv(csv_data, mp4_file_name):
                 
         # Combine the all the clips
         # final_video = CompositeVideoClip([bg_video_full, question_clip, answer_clip, hashtag_clip, ending_clip], use_bgclip=True)
-        final_video = CompositeVideoClip([bg_video_full, question_clip, answer_clip, ending_clip], use_bgclip=True)
+        final_video = CompositeVideoClip([bg_video_full, question_clip, answer_clip, ending_clip, title_clip], use_bgclip=True)
         final_video = final_video.set_duration(video_duration)        
         
         # background_music
@@ -624,12 +627,12 @@ def create_video_from_csv(csv_data, mp4_file_name):
     
     return
 
-def generate_meme_video(top_text, bottom_text, meme_file):
+def generate_meme_video(top_text, bottom_text, meme_file, tts_voice_index=0):
     # Generate TTS
     text = f"{top_text}, {bottom_text}"
     # tts_file = generate_TTS_using_TikTok(top_text)
     # tts_clip, clip_duration = add_audio_tts_clip(tts_file)
-    tts_file = generate_TTS_using_TikTok(text, voice=9) # 17 is ok, 9 is ok
+    tts_file = generate_TTS_using_TikTok(text, voice=tts_voice_index)
     tts_clip, clip_duration = add_audio_tts_clip(tts_file)
     
     video_clip = VideoFileClip(meme_file, audio=True).loop(clip_duration)
@@ -642,6 +645,19 @@ def generate_meme_video(top_text, bottom_text, meme_file):
         text_clip_top = add_text_clip(text=top_text, font_size=30, stroke_color="black", stroke_width=1, position=("center", 0.05), relative=True, start=0, total_duration=clip_duration, size=(size[0], None))
         
     text_clip_bottom = add_text_clip(text=bottom_text, font_size=30, stroke_color="black", stroke_width=1, position=("center", 0.75), relative=True, start=0, total_duration=clip_duration, size=(size[0], None))
+    
+    # generate SRT (per word)
+    useSRT = True
+    if useSRT == True: 
+        srt_file = generate_srt_from_audio_using_whisper(tts_file, method="perword")
+        generator = lambda txt: TextClip(txt=txt, fontsize=30, color="white", font="Impact", stroke_color="black", method="caption", size=(size[0]*0.9, None))
+        # generator = lambda txt: add_text_clip(text=txt, position=("center"), total_duration=clip_duration)
+        subtitles = SubtitlesClip(srt_file, generator)
+        subtitles = subtitles.set_position(("center", "bottom")).set_duration(clip_duration)
+        print("Subtitles Set...")    
+    
+        text_clip_bottom = subtitles
+    
     
     # Add background video
     
@@ -681,7 +697,8 @@ def generate_reddit_video(num_posts=10, num_comments=3, crop=False):
         post_comments = post["comments"]
     
         sentences.append(f"{post_author} said {post_title}")
-        if post_body.strip(): sentences.append(post_body)
+        if post_body.strip() and len(post_body.split()) < 10:
+            sentences.append(post_body)
     
         # Generate Textclips for the comments
         for i, post_comment in enumerate(post_comments):
@@ -705,7 +722,8 @@ def generate_reddit_video(num_posts=10, num_comments=3, crop=False):
     crop = crop # False if using vertical videos, True if using landscape to crop.
     
     # Get each post for each post that comes back
-    posts = get_reddit_data(num_posts=num_posts)
+    url = "https://www.reddit.com/r/Ask/top.json?t=day"
+    posts = get_reddit_data(url=url, num_posts=num_posts)
     for i, post in enumerate(posts): 
         
         # 
@@ -779,24 +797,66 @@ def generate_reddit_video(num_posts=10, num_comments=3, crop=False):
         end_time = time.time()  
         execution_time = end_time - start_time
         print(f"Execution time: {execution_time} seconds")
+
+def generate_full_length_video(sentences, mp4_file, tts_voice_index):
+    
+    video_clip = VideoFileClip(mp4_file, audio=True)
+    
+    size = video_clip.size
+    
+    total_duration = 0
+    tts_clips = []
+    text_clips = []
+    for sentence in sentences:
+        # Generate TTS
+        tts_file = generate_TTS_using_TikTok(sentence, voice=tts_voice_index)
+        tts_clip, clip_duration = add_audio_tts_clip(tts_file, silence=0)
+        tts_clips.append(tts_clip)
+        
+        # Generate Texts
+        print(f"the start is {total_duration} and the end is {total_duration+clip_duration}")
+        # text_clip = add_text_clip(text=sentence, font_size=40, stroke_color="black", stroke_width=1, position=("center", 0.75), relative=True, start=total_duration, total_duration=total_duration+clip_duration, size=(size[0], None))
+        text_clip = TextClip(sentence, font="Impact",fontsize=40, color="white", stroke_color="black", stroke_width=1, size=(size[0], None), method="caption")
+        text_clip = text_clip.set_position(("center", 0.75), relative=True).set_start(total_duration).set_end(total_duration+clip_duration)
+        text_clips.append(text_clip)
+
+        total_duration += clip_duration
+    
+    text_clips[-1] = text_clips[-1].set_end(video_clip.duration)
+
+    if float(video_clip.duration) < float(total_duration):
+        video_clip = VideoFileClip(mp4_file, audio=True).loop(total_duration)
+
+    final_video = CompositeVideoClip([video_clip, *text_clips], use_bgclip=True)
+    final_video = final_video.set_duration(video_clip.duration)
+        
+    # Combine to final video
+    audio = concatenate_audioclips(tts_clips)
+    final_video = final_video.set_audio(audio)
+    
+    # Set the background audio music
+    final_video = add_background_audio(final_video)
+
+    # Write the final video
+    final_video.write_videofile("test.mp4", fps=30, preset='ultrafast')
+        
+    return
+
 def main():
     delete_temp_audio()
     
     audio_type = "happy" # change this to categories eventually, look up music dmca stuff
     audio_path = f"resources\\audio\\{audio_type}"
-    video_path = "resources\\background_videos\\quiz" #scraper\\verticalyoga"
+    video_path = "resources\\background_videos\\quiz"#scraper\\verticalyoga"
     get_video_files(video_path)
     get_audio_files(audio_path)
     
     # today = get_todays_date()
     
-    title = f"New 4.0 Genshin Characters - Furina" # must be blank if no title is needed!!!
+    title = f"Some title" # must be blank if no title is needed!!!
     texts = [
         "Could this be the next archon in Genshin?",
-        "Furina has fair skin and heterochromic eyes with light blue on her right eye and dark blue on her left.",
-        "Furina has mostly grayish-white shoulder-length hair that ends in a curl on its end with several blue streaks.",
-        "Furina wears a dark blue suit-like outfit with accessories that resemble water droplet and a top hat with ribbon and white frills.",
-        "Furina wears a black glove on her right hand and white on her left.",
+
         "Sub, Comment, Like for More!",
     ]
     crop = False
@@ -809,28 +869,45 @@ def main():
     # 4, # from csv, csv file required
     # 5, # a gif in vertical format
     # 6, # reddit. It calls reddit, builds the list, no input necessary other than the video library (crop or not)
+    # 7, # Play an entire video clip with text in the back, tts, and audio bg
     
-    
-    
-    
+    if mode == 7:
+        
+        meme_file = "alternative_garbage_can.mp4"
+        meme_path = os.path.join(os.getcwd(), "resources", "background_videos", "memes", f"{meme_file}")
+        text = ["When you know she's a keeper", 
+                "and if you like her a lot", 
+                "ask her out.", 
+                "You won't regret it.", 
+                "The worst she can say is 'no'", 
+                "The best she can say is 'yes'", 
+                "You've got this.",
+            ]
+        tts_voice_index = 0 # 17 is ok, 9 is ok
+        generate_full_length_video(text,meme_path, tts_voice_index)
+        return
     
     if mode == 6:
         generate_reddit_video(num_posts=10, num_comments=3, crop=crop)
         return
     
     if mode == 5: 
-        meme_file = "shaq_shake.gif"
+        # these are for quick 3-6 second gifs, text doesn't change or anything.
+        meme_file = "alternative_garbage_can.mp4"
         meme_path = os.path.join(os.getcwd(), "resources", "background_videos", "memes", f"{meme_file}")
-        generate_meme_video("when there is", "someone knocking on your door...", meme_path)
+        top_text = ""
+        bottom_text = "some text"
+        tts_voice_index = 0 # 17 is ok, 9 is ok
+        generate_meme_video(top_text, bottom_text, meme_path, tts_voice_index)
         return
     
     if mode == 4:
-        file_name = f"Bet you didnt know this... _ #shorts #quiz #question #animals #pets #dogs #cats #random #fyp" # _ will be replaced by number
-        csv_type = "quiz"
+        file_name = f"Life Pro Tips You Should know #shorts #fyp #lifeprotips #tips #random #mental #strong #health _" # _ will be replaced by number
+        csv_type = "lpt"
         csv_file = f"{csv_type}.csv"
         csv_path = os.path.join("resources", "data", csv_file)
         csv_data = get_csv(csv_path) # takes csv with 3 fields, category, statement, and goal
-        create_video_from_csv(csv_data, file_name)
+        create_video_from_csv(csv_type, csv_data, file_name)
         return
     
     # should hide this logic and throw in a function... we'll decide later
