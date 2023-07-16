@@ -95,8 +95,8 @@ def get_posts(url):
     for post in data["data"]["children"]:
         # if NSFW, go next
         # print(post["data"]["over_18"])
-        if post["data"]["over_18"] == True: 
-            continue
+        # if post["data"]["over_18"] == True: 
+        #     continue
         
         title = post["data"]["title"]
         selftext = post["data"]["selftext"]
@@ -119,10 +119,9 @@ def get_posts(url):
     print(f"finished getting posts from {url}")
     return posts
 
-def get_comments(url, max_num_of_comments=25):
+def get_comments(url, max_num_of_comments=30):
     url = url + ".json"
-    max_num_of_comments = max_num_of_comments
-
+    
     # get the url data from the url given
     response = requests.get(url, headers={'User-agent': 'Mozilla/5.0'})
     data = response.json()
@@ -139,19 +138,26 @@ def get_comments(url, max_num_of_comments=25):
     # get the post body data from data
     comments = []
     for index, comment in enumerate(comments_data):
+        if "author" not in comment["data"]:
+            print(f"No more comments to add. Comments found: {index}")
+            break
         # Skip comment if more than 30 words
-        comment_body = comment["data"]["body"]
-        word_count = len(comment_body.split())
+        # comment_body = comment["data"]["body"]
+        # word_count = len(comment_body.split())
         # if word_count > 30:
         #     continue
         # if comment_body == "[removed]" or comment_body == "[deleted]":
         #     continue
         # ups = comment["data"].get("ups",1)
         # print(f"{index} - Ups: {ups}")
+        # print(f"{index}")
+        
         comments.append({
             "index": str(index+1),
             "author": comment["data"]["author"],
             "comment": comment["data"]["body"],
+            # "author": comment["data"].get("author", ""),
+            # "comment": comment["data"].get("body", ""),
             "ups": str(comment["data"]["ups"]),
             "utc_timestamp": comment["data"]["created_utc"],
             "relative_time": utc_to_relative_time(comment["data"]["created_utc"]),
@@ -176,7 +182,7 @@ def combine_post_comments(post, comments, post_index):
     json_data = load_json_file(file_name)
     return json_data
 
-def get_reddit_data(url="https://www.reddit.com/r/AskReddit/top.json?t=day", num_posts=1, num_comments=25):
+def get_reddit_data(url="https://www.reddit.com/r/AskReddit/top.json?t=day", num_posts=1, num_comments=30):
   
     # Variables to choose from...
     # url = "https://www.reddit.com/r/AmItheAsshole/top.json?t=day"

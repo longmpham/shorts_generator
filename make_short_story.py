@@ -329,6 +329,7 @@ def generate_srt_from_audio_using_whisper(audio_file_path, method="sentence"):
 
 
 
+
 def add_text_clip(text="", font_name="Impact", font_size=50, font_color="white", bg_color="transparent", stroke_color=None, stroke_width=1, size=(int(720*0.9),None), method="caption", start=0, total_duration=5, opacity=1.0, position=("center"), relative=False):
     text_clip = TextClip(text, stroke_color=stroke_color, stroke_width=stroke_width, fontsize=font_size, color=font_color, bg_color=bg_color, font=font_name, size=size, method=method)
     if relative==True:
@@ -567,69 +568,41 @@ def generate_169_many_videos():
     crop = False
     use_title = False
     title = "What would you do"
-    prompts =  [
+    prompts = [
         [
-            "What would you do if you could understand and speak to plants?",
-            "Would you learn about their healing properties and use them for medicine?",
-            "Would you create magnificent gardens and landscapes?",
-            "What about bringing awareness to the importance of nature conservation?",
-            "Let me know what you think and don't forget to Sub, Comment, and Like for More!",
+            "What would you do if you could become a master of disguise?",
+            "Would you take on different identities and solve mysteries?",
+            "Would you use your skills to protect the innocent and expose the guilty?",
+            "What about infiltrating secretive organizations to uncover their secrets?",
+            "Share what you would do! Sub, comment, like for more!"
         ],
         [
-            "What would you do if you could visit the past and future versions of yourself?",
-            "Would you learn from your past self's mistakes?",
-            "Would you seek advice from your future self?",
-            "What about creating a timeline of your life's journey?",
-            "Let me know what you think and don't forget to Sub, Comment, and Like for More!",
+            "What would you do if you could become a renowned motivational speaker?",
+            "Would you inspire and empower audiences around the world?",
+            "Would you share your wisdom and help others achieve their dreams?",
+            "What about creating positive change through the power of words?",
+            "Share what you would do! Sub, comment, like for more!"
         ],
-        [
-            "What would you do if you could control gravity?",
-            "Would you create your own zero-gravity experiences?",
-            "Would you use it for advanced space exploration?",
-            "What about revolutionizing transportation systems and infrastructure?",
-            "Let me know what you think and don't forget to Sub, Comment, and Like for More!",
-        ],
-        [
-            "What would you do if you could become a renowned author?",
-            "Would you write captivating stories that touch people's lives?",
-            "Would you use your platform to advocate for important causes?",
-            "What about leaving behind a literary legacy that inspires future generations?",
-            "Let me know what you think and don't forget to Sub, Comment, and Like for More!",
-        ],
-        [
-            "What would you do if you could become a world-class chef?",
-            "Would you create exquisite culinary masterpieces?",
-            "Would you open your own restaurant and delight people with your creations?",
-            "What about exploring diverse cuisines and preserving culinary traditions?",
-            "Let me know what you think and don't forget to Sub, Comment, and Like for More!",
-        ],
-        [
-            "What would you do if you could become an expert in a particular field overnight?",
-            "Would you solve complex scientific problems?",
-            "Would you become a leading authority in your chosen field?",
-            "What about using your expertise to mentor and educate others?",
-            "Let me know what you think and don't forget to Sub, Comment, and Like for More!",
-        ],
-        [
-            "What would you do if you could control and manipulate technology with your mind?",
-            "Would you revolutionize the way we interact with devices and machines?",
-            "Would you protect against cyber threats and ensure digital security?",
-            "What about bridging the gap between humans and AI?",
-            "Let me know what you think and don't forget to Sub, Comment, and Like for More!",
-        ]
     ]
+
+
     counter = 0
     video_clips = []
     
     for prompt in prompts:
-        for i, bottom_text in enumerate(prompt, start=counter):
+        for i, bottom_text in enumerate(prompt, start=0):
+            print(f"i is {i}")
+            if i == 0: 
+                fname = bottom_text.replace("?", "")
+                title = "What Would You Do?"
+                fname = fname + " #shorts #fyp #questions #thoughts"
             if use_title == False:
                 if i >= 1: 
                     title = ""
             video = generate_169_video(title, bottom_text, crop=crop)
             video_clips.append(video)
         final_video = concatenate_videoclips(video_clips)
-        video_clips.clear() # empty the list as its no longer needed.
+        
         # Set the background audio music
         final_video = add_background_audio(final_video)
         
@@ -639,7 +612,11 @@ def generate_169_many_videos():
             counter+=1
         # final_video.save_frame("frame.png", t=1)
         # exit()
-        final_video.write_videofile(f"resources\\uploaded_videos\\whatwouldyoudo\\{title}.mp4", fps=30, preset='ultrafast')
+        
+        final_video.write_videofile(f"resources\\uploaded_videos\\whatwouldyoudo\\{fname}.mp4", fps=30, preset='ultrafast')
+        video_clips.clear() # empty the list as its no longer needed.
+        delete_temp_audio()
+        
     return
 
 def create_video_from_csv(csv_type, csv_data, mp4_file_name):
@@ -778,26 +755,31 @@ def generate_reddit_video(num_posts=10, num_comments=3, crop=False):
         post_comments = post["comments"]
     
         # sentences.append(f"{post_author} said {post_title}")
-        sentences.append(f"{post_title}")
+        sentences.append(f"Daily Dose of Reddit: {post_title}")
         if post_body.strip() and len(post_body.split()) < 10:
             sentences.append(post_body)
     
         # Generate Textclips for the comments
+        # print(f"number of comments: {len(post_comments)}")
         for i, post_comment in enumerate(post_comments):
             # comment_author = post_comment["author"]
-            comment_author = post_comment["author"] if not any(char.isdigit() for char in post_comment["author"]) else "Someone"
+            comment_author = post_comment["author"] if not any(char.isdigit() for char in post_comment["author"]) else "Redditor"
             comment_body = post_comment["comment"]
+            comment_ups = post_comment["ups"]
             
             word_count = len(comment_body.split())
             if word_count > 25:
                 continue
             
             # sentences.append(f"{comment_author} said {comment_body}")
-            sentences.append(f"{comment_body}")
-            if len(sentences) >= num_comments:
+            sentences.append(f"Redditor said {comment_body}")
+            # sentences.append(f"{comment_body}")
+            if len(sentences) > num_comments:
                 break
 
         sentences.append("Sub, Comment, Like for More!")
+        # for sent in sentences: 
+        #     print(sent)
     
         return sentences
     
@@ -806,7 +788,8 @@ def generate_reddit_video(num_posts=10, num_comments=3, crop=False):
     crop = crop # False if using vertical videos, True if using landscape to crop.
     
     # Get each post for each post that comes back
-    url = "https://www.reddit.com/r/Ask/top.json?t=day"
+    # url = "https://www.reddit.com/r/Ask/top.json?t=day"
+    url = "https://www.reddit.com/r/AskReddit/top.json?t=day"
     posts = get_reddit_data(url=url, num_posts=num_posts)
     for i, post in enumerate(posts): 
         
@@ -871,12 +854,14 @@ def generate_reddit_video(num_posts=10, num_comments=3, crop=False):
         final_video = add_background_audio(final_video)
 
         # Write the final video
-        title = f"reddit_{i}"
+        reddit_path = "resources\\uploaded_videos\\reddit"
+        title = f"Daily Dose of Reddit Questions... #shorts #fyp #reddit #cats #dogs #questions #thoughts {i}"
+        reddit_file = os.path.join(reddit_path, f"{title}.mp4")
+        # reddit_path = os.path.join("resources", "uploaded_videos", f"reddit")
+        # reddit_file = os.path.join("resources", "uploaded_videos", f"reddit", f"reddit_{i}.mp4")
         # final_video.save_frame("frame.png", t=1)
         # exit()
-        final_video.write_videofile(f"{title}.mp4", fps=30, preset='ultrafast')
-        
-        final_video.close()      
+        final_video.write_videofile(reddit_file, fps=30, codec='h264_nvenc')
         
         end_time = time.time()  
         execution_time = end_time - start_time
@@ -935,23 +920,17 @@ def main():
     get_video_files(video_path)
     get_audio_files(audio_path)
     
-    generate_169_many_videos()
-    return
     
     # today = get_todays_date()
     
     title = f"What would you pick?" # must be blank if no title is needed!!!
     texts = [
         "What would you do if you could control people's emotions?",
-        "Would you bring peace and harmony to conflicted situations?",
-        "Would you help others overcome emotional challenges?",
-        "What about using it responsibly and ethically to create positive experiences?",
-  
         "Let me know what you think and don't forget to Sub, Comment, and Like for More!",
     ]
     crop = False
     use_title = False
-    mode = 2
+    mode = 6
     # 0, # vertical, 
     # 1, # 16:9 vertical black bars, requires top and bottom text
     # 2, # 16:9 vertical video, requires top and bottom text and crop
@@ -960,11 +939,13 @@ def main():
     # 5, # a gif in vertical format
     # 6, # reddit. It calls reddit, builds the list, no input necessary other than the video library (crop or not)
     # 7, # Play an entire video clip with text in the back, tts, and audio bg
+    # 8, make bulk videos 169 (#2) format. Go to the function.
     
     
     
-    
-    
+    if mode == 8:    
+        generate_169_many_videos()
+        return
     
     if mode == 7:
         meme_file = "alternative_garbage_can.mp4"
@@ -996,7 +977,7 @@ def main():
         return
     
     if mode == 4:
-        file_name = f"Life Pro Tips You Should know #shorts #fyp #lifeprotips #tips #random #mental #strong #health _" # _ will be replaced by number
+        file_name = f"Life Pro Tips You Should Know #shorts #fyp #lifeprotips #tips #random #mental #strong #health _" # _ will be replaced by number
         csv_type = "lpt"
         csv_file = f"{csv_type}.csv"
         csv_path = os.path.join("resources", "data", csv_file)
