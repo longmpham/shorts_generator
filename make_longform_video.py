@@ -36,6 +36,16 @@ def get_csv(csv_filename):
             data.append({'category': category, 'statement': statement, 'goal': goal})
     return data
 
+def select_random_direction(directions=["left", "top", "bottom", "right"]):
+    random_direction = random.choice(directions)
+    return random_direction
+
+def create_transition(final_video):
+    final_video = CompositeVideoClip([final_video.fx(transfx.slide_in, 0.5, select_random_direction())])
+
+    
+    return final_video
+
 def delete_temp_audio(folder_path="resources\\temp\\audio"):
     # If temp folder is found, delete it
     if os.path.exists(folder_path):
@@ -342,11 +352,13 @@ def add_audio_tts_clip(audio_file, silence=2, start=0):
 
 def generate_full_length_video(text, video_index, tts_voice_index):
 
-    black_image = ImageClip("resources\\black_image.png")
     video = get_video_file(video_index) # gets in order
     video_clip = VideoFileClip(video, audio=True)#, target_resolution=(1080, 1920))
     video_clip = video_clip.resize(height=1080)
-    if not text: return video_clip
+    black_image = ImageClip("resources\\black_image.png")
+    black_image = black_image.set_duration(video_clip.duration).resize((1920,1080))
+    
+    if not text: return CompositeVideoClip([black_image, video_clip.set_position("center")])
     
     size = video_clip.size
 
@@ -361,10 +373,16 @@ def generate_full_length_video(text, video_index, tts_voice_index):
     text_clip = text_clip.set_position(("center", 0.75), relative=True).set_start(0).set_end(clip_duration)
 
     final_video = CompositeVideoClip([black_image, video_clip.set_position("center"), text_clip])
+    # final_video = CompositeVideoClip([final_video.fx(transfx.slide_in, 0.5, "left")])
+    final_video = CompositeVideoClip([final_video.fx(transfx.slide_in, 0.5, select_random_direction())])
+    # final_video = create_transition(final_video)
     final_video = final_video.set_duration(video_clip.duration)
     
     # Combine audio to final video
+    audio = final_video.audio
+    audio = audio.volumex(0.75)
     combined_audio = CompositeAudioClip([tts_clip, final_video.audio])
+
     final_video = final_video.set_audio(combined_audio)
     
     # Write the final video
@@ -374,55 +392,42 @@ def generate_full_length_video(text, video_index, tts_voice_index):
 
 def main():
     delete_temp_audio()
-    
-    # video_path = "resources\\background_videos\\scraper\\catsdogsanimalspetsvertical\\vertical"#scraper\\verticalyoga"
     video_path = "resources\\background_videos\\daily_tiktoks"
     get_video_files(video_path)    
     
     # today = get_todays_date()
     
-    title = f"Watch this to cure your boredom" # must be blank if no title is needed!!!
+    title = f"Your Daily Cure For Boredom TikTok Compilation" # must be blank if no title is needed!!!
     texts = [
-        "",
-        "Mr Stompsalot, wish my dog did this daily",
-        "Beggars can be choosers too!",
-        "2",
-        "",
-        "",
-        "",
-        "Don't forget to Sub, Comment, and Like for More!",
+        "My dogs would just lay over and demand belly rubs", #1
+        "", #2
+        "hashtag forever alone", #3
+        "", #4
+        "Cat 1, human 0", #5
+        "", #6
+        "", #7
+        "Don't forget to Sub, Comment, and Like for More!", #last
     ]
 
     video_clips = []
     for i, text in enumerate(texts):
         video = generate_full_length_video(text, video_index=i, tts_voice_index=0)
         video_clips.append(video)
-        
     final_video = concatenate_videoclips(video_clips)
 
     # Write the final video
     # final_video.save_frame("frame.png", t=1)
     # exit()
-    final_video.write_videofile(f"resources\\uploaded_videos\\daily_tiktoks\\{title}.mp4", fps=30, codec='h264_nvenc') #preset="ultrafast")
+    # final_video.write_videofile(f"resources\\uploaded_videos\\daily_tiktoks\\{title}.mp4", fps=30, threads=8, codec='h264_nvenc', write_logfile=True) #preset="ultrafast")
+    final_video.write_videofile(f"resources\\uploaded_videos\\daily_tiktoks\\{title}.mp4", fps=30, threads=8, codec='hevc_nvenc') #preset="ultrafast")
     
     # Clean up
     final_video.close()
     for clip in video_clips:
         clip.close()
-
+        
     return
 
 if __name__ == "__main__":
     main()
     
-# +------------+
-# |            |
-# |   Title    |
-# |            |
-# |            |
-# |            |
-# |            |
-# |            |
-# |    Text    |
-# |            |
-# +------------+

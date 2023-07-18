@@ -855,7 +855,7 @@ def generate_reddit_video(num_posts=10, num_comments=3, crop=False):
 
         # Write the final video
         reddit_path = "resources\\uploaded_videos\\reddit"
-        title = f"Daily Dose of Reddit Questions... #shorts #fyp #reddit #cats #dogs #questions #thoughts {i}"
+        title = f"Daily Dose of Reddit Questions #shorts #fyp #reddit #cats #dogs #questions #thoughts {i}"
         reddit_file = os.path.join(reddit_path, f"{title}.mp4")
         # reddit_path = os.path.join("resources", "uploaded_videos", f"reddit")
         # reddit_file = os.path.join("resources", "uploaded_videos", f"reddit", f"reddit_{i}.mp4")
