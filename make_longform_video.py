@@ -399,13 +399,16 @@ def main():
     
     title = f"Your Daily Cure For Boredom TikTok Compilation" # must be blank if no title is needed!!!
     texts = [
-        "My dogs would just lay over and demand belly rubs", #1
+        "This is what a baby red panda looks like", #1
         "", #2
-        "hashtag forever alone", #3
+        "What a dangerous job", #3
         "", #4
-        "Cat 1, human 0", #5
-        "", #6
+        "", #5
+        "Is this too aggressive?", #6
         "", #7
+        "What a winer", #8
+        "", #9
+        "Do this to your dog and tell me what happens!", #10
         "Don't forget to Sub, Comment, and Like for More!", #last
     ]
 

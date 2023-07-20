@@ -763,9 +763,9 @@ def generate_reddit_video(num_posts=10, num_comments=3, crop=False):
         # print(f"number of comments: {len(post_comments)}")
         for i, post_comment in enumerate(post_comments):
             # comment_author = post_comment["author"]
-            comment_author = post_comment["author"] if not any(char.isdigit() for char in post_comment["author"]) else "Redditor"
+            # comment_author = post_comment["author"] if not any(char.isdigit() for char in post_comment["author"]) else "Redditor"
             comment_body = post_comment["comment"]
-            comment_ups = post_comment["ups"]
+            # comment_ups = post_comment["ups"]
             
             word_count = len(comment_body.split())
             if word_count > 25:
@@ -774,7 +774,9 @@ def generate_reddit_video(num_posts=10, num_comments=3, crop=False):
             # sentences.append(f"{comment_author} said {comment_body}")
             sentences.append(f"Redditor said {comment_body}")
             # sentences.append(f"{comment_body}")
+            print(len(sentences))
             if len(sentences) > num_comments:
+                print(f"{len(sentences)} found. Breaking")
                 break
 
         sentences.append("Sub, Comment, Like for More!")
