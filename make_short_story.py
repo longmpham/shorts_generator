@@ -7,7 +7,7 @@ import datetime
 from moviepy.editor import *
 from moviepy.video.tools.subtitles import SubtitlesClip
 from skimage.filters import gaussian
-from get_image import get_image_from_answer
+# from get_image import get_image_from_answer
 import speech_recognition as sr
 from pydub import AudioSegment
 from pydub.utils import make_chunks
@@ -349,7 +349,6 @@ def add_video_clip(start=0, total_duration=5, size=(720,1280), blur_image=False,
     else: 
         video_clip = video_clip.set_start(start).set_duration(total_duration).resize(size)
     
-    
     def blur(image, blur_level=5):
         """ Returns a blurred (blur_level=radius=3 pixels) version of the image """
         return gaussian(image.astype(float), sigma=blur_level)
@@ -378,7 +377,9 @@ def add_background_audio(final_video, index=-1):
     
     return final_video
 
-
+def add_audio_bleep():
+    
+    return
 
 
 
@@ -443,8 +444,8 @@ def create_video_audio_text_clip(top_text, bottom_text, crop=False):
     
     # Debug
     # filename = "test.mp4"
-    # final_video.write_videofile(filename, fps=30, codec='libx264', audio_codec='aac', preset='ultrafast')
-    # final_video.write_videofile("test.mp4", fps=30, preset='ultrafast')
+    # final_video.write_videofile(filename, fps=30, codec='libx264', audio_codec='aac', codec='h264_nvenc')
+    # final_video.write_videofile("test.mp4", fps=30, codec='h264_nvenc')
     # exit()
     return final_video
 
@@ -463,7 +464,7 @@ def generate_169_video(top_text, bottom_text, crop):
     # Generate Texts
     top_text_clip = None
     if top_text and top_text.strip(): # takes care of None and "" 
-        top_text_clip = add_text_clip(text=top_text, font_size=100, bg_color="black", opacity=0.7, position=("center", 0.05), relative=True, total_duration=clip_duration, size=(size[0]*0.9,None))
+        top_text_clip = add_text_clip(text=top_text, font_size=50, bg_color="black", opacity=0.7, position=("center", 0.05), relative=True, total_duration=clip_duration, size=(size[0]*0.9,None))
     
     bottom_text_clip = add_text_clip(text=bottom_text, position=("center", "center"), relative=True, total_duration=clip_duration, size=(size[0]*0.9,None), stroke_color="black", stroke_width=1)
     
@@ -566,22 +567,57 @@ def generate_169_vertical_black_bars_video(top_text, bottom_text, crop):
 def generate_169_many_videos():
     
     crop = False
-    use_title = False
-    title = "What would you do"
+    use_title = True
+    title = "Do you know these words that start with the letter 'B'"
     prompts = [
         [
-            "What would you do if you could become a master of disguise?",
-            "Would you take on different identities and solve mysteries?",
-            "Would you use your skills to protect the innocent and expose the guilty?",
-            "What about infiltrating secretive organizations to uncover their secrets?",
-            "Share what you would do! Sub, comment, like for more!"
+            "Do you know these words that start with the letter 'A'",
+            "A fruit that is red, round, and delicious?", "Apple",
+            "An instrument has six strings and is strummed or picked?", "Acoustic guitar",
+            "The study of stars, planets, and galaxies?", "Astronomy",
+            "Like if you got them all! Comment what you missed!",
         ],
         [
-            "What would you do if you could become a renowned motivational speaker?",
-            "Would you inspire and empower audiences around the world?",
-            "Would you share your wisdom and help others achieve their dreams?",
-            "What about creating positive change through the power of words?",
-            "Share what you would do! Sub, comment, like for more!"
+            "Do you know these words that start with the letter 'A'",
+            "The Baboon is a primate that is native to?", "Africa",
+            "A disease that causes fever, sore throat, and swollen lymph nodes?", "Angina",
+            "A natural light display in the Earth's sky, usually green in color?", "Auroras",
+            "Like if you got them all! Comment what you missed!",
+        ],
+        [
+            "Do you know these words that start with the letter 'A'",        
+            "A reptile often associated with the Nile River or Louisiana?", "Alligator",
+            "A sport where athletes swim and compete underwater?", "Aquatics",
+            "A musical instrument played by pressing keys?", "Accordion",
+            "Like if you got them all! Comment what you missed!",
+        ],
+        [
+            "Do you know these words that start with the letter 'A'",
+            "The Latin name for the Western (European) Honey Bee?", "Apis mellifera",
+            "A sweet, sticky substance made by bees?", "Amber",
+            "The study of past events through artifacts and remains?", "Archaeology",
+            "Like if you got them all! Comment what you missed!"
+        ],
+        [
+            "Do you know these words that start with the letter 'A'",        
+            "A structure built over a river to allow for passage?", "Aqueduct",
+            "A mental health condition characterized by persistent worry and fear?", "Anxiety",
+            "A large container for holding and storing liquids?", "Amphora",
+            "Like if you got them all! Comment what you missed!"
+        ],
+        [
+            "Do you know these words that start with the letter 'A'",         
+            "An Emu, a flightless bird, is native to?", "Australia",
+            "A formal agreement between two or more countries?", "Alliance",
+            "A common seasoning derived from the black seeds of a plant?", "Anise",
+            "Like if you got them all! Comment what you missed!"
+        ],
+        [ 
+            "Do you know these words that start with the letter 'A'",           
+            "A popular nut used baking?", "Almond",
+            "An underwater plant with long, narrow leaves?", "Algae",
+            "A legendary Greek hero known for his great strength?", "Achilles",
+            "Like if you got them all! Comment what you missed!"
         ],
     ]
 
@@ -594,8 +630,8 @@ def generate_169_many_videos():
             print(f"i is {i}")
             if i == 0: 
                 fname = bottom_text.replace("?", "")
-                title = "What Would You Do?"
-                fname = fname + " #shorts #fyp #questions #thoughts"
+                title = "Do you know these words that start with the letter 'A'"
+                fname = f"{fname} #shorts #fyp #questions #quiz #games #pets {counter}"
             if use_title == False:
                 if i >= 1: 
                     title = ""
@@ -609,15 +645,87 @@ def generate_169_many_videos():
         # Write the final video
         if title=="": 
             title = f"yt_short_{counter}"
-            counter+=1
+        counter+=1
         # final_video.save_frame("frame.png", t=1)
         # exit()
         
-        final_video.write_videofile(f"resources\\uploaded_videos\\whatwouldyoudo\\{fname}.mp4", fps=30, preset='ultrafast')
+        final_video.write_videofile(f"resources\\uploaded_videos\\lettergame\\{fname}.mp4", fps=30, codec='h264_nvenc')
         video_clips.clear() # empty the list as its no longer needed.
         delete_temp_audio()
         
     return
+
+def generate_guess_the_song(bottom_text, top_text="Guess The Song", ):
+
+    # "guess the song" 2 seconds
+    # play song 3 seconds
+    # timer for 5 seconds
+    # say the song name
+    # say sub comment like for more
+    
+    # top_text = "Guess The Song"
+    # bottom_text = "Recess - TrackTribe"
+    end_text = "Sub, Comment, Like for More!"
+    audio_song_file = f"resources\\audio\\songs\\clips\\{bottom_text}.wav"
+    # size = (1080, 1920)
+    size = (720, 1280)
+    
+    # generate tts
+    tts_file_title = generate_TTS_using_TikTok(top_text)
+    tts_file_song = generate_TTS_using_TikTok(bottom_text)
+    tts_file_end = generate_TTS_using_TikTok(end_text)
+    
+    print("TTS generated!")
+    tts_clip_title, clip_duration1 = add_audio_tts_clip(tts_file_title)
+    tts_clip_title = tts_clip_title.set_start(0)
+    tts_clip_song, clip_duration2 = add_audio_tts_clip(tts_file_song, silence=1)
+    tts_clip_song = tts_clip_song.set_start(10)
+    tts_clip_end, clip_duration3 = add_audio_tts_clip(tts_file_end, silence=1)
+    tts_clip_end = tts_clip_end.set_start(10+clip_duration2)
+    print("TTS clips done!")
+    
+    # Generate Texts
+    top_text_clip = add_text_clip(text=top_text, font_size=50, bg_color="black", opacity=0.7, position=("center", 0.05), relative=True, start=0, total_duration=15, size=(size[0]*0.9,None))
+    text_clip_5 = add_text_clip(text="5", font_size=100, position=("center", "center"), relative=True, start=5, total_duration=1, size=(size[0]*0.9,None), stroke_color="black", stroke_width=1)
+    text_clip_6 = add_text_clip(text="4", font_size=100, position=("center", "center"), relative=True, start=6, total_duration=1, size=(size[0]*0.9,None), stroke_color="black", stroke_width=1)
+    text_clip_7 = add_text_clip(text="3", font_size=100, position=("center", "center"), relative=True, start=7, total_duration=1, size=(size[0]*0.9,None), stroke_color="black", stroke_width=1)
+    text_clip_8 = add_text_clip(text="2", font_size=100, position=("center", "center"), relative=True, start=8, total_duration=1, size=(size[0]*0.9,None), stroke_color="black", stroke_width=1)
+    text_clip_9 = add_text_clip(text="1", font_size=100, position=("center", "center"), relative=True, start=9, total_duration=1, size=(size[0]*0.9,None), stroke_color="black", stroke_width=1)
+    text_clip_answer = add_text_clip(text=bottom_text, position=("center", "center"), relative=True, start=10, total_duration=clip_duration2, size=(size[0]*0.9,None), stroke_color="black", stroke_width=1)
+    text_clip_end = add_text_clip(text=end_text, position=("center", "center"), relative=True, start=10+clip_duration2, total_duration=clip_duration3, size=(size[0]*0.9,None), stroke_color="black", stroke_width=1)
+
+    # generate video clip
+    total_duration = 10+clip_duration2+clip_duration3
+    video_clip = add_video_clip(start=0, total_duration=total_duration, size=size)
+    
+    # Finally, create the video
+    final_video_clip = CompositeVideoClip([video_clip, top_text_clip, text_clip_5, text_clip_6, text_clip_7, text_clip_8, text_clip_9, text_clip_answer, text_clip_end], use_bgclip=True)
+    final_video_clip = final_video_clip.set_duration(total_duration)
+
+    # Set Audio
+    audio_song_clip = AudioFileClip(audio_song_file)
+    audio_song_clip = audio_song_clip.subclip(0, 3)
+    audio_song_clip = audio_song_clip.set_start(2)
+    audio_song_clip = audio_song_clip.volumex(0.5) # set volume of background_audio to 10%
+    audio_timer_path = "resources\\audio\\soundeffects\\timer\\amongus_tick.mp3"
+    audio_timer_clip = AudioFileClip(audio_timer_path)
+    audio_timer_clip5 = audio_timer_clip.set_start(5)
+    audio_timer_clip6 = audio_timer_clip.set_start(6)
+    audio_timer_clip7 = audio_timer_clip.set_start(7)
+    audio_timer_clip8 = audio_timer_clip.set_start(8)
+    audio_timer_clip9 = audio_timer_clip.set_start(9)
+    combined_audio = CompositeAudioClip([audio_song_clip, tts_clip_title, tts_clip_song, tts_clip_end, audio_timer_clip5, audio_timer_clip6, audio_timer_clip7, audio_timer_clip8, audio_timer_clip9])
+    # combined_audio = afx.audio_loop(combined_audio, duration=final_video.duration)
+    final_video_clip = final_video_clip.set_audio(combined_audio)
+
+    # Write the final video
+    # final_video.save_frame("frame.png", t=1)
+    # exit()
+    final_video_clip.write_videofile(f"resources\\uploaded_videos\\guessthesongs\\{top_text} - {bottom_text}.mp4", fps=30, codec='h264_nvenc')
+    
+    final_video_clip.close()
+    return
+
 
 def create_video_from_csv(csv_type, csv_data, mp4_file_name):
     
@@ -668,8 +776,8 @@ def create_video_from_csv(csv_type, csv_data, mp4_file_name):
         # Write the video to a file
         fname = mp4_file_name.replace("_", str(i+1))
         filename = os.path.join("resources", "uploaded_videos", f"{csv_type}", f"{fname}.mp4")
-        # final_video.write_videofile(filename, fps=30, codec='libx264', audio_codec='aac', preset='ultrafast')
-        final_video.write_videofile(filename, fps=30, preset='ultrafast')
+        # final_video.write_videofile(filename, fps=30, codec='libx264', audio_codec='aac', codec='h264_nvenc')
+        final_video.write_videofile(filename, fps=30, codec='h264_nvenc')
         # final_video.write_videofile(filename, verbose=True, write_logfile=True)
         
         
@@ -729,7 +837,7 @@ def generate_meme_video(top_text, bottom_text, meme_file, tts_voice_index=0):
         
     # Combine to final video
     final_video = final_video.set_audio(tts_clip)
-    final_video.write_videofile("test.mp4", fps=30, preset='ultrafast')
+    final_video.write_videofile("test.mp4", fps=30, codec='h264_nvenc')
 
     
     # close partial clips (audiofileclips and videofileclips)
@@ -739,135 +847,10 @@ def generate_meme_video(top_text, bottom_text, meme_file, tts_voice_index=0):
     # Debug
     # filename = "test.mp4"
     # final_video.save_frame("frame.png", t=1)
-    # final_video.write_videofile(filename, fps=30, codec='libx264', audio_codec='aac', preset='ultrafast')
-    # final_video.write_videofile("test.mp4", fps=30, preset='ultrafast')
+    # final_video.write_videofile(filename, fps=30, codec='libx264', audio_codec='aac', codec='h264_nvenc')
+    # final_video.write_videofile("test.mp4", fps=30, codec='h264_nvenc')
     # exit()
     return final_video
-
-def generate_reddit_video(num_posts=10, num_comments=3, crop=False):
-    
-    def make_sentences(post, num_comments=3):
-        sentences = []
-        # post_author = post["author"]
-        post_author = post["author"] if not any(char.isdigit() for char in post["author"]) else "Redditor"
-        post_title = post["title"]
-        post_body = post["selftext"]
-        post_comments = post["comments"]
-    
-        # sentences.append(f"{post_author} said {post_title}")
-        sentences.append(f"Daily Dose of Reddit: {post_title}")
-        if post_body.strip() and len(post_body.split()) < 10:
-            sentences.append(post_body)
-    
-        # Generate Textclips for the comments
-        # print(f"number of comments: {len(post_comments)}")
-        for i, post_comment in enumerate(post_comments):
-            # comment_author = post_comment["author"]
-            # comment_author = post_comment["author"] if not any(char.isdigit() for char in post_comment["author"]) else "Redditor"
-            comment_body = post_comment["comment"]
-            # comment_ups = post_comment["ups"]
-            
-            word_count = len(comment_body.split())
-            if word_count > 25:
-                continue
-            
-            # sentences.append(f"{comment_author} said {comment_body}")
-            sentences.append(f"Redditor said {comment_body}")
-            # sentences.append(f"{comment_body}")
-            print(len(sentences))
-            if len(sentences) > num_comments:
-                print(f"{len(sentences)} found. Breaking")
-                break
-
-        sentences.append("Sub, Comment, Like for More!")
-        # for sent in sentences: 
-        #     print(sent)
-    
-        return sentences
-    
-    size = (720, 1280)
-    useSRT = True
-    crop = crop # False if using vertical videos, True if using landscape to crop.
-    
-    # Get each post for each post that comes back
-    # url = "https://www.reddit.com/r/Ask/top.json?t=day"
-    url = "https://www.reddit.com/r/AskReddit/top.json?t=day"
-    posts = get_reddit_data(url=url, num_posts=num_posts)
-    for i, post in enumerate(posts): 
-        
-        # 
-        start_time = time.time()
-        
-        # Generate sentences to break up the chunks
-        sentences = make_sentences(post, num_comments)
-
-        # for each sentence, make a TTS, video and merge them
-        video_clips = []
-        for sentence in sentences:
-            print(sentence)
-            tts_file = generate_TTS_using_TikTok(sentence)
-            tts_clip, clip_duration = add_audio_tts_clip(tts_file)
-
-            # Generate TextClips
-            title = post['title']
-            text_clip_title = add_text_clip(text=title, bg_color="black", opacity=0.8, position=("center", 0.1), relative=True, total_duration=clip_duration, size=(size[0]*0.9,None))
-            # text_clips.append(text_clip_title) # intro text
-        
-            # text_clips = []
-            text_clip_body = add_text_clip(text=sentence, font_size=40, position=("center", "center"), relative=True, total_duration=clip_duration, size=(size[0]*0.9,None), stroke_color="black", stroke_width=1)
-            # text_clips.append(text_clip_body)
-            
-            # generate SRT (per word)
-            if useSRT == True: 
-                srt_file = generate_srt_from_audio_using_whisper(tts_file, method="continuous")
-                generator = lambda txt: TextClip(txt=txt, fontsize=40, color="white", font="Impact", stroke_color="black", method="caption", size=(size[0]*0.9, None))
-                # generator = lambda txt: add_text_clip(text=txt, position=("center"), total_duration=clip_duration)
-                subtitles = SubtitlesClip(srt_file, generator)
-                subtitles = subtitles.set_position(("center", "center")).set_duration(clip_duration)
-                print("Subtitles Set...")
-            
-                text_clip_body = subtitles
-
-            # generate video clip
-            video_clip = add_video_clip(start=0, total_duration=clip_duration, size=size, crop=crop)
-            
-            # Finally, create the video
-            final_video_clip = CompositeVideoClip([video_clip, text_clip_body, text_clip_title], use_bgclip=True)
-            final_video_clip = final_video_clip.set_duration(clip_duration)
-
-            # Set Audio
-            final_video_clip = final_video_clip.set_audio(tts_clip)
-            print("Videos and banner, and TTS set!")
-
-            # Debug
-            # final_video_clip.save_frame("frame.png", t=3)
-            # exit()
-            # final_video_clip.write_videofile(final_video_path)
-
-            # close partial clips (audiofileclips and videofileclips)
-            # tts_clip.close()
-            # video_clip.close()
-
-            # combined_video.close()
-            video_clips.append(final_video_clip)
-        
-        final_video = concatenate_videoclips(video_clips)
-        # Set the background audio music
-        final_video = add_background_audio(final_video)
-
-        # Write the final video
-        reddit_path = "resources\\uploaded_videos\\reddit"
-        title = f"Daily Dose of Reddit Questions #shorts #fyp #reddit #cats #dogs #questions #thoughts {i}"
-        reddit_file = os.path.join(reddit_path, f"{title}.mp4")
-        # reddit_path = os.path.join("resources", "uploaded_videos", f"reddit")
-        # reddit_file = os.path.join("resources", "uploaded_videos", f"reddit", f"reddit_{i}.mp4")
-        # final_video.save_frame("frame.png", t=1)
-        # exit()
-        final_video.write_videofile(reddit_file, fps=30, codec='h264_nvenc')
-        
-        end_time = time.time()  
-        execution_time = end_time - start_time
-        print(f"Execution time: {execution_time} seconds")
 
 def generate_full_length_video(sentences, mp4_file, tts_voice_index):
     
@@ -909,7 +892,7 @@ def generate_full_length_video(sentences, mp4_file, tts_voice_index):
     final_video = add_background_audio(final_video)
 
     # Write the final video
-    final_video.write_videofile("test.mp4", fps=30, preset='ultrafast')
+    final_video.write_videofile("test.mp4", fps=30, codec='h264_nvenc')
         
     return
 
@@ -919,20 +902,25 @@ def main():
     audio_type = "happy" # change this to categories eventually, look up music dmca stuff
     audio_path = f"resources\\audio\\{audio_type}"
     video_path = "resources\\background_videos\\scraper\\catsdogsanimalspetsvertical\\vertical"#scraper\\verticalyoga"
+    # video_path = "resources\\uploaded_videos\\daily_tiktoks\\uploaded"
     get_video_files(video_path)
     get_audio_files(audio_path)
     
-    
+
     # today = get_todays_date()
     
     title = f"What would you pick?" # must be blank if no title is needed!!!
     texts = [
-        "What would you do if you could control people's emotions?",
+        "Do you know the words that start with 'A'?",
+        "",
+        "",
+        "",
+        "",
         "Let me know what you think and don't forget to Sub, Comment, and Like for More!",
     ]
     crop = False
     use_title = False
-    mode = 6
+    mode = 9
     # 0, # vertical, 
     # 1, # 16:9 vertical black bars, requires top and bottom text
     # 2, # 16:9 vertical video, requires top and bottom text and crop
@@ -943,7 +931,21 @@ def main():
     # 7, # Play an entire video clip with text in the back, tts, and audio bg
     # 8, make bulk videos 169 (#2) format. Go to the function.
     
-    
+    if mode == 9:
+        folder_path = "resources\\audio\\songs\\clips"
+        soundclip_files = [file for file in os.listdir(folder_path) if file.endswith(".wav")]
+        
+        for file in soundclip_files:
+            file_path = os.path.join(folder_path, file)
+            
+            # Extract the filename without extension
+            filename_without_extension = os.path.splitext(os.path.basename(file_path))[0]
+            
+            # Call the generate_guess_the_song function with the filename as input
+            generate_guess_the_song(filename_without_extension)
+        # song_name = "What A Girl Wants -  Christina Aguilera"
+            # generate_guess_the_song(song_name)
+        return
     
     if mode == 8:    
         generate_169_many_videos()
@@ -962,10 +964,6 @@ def main():
             ]
         tts_voice_index = 0 # 17 is ok, 9 is ok
         generate_full_length_video(text,meme_path, tts_voice_index)
-        return
-    
-    if mode == 6:
-        generate_reddit_video(num_posts=10, num_comments=3, crop=crop)
         return
     
     if mode == 5: 
@@ -1011,7 +1009,7 @@ def main():
     if title=="": title = "yt_short"
     # final_video.save_frame("frame.png", t=1)
     # exit()
-    final_video.write_videofile(f"{title}.mp4", fps=30, preset='ultrafast')
+    final_video.write_videofile(f"{title}.mp4", fps=30, codec='h264_nvenc')
     
     final_video.close()
     # background_audio_clip.close()

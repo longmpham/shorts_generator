@@ -153,7 +153,7 @@ def get_comments(url, max_num_of_comments=30):
         # print(f"{index}")
         
         comments.append({
-            "index": str(index+1),
+            "index": str(index),
             "author": comment["data"]["author"],
             "comment": comment["data"]["body"],
             # "author": comment["data"].get("author", ""),

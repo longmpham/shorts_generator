@@ -15,7 +15,7 @@ async def capture(browser: Browser,  url: str) -> None:
         await scroll_down(page)
         await asyncio.sleep(2)  # Adjust the sleep time (in seconds) to control the scrolling speed
         try:
-            view_more_comments_button = 'span:has-text("View more comments")'
+            # view_more_comments_button = 'span:has-text("View more comments")'
             view_more_comments_button_xpath = "/html/body/shreddit-app/div/div[2]/faceplate-batch/faceplate-tracker/shreddit-comment-tree/faceplate-partial/div[1]/button"
             # await page.locator(view_more_comments_button).click()
             await page.locator("xpath=" + view_more_comments_button_xpath).click()
@@ -36,9 +36,9 @@ async def capture(browser: Browser,  url: str) -> None:
     
     # await asyncio.sleep(120)
     
-    await comments.nth(22).screenshot(path=f"resources\\temp\\comment-{2}.png")
-    await comments.nth(23).screenshot(path=f"resources\\temp\\comment-{3}.png")
-    await comments.nth(24).screenshot(path=f"resources\\temp\\comment-{4}.png")
+    await comments.nth(22).screenshot(path=f"resources\\temp\\comment-{22}.png")
+    await comments.nth(23).screenshot(path=f"resources\\temp\\comment-{23}.png")
+    await comments.nth(24).screenshot(path=f"resources\\temp\\comment-{24}.png")
     
     
     # for i in range(count):
@@ -51,7 +51,7 @@ async def capture(browser: Browser,  url: str) -> None:
 
 
 async def main() -> None:
-    reddit_url = "https://www.reddit.com/r/AskReddit/comments/158ed30/what_is_the_worst_aspect_of_being_a_man_in_2023/"
+    reddit_url = "https://www.reddit.com/r/AskReddit/comments/155twk3/whats_the_fastest_way_youve_ever_seen_a_new/"
     async with async_playwright() as p:
         # browser = await p.chromium.launch(headless=False)
         browser = await p.chromium.launch()

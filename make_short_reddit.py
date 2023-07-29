@@ -24,27 +24,6 @@ from get_reddit_data import get_reddit_data
 video_files_list = []
 audio_files_list = []
 
-def get_csv(csv_filename):
-    # Read the CSV file and extract the relationship data
-    data = []
-    with open(csv_filename, 'r', encoding="utf8") as csv_file:
-        csv_reader = csv.reader(csv_file)
-        next(csv_reader)  # skip the first row
-        for row in csv_reader:
-            category, statement, goal = row[:3]
-            print(category, statement, goal)
-            data.append({'category': category, 'statement': statement, 'goal': goal})
-    return data
-
-def select_random_direction(directions=["left", "top", "bottom", "right"]):
-    random_direction = random.choice(directions)
-    return random_direction
-
-def create_transition(final_video):
-    final_video = CompositeVideoClip([final_video.fx(transfx.slide_in, 0.5, select_random_direction())])
-
-    
-    return final_video
 
 def delete_temp_audio(folder_path="resources\\temp\\audio"):
     # If temp folder is found, delete it
@@ -89,6 +68,8 @@ def create_folder_if_not_exists(goal_name):
 
     return
 
+
+
 def get_video_files(path):
     global video_files_list
     background_video_dir = os.path.join(os.getcwd(), f"{path}")
@@ -110,6 +91,27 @@ def get_video_file(index=-1):
     
     return video_files_list[index]
 
+def get_audio_files(path):
+    global audio_files_list
+    background_audio_dir = os.path.join(os.getcwd(), f"{path}")
+    audio_files_list = [os.path.join(background_audio_dir, f) for f in os.listdir(background_audio_dir) if f.endswith(".mp3")]
+    # audio_files_list.sort()  # Sort the audio files alphabetically
+    audio_files_list = natsorted(audio_files_list)  # Sort the audio files naturally
+    # for file in audio_files_list:
+    #     print(file)
+    # exit()
+    return audio_files_list
+
+def get_audio_file(index=-1):
+    global audio_files_list
+    # print(index, len(audio_files_list))
+    
+    if index < 0 or index >= len(audio_files_list): 
+        print("Audio index out of range, using a random audio instead!")
+        rand = random.choice(audio_files_list)
+        # return random.choice(audio_files_list)
+        return rand
+    return audio_files_list[index]
 
 
 
@@ -308,7 +310,6 @@ def generate_srt_from_audio_using_whisper(audio_file_path, method="sentence"):
 
 
 
-
 def add_text_clip(text="", font_name="Impact", font_size=50, font_color="white", bg_color="transparent", stroke_color=None, stroke_width=1, size=(int(720*0.9),None), method="caption", start=0, total_duration=5, opacity=1.0, position=("center"), relative=False):
     text_clip = TextClip(text, stroke_color=stroke_color, stroke_width=stroke_width, fontsize=font_size, color=font_color, bg_color=bg_color, font=font_name, size=size, method=method)
     if relative==True:
@@ -347,124 +348,172 @@ def add_audio_tts_clip(audio_file, silence=2, start=0):
     
     return audio_clip, clip_duration
 
-
-def generate_full_length_video_mobile(text, video_index, tts_voice_index):
-
-    video = get_video_file(video_index) # gets in order
-    video_clip = VideoFileClip(video, audio=True)#, target_resolution=(1080, 1920))
-    video_clip = video_clip.resize(height=1080)
-    video_clip = video_clip.subclip(0,5) 
-
-    if not text: return CompositeVideoClip([video_clip])
-    
-    size = video_clip.size
-
-    # Generate TTS
-    # if text:
-        
-    tts_file = generate_TTS_using_TikTok(text, voice=tts_voice_index)
-    tts_clip, clip_duration = add_audio_tts_clip(tts_file, silence=0)
-    
-    # Generate Texts
-    text_clip = TextClip(text, font="Impact", fontsize=40, color="white", stroke_color="black", stroke_width=1, size=(size[0], None), method="caption")
-    text_clip = text_clip.set_position(("center", 0.75), relative=True).set_start(0).set_end(clip_duration)
-
-    final_video = CompositeVideoClip([video_clip, text_clip])
-    # final_video = CompositeVideoClip([final_video.fx(transfx.slide_in, 0.5, "left")])
-    final_video = CompositeVideoClip([final_video.fx(transfx.slide_in, 0.5, select_random_direction())])
-    # final_video = create_transition(final_video)
-    final_video = final_video.set_duration(video_clip.duration)
-    
-    # Combine audio to final video
-    audio = final_video.audio
-    audio = audio.volumex(0.75)
-    combined_audio = CompositeAudioClip([tts_clip, final_video.audio])
-
+def add_background_audio(final_video, index=-1):    
+    audio_path = get_audio_file(index) # random
+    background_audio_clip = AudioFileClip(audio_path)
+    background_audio_clip = background_audio_clip.volumex(0.1) # set volume of background_audio to 10%
+    combined_audio = CompositeAudioClip([background_audio_clip, final_video.audio])
+    combined_audio = afx.audio_loop(combined_audio, duration=final_video.duration)
     final_video = final_video.set_audio(combined_audio)
     
-    # Write the final video
-    # final_video.save_frame("frame.png", t=1)
-    # final_video.write_videofile(f"resources\\uploaded_videos\\daily_tiktoks\\test_{video_index}.mp4", fps=30, preset='ultrafast')
     return final_video
 
-def generate_full_length_video(text, video_index, tts_voice_index):
 
-    video = get_video_file(video_index) # gets in order
-    video_clip = VideoFileClip(video, audio=True)#, target_resolution=(1080, 1920))
-    video_clip = video_clip.resize(height=1080)
-    video_clip = video_clip.subclip(0,5) 
-    black_image = ImageClip("resources\\black_image.png")
-    black_image = black_image.set_duration(video_clip.duration).resize((1920,1080))
-    
-    if not text: return CompositeVideoClip([black_image, video_clip.set_position("center")])
-    
-    size = video_clip.size
 
-    # Generate TTS
-    # if text:
+def generate_reddit_video(url, num_posts=10, num_comments=3, crop=False, useSRT=True):
+    
+    def make_sentences(post, num_comments=3):
+        sentences = []
+        # post_author = post["author"]
+        post_author = post["author"] if not any(char.isdigit() for char in post["author"]) else "Redditor"
+        post_title = post["title"]
+        post_body = post["selftext"]
+        post_comments = post["comments"]
+    
+        # sentences.append(f"{post_author} said {post_title}")
+        sentences.append(f"Daily Dose of Reddit: {post_title}")
+        if post_body.strip() and len(post_body.split()) < 10:
+            sentences.append(post_body)
+    
+        # Generate Textclips for the comments
+        # print(f"number of comments: {len(post_comments)}")
+        for i, post_comment in enumerate(post_comments):
+            # comment_author = post_comment["author"]
+            # comment_author = post_comment["author"] if not any(char.isdigit() for char in post_comment["author"]) else "Redditor"
+            comment_body = post_comment["comment"]
+            # comment_ups = post_comment["ups"]
+            comment_index = post_comment["index"]
+            
+            word_count = len(comment_body.split())
+            if word_count > 25:
+                continue
+            senten = f"Redditor {comment_index} said {comment_body}"
+            print(senten)
+            # sentences.append(f"{comment_author} said {comment_body}")
+            sentences.append(f"Redditor said {comment_body}")
+            # sentences.append(f"{comment_body}")
+            print(len(sentences))
+            if len(sentences) > num_comments:
+                print(f"{len(sentences)} found. Breaking")
+                break
+
+        sentences.append("Sub, Comment, Like for More!")
+        # for sent in sentences: 
+        #     print(sent)
+    
+        return sentences
+    
+    size = (720, 1280)
+    
+    # Get each post for each post that comes back
+    posts = get_reddit_data(url=url, num_posts=num_posts)
+    for i, post in enumerate(posts): 
         
-    tts_file = generate_TTS_using_TikTok(text, voice=tts_voice_index)
-    tts_clip, clip_duration = add_audio_tts_clip(tts_file, silence=0)
-    
-    # Generate Texts
-    text_clip = TextClip(text, font="Impact", fontsize=40, color="white", stroke_color="black", stroke_width=1, size=(size[0], None), method="caption")
-    text_clip = text_clip.set_position(("center", 0.75), relative=True).set_start(0).set_end(clip_duration)
+        start_time = time.time()
+        
+        # Generate sentences to break up the chunks
+        sentences = make_sentences(post, num_comments)
 
-    final_video = CompositeVideoClip([black_image, video_clip.set_position("center"), text_clip])
-    # final_video = CompositeVideoClip([final_video.fx(transfx.slide_in, 0.5, "left")])
-    final_video = CompositeVideoClip([final_video.fx(transfx.slide_in, 0.5, select_random_direction())])
-    # final_video = create_transition(final_video)
-    final_video = final_video.set_duration(video_clip.duration)
-    
-    # Combine audio to final video
-    audio = final_video.audio
-    audio = audio.volumex(0.75)
-    combined_audio = CompositeAudioClip([tts_clip, final_video.audio])
+        # for each sentence, make a TTS, video and merge them
+        video_clips = []
+        for sentence in sentences:
+            print(sentence)
+            tts_file = generate_TTS_using_TikTok(sentence)
+            tts_clip, clip_duration = add_audio_tts_clip(tts_file)
 
-    final_video = final_video.set_audio(combined_audio)
-    
-    # Write the final video
-    # final_video.save_frame("frame.png", t=1)
-    # final_video.write_videofile(f"resources\\uploaded_videos\\daily_tiktoks\\test_{video_index}.mp4", fps=30, preset='ultrafast')
-    return final_video
+            # Generate TextClips
+            title = post['title']
+            text_clip_title = add_text_clip(text=title, bg_color="black", opacity=0.8, position=("center", 0.1), relative=True, total_duration=clip_duration, size=(size[0]*0.9,None))
+            # text_clips.append(text_clip_title) # intro text
+        
+            # text_clips = []
+            text_clip_body = add_text_clip(text=sentence, font_size=40, position=("center", "center"), relative=True, total_duration=clip_duration, size=(size[0]*0.9,None), stroke_color="black", stroke_width=1)
+            # text_clips.append(text_clip_body)
+            
+            # generate SRT (per word)
+            if useSRT == True: 
+                srt_file = generate_srt_from_audio_using_whisper(tts_file, method="continuous")
+                generator = lambda txt: TextClip(txt=txt, fontsize=40, color="white", font="Impact", stroke_color="black", method="caption", size=(size[0]*0.9, None))
+                # generator = lambda txt: add_text_clip(text=txt, position=("center"), total_duration=clip_duration)
+                subtitles = SubtitlesClip(srt_file, generator)
+                subtitles = subtitles.set_position(("center", "center")).set_duration(clip_duration)
+                print("Subtitles Set...")
+            
+                text_clip_body = subtitles
+
+            # generate video clip
+            video_clip = add_video_clip(start=0, total_duration=clip_duration, size=size, crop=crop)
+            
+            # Finally, create the video
+            final_video_clip = CompositeVideoClip([video_clip, text_clip_body, text_clip_title], use_bgclip=True)
+            final_video_clip = final_video_clip.set_duration(clip_duration)
+
+            # Set Audio
+            final_video_clip = final_video_clip.set_audio(tts_clip)
+            print("Videos and banner, and TTS set!")
+
+            # Debug
+            # final_video_clip.save_frame("frame.png", t=3)
+            # exit()
+            # final_video_clip.write_videofile(final_video_path)
+
+            # close partial clips (audiofileclips and videofileclips)
+            # tts_clip.close()
+            # video_clip.close()
+
+            # combined_video.close()
+            video_clips.append(final_video_clip)
+        
+        final_video = concatenate_videoclips(video_clips)
+        # Set the background audio music
+        final_video = add_background_audio(final_video)
+
+        # Write the final video
+        reddit_path = "resources\\uploaded_videos\\reddit"
+        title = f"Daily Dose of Reddit Questions #shorts #fyp #reddit #cats #dogs #questions #thoughts {i}"
+        reddit_file = os.path.join(reddit_path, f"{title}.mp4")
+        # reddit_path = os.path.join("resources", "uploaded_videos", f"reddit")
+        # reddit_file = os.path.join("resources", "uploaded_videos", f"reddit", f"reddit_{i}.mp4")
+        # final_video.save_frame("frame.png", t=1)
+        # exit()
+        final_video.write_videofile(reddit_file, fps=30, codec='h264_nvenc')
+        
+        # time taken?
+        end_time = time.time()  
+        execution_time = end_time - start_time
+        print(f"Execution time: {execution_time} seconds")
 
 def main():
     delete_temp_audio()
-    video_path = "resources\\background_videos\\daily_tiktoks"
-    get_video_files(video_path)    
     
-    # today = get_todays_date()
+    audio_type = "happy" # change this to categories eventually, look up music dmca stuff
+    audio_path = f"resources\\audio\\{audio_type}"
+    video_path = "resources\\background_videos\\scraper\\catsdogsanimalspetsvertical\\vertical"#scraper\\verticalyoga"
+    get_video_files(video_path)
+    get_audio_files(audio_path)
     
-    title = f"Your Daily Cure For Boredom TikTok Compilation" # must be blank if no title is needed!!!
-    texts = [
-        "Thank you all for 100 subs!", #1
-        "", #2
-        "If he can do it you can too", #3
-        "", #4
-        "", #5
-        "Sub, Comment, Like for More!", #last
-    ]
-
-    video_clips = []
-    for i, text in enumerate(texts):
-        # video = generate_full_length_video(text, video_index=i, tts_voice_index=0)
-        video = generate_full_length_video_mobile(text, video_index=i, tts_voice_index=0)
-        video_clips.append(video)
-    final_video = concatenate_videoclips(video_clips)
-
-    # Write the final video
-    # final_video.save_frame("frame.png", t=1)
-    # exit()
-    # final_video.write_videofile(f"resources\\uploaded_videos\\daily_tiktoks\\{title}.mp4", fps=30, threads=8, codec='h264_nvenc', write_logfile=True) #preset="ultrafast")
-    final_video.write_videofile(f"resources\\uploaded_videos\\daily_tiktoks\\{title}.mp4", fps=30, threads=8, codec='hevc_nvenc') #preset="ultrafast")
     
-    # Clean up
-    final_video.close()
-    for clip in video_clips:
-        clip.close()
-        
+    # url = "https://www.reddit.com/r/Ask/top.json?t=day"
+    url = "https://www.reddit.com/r/AskReddit/top.json?t=day"
+    num_posts = 10
+    num_comments = 3
+    crop = False
+    useSRT = True
+    generate_reddit_video(url, num_posts=num_posts, num_comments=num_comments, crop=crop, useSRT=useSRT)
+    
     return
 
 if __name__ == "__main__":
     main()
     
+# +------------+
+# |            |
+# |   Title    |
+# |            |
+# |            |
+# |            |
+# |            |
+# |            |
+# |    Text    |
+# |            |
+# +------------+

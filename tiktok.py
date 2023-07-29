@@ -51,13 +51,33 @@ async def main():
         await password_locator.fill(password)
         await password_locator.press("Enter")
         
+        # login blocker check
+        print("hit enter once you've logged in:")
+        input()
+        
         button_pets_and_nature = 'span:has-text("Pets and Nature")' 
         await page.locator(button_pets_and_nature).click(button="left")
             # button="left", modifiers=["Shift"], position={"x": 23, "y": 32}
-            
-        input()
-            
-            
+        
+        links = set()
+        iterator_variable = 1  # Start with the initial value of the iterator_variable
+
+        while True:
+            # cssselector = "div.tiktok-x6y88p-DivItemContainerV2:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > a:nth-child(1)"
+            xpath = f"/html/body/div[1]/div[2]/div[2]/div/div[2]/div/div[{iterator_variable}]/div[1]/div/div/a"
+            element = page.locator("xpath=" + xpath)
+
+
+            link_href = await element.get_attribute("href")
+            print(link_href)
+            links.add(link_href)
+
+            iterator_variable += 1
+            user_break = input("press enter to get new video, 'exit' to exit")
+            if user_break == "exit": break
+        for link in links:
+            print(link)   
+        input("press enter to close")
         await browser.close()
 
     
