@@ -83,11 +83,10 @@ def load_json_file(file_path):
     # print(data)
     return data
 
-def get_posts(url):
+def get_posts(base_url):
 
     # get all posts from the url given
-    url = url
-    response = requests.get(url, headers={"User-agent": "Mozilla/5.0"})
+    response = requests.get(base_url, headers={"User-agent": "Mozilla/5.0"})
     data = response.json()
 
     # create a list of dictionaries (reddit posts) from the data
@@ -95,8 +94,8 @@ def get_posts(url):
     for post in data["data"]["children"]:
         # if NSFW, go next
         # print(post["data"]["over_18"])
-        # if post["data"]["over_18"] == True: 
-        #     continue
+        if post["data"]["over_18"] == True: 
+            continue
         
         title = post["data"]["title"]
         selftext = post["data"]["selftext"]
@@ -116,12 +115,13 @@ def get_posts(url):
             "url": url,
             "date_time": utc_time,
         })
-    print(f"finished getting posts from {url}")
+        print(f"Getting posts from {url}...")
+    print(f"finished getting posts from {base_url}")
     return posts
 
 def get_comments(url, max_num_of_comments=30):
     url = url + ".json"
-    
+    print(f"Geting comments from {url}...")
     # get the url data from the url given
     response = requests.get(url, headers={'User-agent': 'Mozilla/5.0'})
     data = response.json()
@@ -142,12 +142,15 @@ def get_comments(url, max_num_of_comments=30):
             print(f"No more comments to add. Comments found: {index}")
             break
         # Skip comment if more than 30 words
-        # comment_body = comment["data"]["body"]
-        # word_count = len(comment_body.split())
-        # if word_count > 30:
-        #     continue
+        comment_body = comment["data"]["body"]
+        word_count = len(comment_body.split())
+        if word_count > 10:
+            continue
         # if comment_body == "[removed]" or comment_body == "[deleted]":
         #     continue
+        if "[removed]" in comment_body or "[deleted]" in comment_body:
+            continue
+
         # ups = comment["data"].get("ups",1)
         # print(f"{index} - Ups: {ups}")
         # print(f"{index}")
@@ -155,7 +158,8 @@ def get_comments(url, max_num_of_comments=30):
         comments.append({
             "index": str(index),
             "author": comment["data"]["author"],
-            "comment": comment["data"]["body"],
+            # "comment": comment["data"]["body"],
+            "comment": comment_body,
             # "author": comment["data"].get("author", ""),
             # "comment": comment["data"].get("body", ""),
             "ups": str(comment["data"]["ups"]),
@@ -167,7 +171,7 @@ def get_comments(url, max_num_of_comments=30):
         # Check if three comments have been appended
         if len(comments) == max_num_of_comments:
             break
-    
+    print(f"Finished getting comments from {url}...")
     return comments
 
 def combine_post_comments(post, comments, post_index):
