@@ -5,7 +5,24 @@ Reused some information from AITA project and created a lot of shorts for youtub
 
 How to use:
 1. Get the git repo in a local directory
-2. using the requirements.txt, install the necessary packages required
+2. Activate a Python Env by typing in "python -m venv ." (the dot refers to the current directory!)
+3. Activate the Python Env by typing ".\Scripts\activate" in the terminal.
+4. Using the requirements.txt, install the necessary packages required
 pip freeze > requirements.txt
 pip install -r requirements.txt
-3. 
+5. Torch may not install correctly, if so, try this:
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+note: this is only if you want to transcribe with CUDA capable devices, otherwise you can just use your CPU instead (longer times to transcribe audio)
+6. Follow the directory I have layed out or change them to your liking... you'll need your own audio/video files to make the clips!
+
+
+<todo: fix pathing up...>
+/resources
+  /audio/<topic>/
+  /background_videos/<topic>/
+  /data
+  /screenshots
+  /temp
+  /tiktok
+  /uploaded_videos
+
