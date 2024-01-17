@@ -72,7 +72,7 @@ def generate_srt_from_audio_using_whisper(audio_file_path, method="sentence"):
         return f"{hours:02.0f}:{minutes:02.0f}:{seconds:02.0f},{milliseconds:03.0f}"
     
     # use large-v2 model and transcribe the audio file
-    model_size = "large-v2"
+    model_size = "large-v3"
     model = WhisperModel(model_size, device="cpu", compute_type="int8")
     # model = WhisperModel(model_size, device="cuda", compute_type="float16")
     # print(audio_file_path)

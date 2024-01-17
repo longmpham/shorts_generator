@@ -241,7 +241,7 @@ def generate_srt_from_audio_using_whisper(audio_file_path, method="sentence"):
     start = time.time()
     
     # use large-v2 model and transcribe the audio file
-    model_size = "large-v2"
+    model_size = "large-v3"
     # model = WhisperModel(model_size, device="cpu", compute_type="int8", num_workers=2) # num_workers = default 1
     model = WhisperModel(model_size, device="cuda", compute_type="float16", num_workers=2)
     # print(audio_file_path)
