@@ -12,7 +12,7 @@ import speech_recognition as sr
 from pydub import AudioSegment
 from pydub.utils import make_chunks
 from datetime import timedelta
-from coqui_tts import generate_TTS_using_bark, generate_TTS_using_coqui
+# from coqui_tts import generate_TTS_using_bark, generate_TTS_using_coqui
 import shutil
 from tqdm import tqdm
 from faster_whisper import WhisperModel
