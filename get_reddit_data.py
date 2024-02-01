@@ -197,7 +197,6 @@ def get_reddit_data(url="https://www.reddit.com/r/AskReddit/top.json?t=day", num
     
     # Get Reddit posts from url
     reddit_posts = get_posts(url)
-    
     # get all posts and their comments
     json_posts = []
     for i, post in enumerate(reddit_posts):

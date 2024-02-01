@@ -4,6 +4,8 @@ Reused some information from AITA project and created a lot of shorts for youtub
 
 Prerequisite:
 Working with Python 3.10.11
+Imagick is required too. install with the legacy option selected.
+Works with ImageMagick-7.1.1-10-Q16-HDRI-x64-dll.exe 
 
 
 How to use:
