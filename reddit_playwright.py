@@ -1,46 +1,82 @@
 import asyncio
 from playwright.async_api import async_playwright, Browser
+import sys
 
 MAX_COMMENT_LIMIT = 10
 
 async def scroll_down(page):
     await page.evaluate("window.scrollTo(0, document.body.scrollHeight);")
+    await asyncio.sleep(1)  # Adjust the sleep time (in seconds) to control the scrolling speed
+
+
+async def get_reddit_title(browser: Browser,  url: str) -> None:
+    page = await browser.new_page()
+    await page.goto(url)
+    # title of the page
+    title = page.locator("shreddit-post")
+    await title.screenshot(path="resources\\temp\\post.png")
 
 async def capture(browser: Browser,  url: str) -> None:
     page = await browser.new_page()
+    await page.set_viewport_size({"width": int(485), "height": 800})
+
 
     await page.goto(url)
     
-    for _ in range(3):
+    for _ in range(1):
         await scroll_down(page)
-        await asyncio.sleep(2)  # Adjust the sleep time (in seconds) to control the scrolling speed
+        await scroll_down(page)
         try:
-            view_more_comments_button = 'span:has-text("View more comments")'
-            view_more_comments_button_xpath = "/html/body/shreddit-app/div/div[2]/faceplate-batch/faceplate-tracker/shreddit-comment-tree/faceplate-partial/div[1]/button"
-            # await page.locator(view_more_comments_button).click()
-            await page.locator("xpath=" + view_more_comments_button_xpath).click()
+            span = await page.wait_for_selector('span:has-text("View more comments")')
+            # Click the span element
+            await span.click()        
         except: 
             print("couldn't find button")
+    
+    # for some reason i have to keep this for the minus buttons to prompt
+    await asyncio.sleep(3)
+    
+    # Find all buttons matching the specified attributes
+    buttons = await page.query_selector_all('button[aria-controls="comment-children"][aria-expanded="true"][aria-label="Toggle Comment Thread"]')
 
-    
-    posts = page.locator("shreddit-post")
-    # posts = page.get_by_test_id("post-container") # sometimes works.
+    # Click each button
+    for button in buttons:
+        # print(f"clicking {button}...")
+        await button.click()
 
-    await posts.screenshot(path="resources\\temp\\post.png")
+    title = page.locator("shreddit-post")
+    
+    # title of the page
+    await title.screenshot(path="resources\\temp\\post.png")
 
-    # this does not respect comment-nesting
-    # comments = page.locator(".Comment") # doesnt work
-    comments = page.locator("shreddit-comment")
-    count = await comments.count()
-    print(f"Found {count} comments")
+    # comments = page.locator("shreddit-comment")
+    comments = await page.locator('//*[@id="comment-tree"]/shreddit-comment').all() # works
+    # comments = await page.locator('//*[@id="comment-tree"]/shreddit-comment[not(.//shreddit-comment)]').all()
+
+    # comments = await page.locator("shreddit-comment:not(:has(> shreddit-comment[parentid]))").all()
+    # score_value = await page.evaluate('(selector) => document.querySelector(selector).getAttribute("score")', "#comment-tree > shreddit-comment:nth-child(13)") # returns a number
+
+    # Create a list to store tuples of (score, comment_element)
+    comment_list = []
     
-    # await asyncio.sleep(120)
+    # Extract score and element for each comment
+    for comment in comments:
+        # score = int(await comment.get_attribute("score"))
+        score = await comment.evaluate('(element) => element.getAttribute("score")')
+        print(score)
+        
+        comment_list.append((int(score), comment))
+    # Sort comments based on score
+    sorted_comments = sorted(comment_list, key=lambda x: x[0], reverse=True)
+    # print(sorted_comments)
+
+    # Take screenshots of the first three comments
+    for i in range(min(3, len(sorted_comments))):
+        await sorted_comments[i][1].screenshot(path=f"resources\\temp\\comment-{i+1}.png")
+        
+    # print(f"Found {count} comments")
     
-    await comments.nth(22).screenshot(path=f"resources\\temp\\comment-{2}.png")
-    await comments.nth(23).screenshot(path=f"resources\\temp\\comment-{3}.png")
-    await comments.nth(24).screenshot(path=f"resources\\temp\\comment-{4}.png")
-    
-    
+
     # for i in range(count):
     #     print(f"printing comment: {i+1}")
     #     await comments.nth(i).screenshot(path=f"resources\\temp\\comment-{i}.png")
@@ -50,12 +86,22 @@ async def capture(browser: Browser,  url: str) -> None:
     #         break
 
 
-async def main() -> None:
-    reddit_url = "https://www.reddit.com/r/AskReddit/comments/158ed30/what_is_the_worst_aspect_of_being_a_man_in_2023/"
+async def main(reddit_url: str) -> None:
     async with async_playwright() as p:
-        # browser = await p.chromium.launch(headless=False)
-        browser = await p.chromium.launch()
+        browser = await p.chromium.launch(headless=False)
+        # browser = await p.chromium.launch()
         await capture(browser, reddit_url)
+        # await get_reddit_title(browser, reddit_url)
         await browser.close()
 
-asyncio.run(main())
+if __name__ == "__main__":
+    # Check if a URL argument is provided
+    if len(sys.argv) == 2:
+        print("Usage: python <filename> <url>")
+        reddit_url = sys.argv[1]
+        # sys.exit(1)
+    else:
+        reddit_url = "https://www.reddit.com/r/AskReddit/comments/1bmnayh/what_is_the_biggest_lie_successfully_sold_by_the/"
+
+    # Call main function with the provided URL
+    asyncio.run(main(reddit_url))

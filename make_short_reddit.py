@@ -20,6 +20,7 @@ from gtts import gTTS
 from tiktok_tts_v2 import texttotiktoktts
 from natsort import natsorted
 from get_reddit_data import get_reddit_data
+from playwright.sync_api import sync_playwright
 
 video_files_list = []
 audio_files_list = []
@@ -67,6 +68,24 @@ def create_folder_if_not_exists(goal_name):
     _create_folder_if_not_exists(temp_folder_path)
 
     return
+
+def get_reddit_title_image(url):
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=False)
+        # browser = await p.chromium.launch()
+        page = browser.new_page()
+        page.set_viewport_size({"width": int(485), "height": 800})
+        page.goto(url)
+        # title of the page
+        title = page.locator("shreddit-post")
+        title.screenshot(path="resources\\temp\\post.png")
+        browser.close()
+    
+    # create imageclip from title
+    image_path = "resources\\temp\\post.png"
+    image_clip = ImageClip(image_path)
+
+    return image_clip    
 
 
 
@@ -180,6 +199,7 @@ def generate_TTS_using_GTTS(sentences):
     return output_files
 
 def generate_TTS_using_TikTok(sentence, voice=0):
+    voice = random.randint(0, 8)
     voices = [
         # ENG VOICES
         "en_us_001",            # 0 Female
@@ -361,7 +381,7 @@ def add_background_audio(final_video, index=-1):
 
 
 
-def generate_reddit_video(url, num_posts=10, num_comments=3, crop=False, useSRT=True):
+def generate_reddit_video(url, num_posts=10, num_comments=3, crop=False, useSRT=True, usePlaywright=True):
     
     def make_sentences(post, num_comments=3):
         sentences = []
@@ -410,6 +430,11 @@ def generate_reddit_video(url, num_posts=10, num_comments=3, crop=False, useSRT=
     posts = get_reddit_data(url=url, num_posts=num_posts)
     for i, post in enumerate(posts): 
         
+        image_clip = None
+        if(usePlaywright):
+            # Generate title screenshot of reddit page
+            image_clip = get_reddit_title_image(post["url"])
+        
         start_time = time.time()
         
         # Generate sentences to break up the chunks
@@ -423,8 +448,11 @@ def generate_reddit_video(url, num_posts=10, num_comments=3, crop=False, useSRT=
             tts_clip, clip_duration = add_audio_tts_clip(tts_file)
             
             # Generate TextClips
-            title = post['title']
-            text_clip_title = add_text_clip(text=title, bg_color="black", opacity=0.8, position=("center", 0.1), relative=True, total_duration=clip_duration, size=(size[0]*0.9,None))
+            if(usePlaywright):
+                image_clip = image_clip.set_start(0).set_duration(clip_duration).resize(width=int(720*0.95)).set_position(("center", 0.1), relative=True).set_opacity(0.9)
+            else:
+                title = post['title']
+                text_clip_title = add_text_clip(text=title, bg_color="black", opacity=0.8, position=("center", 0.1), relative=True, total_duration=clip_duration, size=(size[0]*0.9,None))
             # text_clips.append(text_clip_title) # intro text
         
             # text_clips = []
@@ -445,7 +473,11 @@ def generate_reddit_video(url, num_posts=10, num_comments=3, crop=False, useSRT=
             video_clip = add_video_clip(start=0, total_duration=clip_duration, size=size, crop=crop)
             
             # Finally, create the video
-            final_video_clip = CompositeVideoClip([video_clip, text_clip_body, text_clip_title], use_bgclip=True)
+            if(usePlaywright):
+                final_video_clip = CompositeVideoClip([video_clip, image_clip, text_clip_body], use_bgclip=True)
+            else:
+                final_video_clip = CompositeVideoClip([video_clip, text_clip_body, text_clip_title], use_bgclip=True)
+            
             final_video_clip = final_video_clip.set_duration(clip_duration)
 
             # Set Audio
@@ -470,7 +502,7 @@ def generate_reddit_video(url, num_posts=10, num_comments=3, crop=False, useSRT=
 
         # Write the final video
         reddit_path = "resources\\uploaded_videos\\reddit"
-        title = f"Daily Dose of Reddit Questions #shorts #fyp #reddit #cats #dogs #questions #thoughts {i}"
+        title = f"Daily Dose of AskReddit #shorts #fyp #reddit #cats #dogs #questions #thoughts {i}"
         reddit_file = os.path.join(reddit_path, f"{title}.mp4")
         # reddit_path = os.path.join("resources", "uploaded_videos", f"reddit")
         # reddit_file = os.path.join("resources", "uploaded_videos", f"reddit", f"reddit_{i}.mp4")
@@ -484,21 +516,26 @@ def generate_reddit_video(url, num_posts=10, num_comments=3, crop=False, useSRT=
         print(f"Execution time: {execution_time} seconds")
 
 def main():
-    delete_temp_audio()
     
+    # Setup files
+    delete_temp_audio()
     audio_type = "happy" # change this to categories eventually, look up music dmca stuff
     audio_path = f"resources\\audio\\{audio_type}"
     video_path = "resources\\background_videos\\scraper\\catsdogsanimalspetsvertical\\vertical"#scraper\\verticalyoga"
     get_video_files(video_path)
     get_audio_files(audio_path)
     
+    # Variables to setup - Required!
     # url = "https://www.reddit.com/r/Ask/top.json?t=day"
     url = "https://www.reddit.com/r/AskReddit/top.json?t=day"
-    num_posts = 1
+    num_posts = 3
     num_comments = 3
     crop = False
     useSRT = True
-    generate_reddit_video(url, num_posts=num_posts, num_comments=num_comments, crop=crop, useSRT=useSRT)
+    usePlaywright = True
+    
+    # Start generation
+    generate_reddit_video(url, num_posts=num_posts, num_comments=num_comments, crop=crop, useSRT=useSRT,usePlaywright=usePlaywright)
     
     return
 
