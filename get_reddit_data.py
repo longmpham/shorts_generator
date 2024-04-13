@@ -5,6 +5,7 @@ import json
 import re
 import unicodedata
 
+from fake_useragent import UserAgent
 from datetime import timedelta
 from datetime import datetime as dt
 
@@ -86,9 +87,14 @@ def load_json_file(file_path):
 def get_posts(base_url):
 
     # get all posts from the url given
-    response = requests.get(base_url, headers={"User-agent": "Mozilla/5.0"})
+    ua = UserAgent()
+    print(ua.chrome)
+    header = {'User-Agent':str(ua.chrome)}
+    print(header)
+    response = requests.get(base_url, headers=header)
+    print(response)
     data = response.json()
-
+    exit() # currently broken because I now need a token to access the json... :( 
     # create a list of dictionaries (reddit posts) from the data
     posts = []
     for post in data["data"]["children"]:
