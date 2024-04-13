@@ -19,19 +19,26 @@ from faster_whisper import WhisperModel
 from gtts import gTTS
 from tiktok_tts_v2 import texttotiktoktts
 from natsort import natsorted
-from get_reddit_data import get_reddit_data
+from reddit_playwright import get_reddit_data
+from reddit_playwright import get_reddit_title
 from playwright.sync_api import sync_playwright
+from dotenv import load_dotenv
+import asyncio
+
+load_dotenv()
+reddit_user = os.getenv("REDDIT_USER")
+reddit_pw = os.getenv("REDDIT_PW")
 
 video_files_list = []
 audio_files_list = []
 
 
-def delete_temp_audio(folder_path="resources\\temp\\audio"):
+def delete_temp_audio(folder_path="./resources/reddit/audio"):
     # If temp folder is found, delete it
     if os.path.exists(folder_path):
         print(f"deleting {folder_path}")
         shutil.rmtree(folder_path)
-        print("removed")
+        print("removed temp audio")
     # Create the folder
     os.makedirs(folder_path)
     
@@ -70,23 +77,50 @@ def create_folder_if_not_exists(goal_name):
     return
 
 def get_reddit_title_image(url):
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
-        # browser = await p.chromium.launch()
-        page = browser.new_page()
-        page.set_viewport_size({"width": int(485), "height": 800})
-        page.goto(url)
-        # title of the page
-        title = page.locator("shreddit-post")
-        title.screenshot(path="resources\\temp\\post.png")
-        browser.close()
     
+    # def login(page, url):
+    #     # page = await context.new_page()
+    #     page.set_viewport_size({"width": int(485), "height": 800})
+
+    #     page.goto(url)
+    #     page.locator("input[name=\"username\"]").fill(reddit_user)
+    #     page.locator("input[name=\"password\"]").fill(reddit_pw)
+    #     time.sleep(1)
+    #     page.get_by_role("button", name="Log In").click()
+    #     # page.keyboard.press('Enter')
+        
+    #     # let the login take place.
+    #     time.sleep(15)
+        
+    #     # for some reason the context doesn't hold so dont close the page.
+    #     # await page.close()
+    
+    #     return    
+    
+    # with sync_playwright() as p:
+    #     browser = p.chromium.launch(headless=False)
+    #     # browser = await p.chromium.launch()
+    #     page = browser.new_page()
+        
+    #     # log in
+    #     login(page, "https://www.reddit.com/login")
+        
+    #     page.set_viewport_size({"width": int(485), "height": 800})
+    #     page.goto(url)
+    #     time.sleep(5)
+    #     # title of the page
+    #     # title = page.locator("shreddit-post")
+    #     title = page.get_by_test_id("post-content")
+        
+    #     title.screenshot(path="./resources/reddit/post.png")
+    #     browser.close()
+    
+    asyncio.run(get_reddit_title(url))
     # create imageclip from title
-    image_path = "resources\\temp\\post.png"
+    image_path = "./resources/reddit/post.png"
     image_clip = ImageClip(image_path)
 
     return image_clip    
-
 
 
 def get_video_files(path):
@@ -427,7 +461,9 @@ def generate_reddit_video(url, num_posts=10, num_comments=3, crop=False, useSRT=
     size = (720, 1280)
     
     # Get each post for each post that comes back
-    posts = get_reddit_data(url=url, num_posts=num_posts)
+    posts = asyncio.run(get_reddit_data(reddit_url=url, num_posts=num_posts))
+    # print(posts)
+
     for i, post in enumerate(posts): 
         
         image_clip = None

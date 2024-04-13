@@ -50,12 +50,23 @@ async def scroll_down(page):
     await page.evaluate("window.scrollTo(0, document.body.scrollHeight);")
     await asyncio.sleep(1)  # Adjust the sleep 1ime (in seconds) to control the scrolling speed
 
-async def get_reddit_title(browser: Browser,  url: str) -> None:
-    page = await browser.new_page()
-    await page.goto(url)
-    # title of the page
-    title = page.locator("shreddit-post")
-    await title.screenshot(path="resources\\temp\\post.png")
+async def get_reddit_title(url: str) -> None:
+    
+    async with async_playwright() as p:
+        browser = await p.firefox.launch(headless=False)
+        context = await browser.new_context()
+        page = await context.new_page()
+        
+        await login(page)
+        
+        await page.goto(url)
+        # title of the page
+        # title = page.locator("shreddit-post") # old and broken now DNE
+        title = page.get_by_test_id("post-container")
+        await title.screenshot(path="./resources/reddit/post.png")
+        await page.close()
+
+
 
 async def get_comments(page, url, max_num_of_comments=30):
     
@@ -144,7 +155,7 @@ async def parse_json_data(page, reddit_posts, num_posts=1, num_comments=30):
 
 async def get_json_data(page: Browser,  url: str) -> None:
     # page = await context.new_page()
-    await page.set_viewport_size({"width": int(485), "height": 800})
+    # await page.set_viewport_size({"width": int(485), "height": 800})
     base_url="https://www.reddit.com/r/AskReddit/top.json?t=day"
     await page.goto(base_url)
     
@@ -186,22 +197,25 @@ async def get_json_data(page: Browser,  url: str) -> None:
     # await page.close()
     return posts
 
-async def login(page: Browser,  url: str) -> None:
+async def login(page: Browser,  url="https://www.reddit.com/login") -> None:
     # page = await context.new_page()
     await page.set_viewport_size({"width": int(485), "height": 800})
-
     await page.goto(url)
+    await asyncio.sleep(1)
     await page.locator("input[name=\"username\"]").fill(reddit_user)
+    await asyncio.sleep(1)
     await page.locator("input[name=\"password\"]").fill(reddit_pw)
-    await page.keyboard.press('Enter')
+    await asyncio.sleep(1)
+    await page.get_by_role("button", name="Log In").click()
+    # await page.keyboard.press('Enter')
     
     # let the login take place.
-    await asyncio.sleep(15)
+    # await asyncio.sleep(15)
+    await page.wait_for_url("https://www.reddit.com/")
+    await page.wait_for_load_state("networkidle")
     
     # for some reason the context doesn't hold so dont close the page.
     # await page.close()
-    
-    return
 
 async def capture(context: Browser,  url: str) -> None:
     page = await context.new_page()
@@ -273,9 +287,9 @@ async def capture(context: Browser,  url: str) -> None:
     #         break
 
 
-async def main(reddit_url: str) -> None:
+async def get_reddit_data(reddit_url: str, num_posts: int) -> None:
     
-    num_posts = 3
+    num_posts = num_posts
     num_comments = 30
     
     async with async_playwright() as p:
@@ -300,6 +314,7 @@ async def main(reddit_url: str) -> None:
         
         
         await page.close()
+        return json_posts
 
 if __name__ == "__main__":
     # Check if a URL argument is provided
@@ -311,4 +326,4 @@ if __name__ == "__main__":
         reddit_url = "https://www.reddit.com/r/AskReddit/comments/1bmnayh/what_is_the_biggest_lie_successfully_sold_by_the/"
 
     # Call main function with the provided URL
-    asyncio.run(main(reddit_url))
+    asyncio.run(get_reddit_data(reddit_url))
