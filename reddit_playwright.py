@@ -1,13 +1,54 @@
 import asyncio
 from playwright.async_api import async_playwright, Browser
 import sys
+import json
+import os
+import time
+from dotenv import load_dotenv
+from datetime import timedelta
+from datetime import datetime as dt
+
+# Load environment variables from .env file
+load_dotenv()
+reddit_user = os.getenv("REDDIT_USER")
+reddit_pw = os.getenv("REDDIT_PW")
 
 MAX_COMMENT_LIMIT = 10
 
+async def utc_to_relative_time(utc_timestamp):
+    now = dt.utcnow()
+    post_time = dt.utcfromtimestamp(utc_timestamp)
+    # now = datetime.datetime.now()
+    # post_time = datetime.datetime.fromtimestamp(utc_timestamp)
+    
+    time_diff = now - post_time
+    if time_diff < timedelta(minutes=1):
+        return 'just now'
+    elif time_diff < timedelta(hours=1):
+        minutes = int(time_diff.total_seconds() / 60)
+        return f'{minutes} minutes ago'
+    elif time_diff < timedelta(days=1):
+        hours = int(time_diff.total_seconds() / 3600)
+        return f'{hours} hours ago'
+    else:
+        days = time_diff.days
+        return f'{days} days ago'
+
+async def save_to_json(filename, data):        
+    with open(filename, "w") as f:
+        json.dump(data, f, indent=4)
+    return
+
+def load_json_file(file_path):
+    data = {}
+    with open(file_path) as file:
+        data = json.load(file)
+    # print(data)
+    return data
+
 async def scroll_down(page):
     await page.evaluate("window.scrollTo(0, document.body.scrollHeight);")
-    await asyncio.sleep(1)  # Adjust the sleep time (in seconds) to control the scrolling speed
-
+    await asyncio.sleep(1)  # Adjust the sleep 1ime (in seconds) to control the scrolling speed
 
 async def get_reddit_title(browser: Browser,  url: str) -> None:
     page = await browser.new_page()
@@ -16,8 +57,154 @@ async def get_reddit_title(browser: Browser,  url: str) -> None:
     title = page.locator("shreddit-post")
     await title.screenshot(path="resources\\temp\\post.png")
 
-async def capture(browser: Browser,  url: str) -> None:
-    page = await browser.new_page()
+async def get_comments(page, url, max_num_of_comments=30):
+    
+    print(f"Geting comments from {url}...")
+    url = url + ".json"
+    # await page.set_viewport_size({"width": int(485), "height": 800})
+    await page.goto(url)    
+    data = await page.evaluate("() => { return JSON.parse(document.body.innerText); }")
+
+    # Save json post data
+    # await save_to_json("./resources/reddit/full_post.json", data)
+
+    comments_data = data[1]['data']['children']
+    # Sort comments_data by largest "ups"
+    # comments_data.sort(key=lambda comment: comment["data"].get("ups",1), reverse=True)
+    
+    # Print the sorted comments
+    # for i, comment in enumerate(comments_data):
+    #     ups = comment["data"].get("ups",1)
+    #     print(f"{i} - Ups: {ups}")
+    # exit()
+    
+    # get the post body data from data
+    comments = []
+    for index, comment in enumerate(comments_data):
+        if "author" not in comment["data"]:
+            print(f"No more comments to add. Comments found: {index}")
+            break
+        # Skip comment if more than 30 words
+        comment_body = comment["data"]["body"]
+        word_count = len(comment_body.split())
+        if word_count > 10:
+            continue
+        # if comment_body == "[removed]" or comment_body == "[deleted]":
+        #     continue
+        if "[removed]" in comment_body or "[deleted]" in comment_body:
+            continue
+
+        # ups = comment["data"].get("ups",1)
+        # print(f"{index} - Ups: {ups}")
+        # print(f"{index}")
+        
+        comments.append({
+            "index": str(index),
+            "author": comment["data"]["author"],
+            # "comment": comment["data"]["body"],
+            "comment": comment_body,
+            # "author": comment["data"].get("author", ""),
+            # "comment": comment["data"].get("body", ""),
+            "ups": str(comment["data"]["ups"]),
+            "utc_timestamp": comment["data"]["created_utc"],
+            "relative_time": await utc_to_relative_time(comment["data"]["created_utc"]),
+            "date_time": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(comment["data"]["created_utc"]))            
+        })
+        
+        # Check if three comments have been appended
+        if len(comments) == max_num_of_comments:
+            break
+    print(f"Finished getting comments from {url}...")
+    return comments
+
+async def combine_post_comments(post, comments, post_index):
+    # what is the type of post and comments?
+    # print(type(post)) # dict
+    # print(type(comments)) # list of dict
+    merged_post = post
+    merged_post["comments"] = comments
+    file_name = f"./resources/reddit/post_{post_index}.json"
+    # Save json post data
+    await save_to_json(file_name, merged_post)
+    # save_json(merged_post, file_name)
+    # clean_json_file(file_name, file_name)
+    json_data = load_json_file(file_name)
+    return json_data
+
+async def parse_json_data(page, reddit_posts, num_posts=1, num_comments=30):
+    # get all posts and their comments
+    json_posts = []
+    for i, post in enumerate(reddit_posts):
+        if i >= num_posts:
+            break
+        post_comment = await get_comments(page, post['url'], num_comments)
+        combined_post = await combine_post_comments(post, post_comment, i)
+        json_posts.append(combined_post)
+    return json_posts
+
+async def get_json_data(page: Browser,  url: str) -> None:
+    # page = await context.new_page()
+    await page.set_viewport_size({"width": int(485), "height": 800})
+    base_url="https://www.reddit.com/r/AskReddit/top.json?t=day"
+    await page.goto(base_url)
+    
+    data = await page.evaluate("() => { return JSON.parse(document.body.innerText); }")
+
+    # Save json post data
+    await save_to_json("./resources/reddit/full_post.json", data)
+        
+    posts = []
+    for post in data["data"]["children"]:
+        # if NSFW, go next
+        # print(post["data"]["over_18"])
+        if post["data"]["over_18"] == True: 
+            continue
+        
+        title = post["data"]["title"]
+        selftext = post["data"]["selftext"]
+        author = post["data"]["author"]
+        ups = str(post["data"]["ups"])
+        utc_timestamp = post["data"]["created_utc"]
+        url = post["data"]['url']
+        utc_time = time.strftime(
+            "%Y-%m-%d %H:%M:%S", time.localtime(utc_timestamp))
+        posts.append({
+            "title": title,
+            "selftext": selftext,
+            "author": author,
+            "ups": ups,
+            "utc_timestamp": utc_timestamp,
+            "relative_time": await utc_to_relative_time(utc_timestamp),
+            "url": url,
+            "date_time": utc_time,
+        })
+        print(f"Getting posts from {url}...")
+    print(f"finished getting posts from {base_url}")
+
+    await asyncio.sleep(1)
+
+    # await page.close()
+    return posts
+
+async def login(page: Browser,  url: str) -> None:
+    # page = await context.new_page()
+    await page.set_viewport_size({"width": int(485), "height": 800})
+
+    await page.goto(url)
+    await page.locator("input[name=\"username\"]").fill(reddit_user)
+    await page.locator("input[name=\"password\"]").fill(reddit_pw)
+    await page.keyboard.press('Enter')
+    
+    # let the login take place.
+    await asyncio.sleep(15)
+    
+    # for some reason the context doesn't hold so dont close the page.
+    # await page.close()
+    
+    return
+
+async def capture(context: Browser,  url: str) -> None:
+    page = await context.new_page()
     await page.set_viewport_size({"width": int(485), "height": 800})
 
 
@@ -34,7 +221,7 @@ async def capture(browser: Browser,  url: str) -> None:
             print("couldn't find button")
     
     # for some reason i have to keep this for the minus buttons to prompt
-    await asyncio.sleep(3)
+    await asyncio.sleep(1)
     
     # Find all buttons matching the specified attributes
     buttons = await page.query_selector_all('button[aria-controls="comment-children"][aria-expanded="true"][aria-label="Toggle Comment Thread"]')
@@ -87,12 +274,32 @@ async def capture(browser: Browser,  url: str) -> None:
 
 
 async def main(reddit_url: str) -> None:
+    
+    num_posts = 3
+    num_comments = 30
+    
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=False)
+        context = await browser.new_context()
+        page = await context.new_page()
+
         # browser = await p.chromium.launch()
-        await capture(browser, reddit_url)
-        # await get_reddit_title(browser, reddit_url)
-        await browser.close()
+        
+        # log in
+        await login(page, "https://www.reddit.com/login")
+        
+        posts = await get_json_data(page, reddit_url)
+        
+        # now that we have the master json, we parse the goodies
+        json_posts = await parse_json_data(page, posts, num_posts, num_comments)
+        
+        # capture title and comments screenshots
+        # await capture(page, reddit_url)
+        
+        # await get_reddit_title(page, reddit_url)
+        
+        
+        await page.close()
 
 if __name__ == "__main__":
     # Check if a URL argument is provided

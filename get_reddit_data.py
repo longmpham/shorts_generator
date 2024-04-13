@@ -88,13 +88,10 @@ def get_posts(base_url):
 
     # get all posts from the url given
     ua = UserAgent()
-    print(ua.chrome)
     header = {'User-Agent':str(ua.chrome)}
-    print(header)
     response = requests.get(base_url, headers=header)
-    print(response)
-    data = response.json()
     exit() # currently broken because I now need a token to access the json... :( 
+    data = response.json()
     # create a list of dictionaries (reddit posts) from the data
     posts = []
     for post in data["data"]["children"]:
