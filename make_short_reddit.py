@@ -463,13 +463,15 @@ def generate_reddit_video(url, num_posts=10, num_comments=3, crop=False, useSRT=
     # Get each post for each post that comes back
     posts = asyncio.run(get_reddit_data(reddit_url=url, num_posts=num_posts))
     print("\n\nFinished getting all the posts! Lets begin MoviePy stuff.\n")
-    time.sleep(30) # wait artifically because reddit is catching on
+    # time.sleep(30) # wait artifically because reddit is catching on
     for i, post in enumerate(posts): 
         
         image_clip = None
         if(usePlaywright):
             # Generate title screenshot of reddit page
-            image_clip = get_reddit_title_image(post["url"])
+            # image_clip = get_reddit_title_image(post["url"])
+            image_path = f"./resources/reddit/post-{i}.png"
+            image_clip = ImageClip(image_path)
         
         start_time = time.time()
         

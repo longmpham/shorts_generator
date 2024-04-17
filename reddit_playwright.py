@@ -7,6 +7,7 @@ import time
 from dotenv import load_dotenv
 from datetime import timedelta
 from datetime import datetime as dt
+from typing import List
 
 # Load environment variables from .env file
 load_dotenv()
@@ -82,6 +83,23 @@ async def get_reddit_title(url: str) -> None:
         # await title.screenshot(path="./resources/reddit/post.png")
         # await page.close()
 
+async def get_reddit_title_screenshot(page: Browser, posts, num_posts: int) -> None:
+    
+    for index, post in enumerate(posts[:num_posts]):
+        url = post['url']
+        print(f"getting a top post: {url}")
+        await asyncio.sleep(5)
+
+        await page.goto(url)
+        await asyncio.sleep(1)
+        try:
+            title = page.locator("shreddit-post")
+            await title.screenshot(path=f"./resources/reddit/post-{index}.png")
+            # await page.close()
+        except Exception as e:
+            print(f"There was an issue grabbing 'title = page.locator('shreddit-post')': {e}")
+            # await page.close()
+            # exit()        
 
 
 async def get_comments(page, url, max_num_of_comments=30):
@@ -169,7 +187,7 @@ async def parse_json_data(page, reddit_posts, num_posts=1, num_comments=30):
         json_posts.append(combined_post)
     return json_posts
 
-async def get_json_data(page: Browser,  url: str) -> None:
+async def get_json_data(page: Browser,  url: str, num_posts=10) -> None:
     # page = await context.new_page()
     # await page.set_viewport_size({"width": int(485), "height": 800})
     base_url="https://www.reddit.com/r/AskReddit/top.json?t=day"
@@ -181,31 +199,32 @@ async def get_json_data(page: Browser,  url: str) -> None:
     await save_to_json("./resources/reddit/full_post.json", data)
         
     posts = []
-    for post in data["data"]["children"]:
-        # if NSFW, go next
-        # print(post["data"]["over_18"])
-        if post["data"]["over_18"] == True: 
-            continue
-        
-        title = post["data"]["title"]
-        selftext = post["data"]["selftext"]
-        author = post["data"]["author"]
-        ups = str(post["data"]["ups"])
-        utc_timestamp = post["data"]["created_utc"]
-        url = post["data"]['url']
-        utc_time = time.strftime(
-            "%Y-%m-%d %H:%M:%S", time.localtime(utc_timestamp))
-        posts.append({
-            "title": title,
-            "selftext": selftext,
-            "author": author,
-            "ups": ups,
-            "utc_timestamp": utc_timestamp,
-            "relative_time": await utc_to_relative_time(utc_timestamp),
-            "url": url,
-            "date_time": utc_time,
-        })
-        print(f"Getting posts from {url}...")
+    for _ in range(num_posts):
+        for post in data["data"]["children"]:
+            # if NSFW, go next
+            # print(post["data"]["over_18"])
+            if post["data"]["over_18"] == True: 
+                continue
+            
+            title = post["data"]["title"]
+            selftext = post["data"]["selftext"]
+            author = post["data"]["author"]
+            ups = str(post["data"]["ups"])
+            utc_timestamp = post["data"]["created_utc"]
+            url = post["data"]['url']
+            utc_time = time.strftime(
+                "%Y-%m-%d %H:%M:%S", time.localtime(utc_timestamp))
+            posts.append({
+                "title": title,
+                "selftext": selftext,
+                "author": author,
+                "ups": ups,
+                "utc_timestamp": utc_timestamp,
+                "relative_time": await utc_to_relative_time(utc_timestamp),
+                "url": url,
+                "date_time": utc_time,
+            })
+            print(f"Getting posts from {url}...")
     print(f"finished getting posts from {base_url}")
 
     await asyncio.sleep(1)
@@ -305,10 +324,7 @@ async def capture(context: Browser,  url: str) -> None:
     #         break
 
 
-async def get_reddit_data(reddit_url: str, num_posts: int) -> None:
-    
-    num_posts = num_posts
-    num_comments = 30
+async def get_reddit_data(reddit_url: str, num_posts=10, num_comments=30) -> List:
     
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=False)
@@ -322,17 +338,18 @@ async def get_reddit_data(reddit_url: str, num_posts: int) -> None:
         await login(page, "https://www.reddit.com/login")
         
         print("getting json data...")
-        posts = await get_json_data(page, reddit_url)
+        posts = await get_json_data(page, reddit_url, num_posts)
+        
+        # Get screenshots
+        print("Getting screenshots...")
+        await get_reddit_title_screenshot(page, posts, num_posts)
         
         # now that we have the master json, we parse the goodies
-        print("parsing json data...")
+        print("parsing json data for each post...")
         json_posts = await parse_json_data(page, posts, num_posts, num_comments)
         
         # capture title and comments screenshots
-        # await capture(page, reddit_url)
-        
-        # await get_reddit_title(page, reddit_url)
-        
+        # await capture(page, reddit_url)    
         
         await page.close()
         return json_posts
@@ -347,4 +364,4 @@ if __name__ == "__main__":
         reddit_url = "https://www.reddit.com/r/AskReddit/top.json?t=day"
 
     # Call main function with the provided URL
-    asyncio.run(get_reddit_data(reddit_url))
+    asyncio.run(get_reddit_data(reddit_url, num_posts=3))
