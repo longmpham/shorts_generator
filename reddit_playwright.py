@@ -62,9 +62,25 @@ async def get_reddit_title(url: str) -> None:
         await page.goto(url)
         # title of the page
         # title = page.locator("shreddit-post") # old and broken now DNE
-        title = page.get_by_test_id("post-container")
-        await title.screenshot(path="./resources/reddit/post.png")
-        await page.close()
+        # try:
+        #     title = page.get_by_test_id("post-container")
+        #     # await title.screenshot(path="./resources/reddit/post.png")
+        #     # await page.close()
+        # except Exception as e:
+        #     print("There was an issue grabbing 'title = page.get_by_test_id('post-container')'")
+        #     print("Trying shreddit-post way")
+
+        try:
+            title = page.locator("shreddit-post")
+            await title.screenshot(path="./resources/reddit/post.png")
+            await page.close()
+        except Exception as e:
+            print("There was an issue grabbing 'title = page.locator('shreddit-post')'")
+            await page.close()
+            exit()        
+        
+        # await title.screenshot(path="./resources/reddit/post.png")
+        # await page.close()
 
 
 
@@ -208,11 +224,13 @@ async def login(page: Browser,  url="https://www.reddit.com/login") -> None:
     await asyncio.sleep(1)
     await page.get_by_role("button", name="Log In").click()
     # await page.keyboard.press('Enter')
-    
+    for i in range(15,0,-1):
+        print(f"{i}...")
+        await asyncio.sleep(1)
     # let the login take place.
-    # await asyncio.sleep(15)
-    await page.wait_for_url("https://www.reddit.com/")
-    await page.wait_for_load_state("networkidle")
+    # for some reason it wont idle.
+    # await page.wait_for_url("https://www.reddit.com/")
+    # await page.wait_for_load_state("networkidle")
     
     # for some reason the context doesn't hold so dont close the page.
     # await page.close()
@@ -300,11 +318,14 @@ async def get_reddit_data(reddit_url: str, num_posts: int) -> None:
         # browser = await p.chromium.launch()
         
         # log in
+        print("logging in...")
         await login(page, "https://www.reddit.com/login")
         
+        print("getting json data...")
         posts = await get_json_data(page, reddit_url)
         
         # now that we have the master json, we parse the goodies
+        print("parsing json data...")
         json_posts = await parse_json_data(page, posts, num_posts, num_comments)
         
         # capture title and comments screenshots
@@ -323,7 +344,7 @@ if __name__ == "__main__":
         reddit_url = sys.argv[1]
         # sys.exit(1)
     else:
-        reddit_url = "https://www.reddit.com/r/AskReddit/comments/1bmnayh/what_is_the_biggest_lie_successfully_sold_by_the/"
+        reddit_url = "https://www.reddit.com/r/AskReddit/top.json?t=day"
 
     # Call main function with the provided URL
     asyncio.run(get_reddit_data(reddit_url))
