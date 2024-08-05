@@ -566,7 +566,7 @@ def main():
     # Variables to setup - Required!
     # url = "https://www.reddit.com/r/Ask/top.json?t=day"
     url = "https://www.reddit.com/r/AskReddit/top.json?t=day"
-    num_posts = 3
+    num_posts = 5
     num_comments = 3
     crop = False
     useSRT = True

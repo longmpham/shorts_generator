@@ -93,6 +93,10 @@ async def get_reddit_title_screenshot(page: Browser, posts, num_posts: int) -> N
         await page.goto(url)
         await asyncio.sleep(1)
         try:
+            await page.get_by_label("close error button").click()
+        except Exception as e: 
+            print("Server error dialog not found, continuing...")
+        try:
             title = page.locator("shreddit-post")
             await title.screenshot(path=f"./resources/reddit/post-{index}.png")
             # await page.close()
@@ -324,7 +328,7 @@ async def capture(context: Browser,  url: str) -> None:
     #         break
 
 
-async def get_reddit_data(reddit_url: str, num_posts=10, num_comments=30) -> List:
+async def get_reddit_data(reddit_url: str, num_posts=5, num_comments=30) -> List:
     
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=False)
