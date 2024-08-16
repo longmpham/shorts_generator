@@ -15,8 +15,12 @@ How to use:
 4. Using the requirements.txt, install the necessary packages required (comes from `pip freeze > requirements.txt`)
 `pip install -r requirements.txt`
 5. Torch may not install correctly, if so, try this:
-`pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118`
-note: this is only if you want to transcribe with CUDA capable devices, otherwise you can just use your CPU instead (longer times to transcribe audio)
+`pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118` # cublas latest?
+`pip install torch==2.3.1 torchvision==0.18.1 torchaudio==2.3.1 --index-url https://download.pytorch.org/whl/cu118` # cublas 11 (this one works)
+`pip install --upgrade --force-reinstall ctranslate2==3.24.0` # this fixes cublas 12+ and reverts to cublas 11
+    https://stackoverflow.com/questions/78320397/runtimeerror-library-cublas64-12-dll-is-not-found-or-cannot-be-loaded-while-us
+    
+    note: this is only if you want to transcribe with CUDA capable devices, otherwise you can just use your CPU instead (longer times to transcribe audio)
 6. Follow the directory I have layed out or change them to your liking... you'll need your own audio/video files to make the clips!
 
 
@@ -30,3 +34,7 @@ note: this is only if you want to transcribe with CUDA capable devices, otherwis
   /tiktok
   /uploaded_videos
 
+Note:
+fx/resize.py
+            # resized_pil = pilim.resize(newsize[::-1], Image.ANTIALIAS) # PIL 9.5.0
+            resized_pil = pilim.resize(newsize[::-1], Image.Resampling.LANCZOS) # PIL 10+

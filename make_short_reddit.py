@@ -1,4 +1,5 @@
 import os
+os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE" # for whatever reason i have multiple LIBOMP SH**
 import random
 import time
 import math
