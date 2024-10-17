@@ -93,12 +93,13 @@ async def get_reddit_title_screenshot(page: Browser, posts, num_posts: int) -> N
         await page.goto(url)
         await asyncio.sleep(1)
         try:
-            await page.get_by_label("close error button").click()
+            await page.get_by_label("close error button").click(timeout=5)
         except Exception as e: 
             print("Server error dialog not found, continuing...")
         try:
             title = page.locator("shreddit-post")
             await title.screenshot(path=f"./resources/reddit/post-{index}.png")
+            print("Completed gathering screenshot!")
             # await page.close()
         except Exception as e:
             print(f"There was an issue grabbing 'title = page.locator('shreddit-post')': {e}")
@@ -247,7 +248,7 @@ async def login(page: Browser,  url="https://www.reddit.com/login") -> None:
     await asyncio.sleep(1)
     await page.get_by_role("button", name="Log In").click()
     # await page.keyboard.press('Enter')
-    for i in range(15,0,-1):
+    for i in range(30,0,-1):
         print(f"{i}...")
         await asyncio.sleep(1)
     # let the login take place.

@@ -1,5 +1,5 @@
 import os
-os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE" # for whatever reason i have multiple LIBOMP SH**
+os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 import random
 import time
 import math
@@ -8,7 +8,6 @@ import datetime
 from moviepy.editor import *
 from moviepy.video.tools.subtitles import SubtitlesClip
 from skimage.filters import gaussian
-# from get_image import get_image_from_answer
 import speech_recognition as sr
 from pydub import AudioSegment
 from pydub.utils import make_chunks
@@ -20,8 +19,7 @@ from faster_whisper import WhisperModel
 from gtts import gTTS
 from tiktok_tts_v2 import texttotiktoktts
 from natsort import natsorted
-from reddit_playwright import get_reddit_data
-from reddit_playwright import get_reddit_title
+from reddit_playwright import get_reddit_data, get_reddit_title
 from playwright.sync_api import sync_playwright
 from dotenv import load_dotenv
 import asyncio
@@ -580,15 +578,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
-# +------------+
-# |            |
-# |   Title    |
-# |            |
-# |            |
-# |            |
-# |            |
-# |            |
-# |    Text    |
-# |            |
-# +------------+
