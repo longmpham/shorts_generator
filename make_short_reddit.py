@@ -1,11 +1,12 @@
 import os
-os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
+from pathlib import Path
+import sys
 import random
 import time
 import math
 import csv
 import datetime
-from moviepy.editor import *
+from moviepy import *
 from moviepy.video.tools.subtitles import SubtitlesClip
 from skimage.filters import gaussian
 import speech_recognition as sr
@@ -19,10 +20,35 @@ from faster_whisper import WhisperModel
 from gtts import gTTS
 from tiktok_tts_v2 import texttotiktoktts
 from natsort import natsorted
-from reddit_playwright import get_reddit_data, get_reddit_title
+from reddit_playwright import get_reddit_data, get_reddit_title, load_json_file
 from playwright.sync_api import sync_playwright
 from dotenv import load_dotenv
 import asyncio
+from moviepy.video.fx import Loop
+from moviepy.audio.fx import AudioLoop
+
+# gpu 
+# import sys
+# import os
+from pathlib import Path
+
+def set_cuda_paths():
+    venv_base = Path(sys.executable).parent.parent
+    nvidia_base_path = venv_base / 'Lib' / 'site-packages' / 'nvidia'
+    cuda_path = nvidia_base_path / 'cuda_runtime' / 'bin'
+    cublas_path = nvidia_base_path / 'cublas' / 'bin'
+    cudnn_path = nvidia_base_path / 'cudnn' / 'bin'
+    paths_to_add = [str(cuda_path), str(cublas_path), str(cudnn_path)]
+    env_vars = ['CUDA_PATH', 'CUDA_PATH_V12_4', 'PATH']
+    
+    for env_var in env_vars:
+        current_value = os.environ.get(env_var, '')
+        new_value = os.pathsep.join(paths_to_add + [current_value] if current_value else paths_to_add)
+        os.environ[env_var] = new_value
+
+set_cuda_paths()
+
+# end gpu
 
 load_dotenv()
 reddit_user = os.getenv("REDDIT_USER")
@@ -364,24 +390,28 @@ def generate_srt_from_audio_using_whisper(audio_file_path, method="sentence"):
 
 
 
-def add_text_clip(text="", font_name="Impact", font_size=50, font_color="white", bg_color="transparent", stroke_color=None, stroke_width=1, size=(int(720*0.9),None), method="caption", start=0, total_duration=5, opacity=1.0, position=("center"), relative=False):
-    text_clip = TextClip(text, stroke_color=stroke_color, stroke_width=stroke_width, fontsize=font_size, color=font_color, bg_color=bg_color, font=font_name, size=size, method=method)
+def add_text_clip(text="", font="C:\\Windows\\Fonts\\impact.ttf", font_size=50, color="white", bg_color=None, stroke_color=None, stroke_width=1, size=(int(720*0.9),None), method="caption", start=0, total_duration=5, opacity=1.0, position=("center"), relative=False):
+    text_clip = TextClip(text=text, font=font, stroke_color=stroke_color, stroke_width=stroke_width, font_size=font_size, color=color, bg_color=bg_color, size=(int(size[0] * 0.9), None), method=method)
     if relative==True:
-        text_clip = text_clip.set_position(position, relative=True).set_start(start).set_duration(total_duration).set_opacity(opacity)
-    else:   
-        text_clip = text_clip.set_position(position).set_start(start).set_duration(total_duration).set_opacity(opacity)
+        text_clip = text_clip.with_position(position, relative=True).with_start(start).with_duration(total_duration).with_opacity(opacity)
+    else:
+        text_clip = text_clip.with_position(position).with_start(start).with_duration(total_duration).with_opacity(opacity)
     return text_clip
 
-def add_video_clip(start=0, total_duration=5, size=(720,1280), blur_image=False, crop=False, index=-1):
+def add_video_clip(start=0, total_duration=5, size=(720,1280), blur_image=False, cropped=False, index=-1):
     
     video_file = get_video_file(index) # -int is random, otherwise, pick a number any number.
-    video_clip = VideoFileClip(video_file, audio=True).loop(total_duration)
+    video_clip = VideoFileClip(video_file, audio=True)
+    print(video_clip)
+    # video_clip = video_clip.with_effects([Loop(duration=total_duration)])
+    # loop = Loop(duration=total_duration)
+    # loop.apply(video_clip)
     
-    if crop == True:
-        video_clip = video_clip.set_start(start).set_duration(total_duration).resize(height=size[1]).crop(x1=780, width=720, height=1280)
-        # resize(height=1920).crop(x_center=960, y_center=960, width=1080, height=1920)
+    if cropped == True:
+        video_clip = video_clip.with_start(start).with_duration(total_duration).resized(height=size[1]).cropped(x1=780, width=720, height=1280)
+        # resized(height=1920).cropped(x_center=960, y_center=960, width=1080, height=1920)
     else: 
-        video_clip = video_clip.set_start(start).set_duration(total_duration).resize(size)
+        video_clip = video_clip.with_start(start).with_duration(total_duration).resized(size)
     
     
     def blur(image, blur_level=5):
@@ -392,29 +422,33 @@ def add_video_clip(start=0, total_duration=5, size=(720,1280), blur_image=False,
         print(f'blurring image because blur is {blur_image}')
         # video_clip = video_clip.fl_image(blur)
         video_clip = video_clip.fl_image(lambda image: blur(image, blur_level=5))
+
     return video_clip
 
 def add_audio_tts_clip(audio_file, silence=2, start=0):
     # print(audio_file)
     audio_clip = AudioFileClip(audio_file)
     clip_duration = audio_clip.duration + silence
-    audio_clip = audio_clip.set_start(start)
+    audio_clip = audio_clip.with_start(start)
     
     return audio_clip, clip_duration
 
 def add_background_audio(final_video, index=-1):    
     audio_path = get_audio_file(index) # random
     background_audio_clip = AudioFileClip(audio_path)
-    background_audio_clip = background_audio_clip.volumex(0.1) # set volume of background_audio to 10%
+    # background_audio_clip = background_audio_clip.volumex(0.1) # set volume of background_audio to 10% # outdated.
+    background_audio_clip = background_audio_clip.with_volume_scaled(factor=0.1) # 2.0+ uses audiofile * <float>. Ie. audio * 0.1 = 10% volume
     combined_audio = CompositeAudioClip([background_audio_clip, final_video.audio])
-    combined_audio = afx.audio_loop(combined_audio, duration=final_video.duration)
-    final_video = final_video.set_audio(combined_audio)
-    
+    # combined_audio = afx.audio_loop(combined_audio, duration=final_video.duration) # outdated, use v2+
+    combined_audio = combined_audio.with_effects([afx.AudioLoop(duration=final_video.duration)])
+    print(f"FINAL DURATION AUDIO {combined_audio.duration}")
+    final_video = final_video.with_audio(combined_audio)
+    # print(final_video)
     return final_video
 
 
 
-def generate_reddit_video(url, num_posts=10, num_comments=3, crop=False, useSRT=True, usePlaywright=True):
+def generate_reddit_video(url, num_posts=10, num_comments=3, cropped=False, useSRT=True, usePlaywright=True):
     
     def make_sentences(post, num_comments=3):
         sentences = []
@@ -461,6 +495,8 @@ def generate_reddit_video(url, num_posts=10, num_comments=3, crop=False, useSRT=
     
     # Get each post for each post that comes back
     posts = asyncio.run(get_reddit_data(reddit_url=url, num_posts=num_posts))
+    # posts = []
+    # posts.append(load_json_file("./resources/reddit/post_0.json")) # delete this after we test moviepy. We know reddit works.
     print("\n\nFinished getting all the posts! Lets begin MoviePy stuff.\n")
     # time.sleep(30) # wait artifically because reddit is catching on
     for i, post in enumerate(posts): 
@@ -486,28 +522,28 @@ def generate_reddit_video(url, num_posts=10, num_comments=3, crop=False, useSRT=
             
             # Generate TextClips
             if(usePlaywright):
-                image_clip = image_clip.set_start(0).set_duration(clip_duration).resize(width=int(720*0.95)).set_position(("center", 0.1), relative=True).set_opacity(0.9)
+                image_clip = image_clip.with_start(0).with_duration(clip_duration).resized(width=int(720*0.95)).with_position(("center", 0.1), relative=True).with_opacity(0.9)
             else:
                 title = post['title']
-                text_clip_title = add_text_clip(text=title, bg_color="black", opacity=0.8, position=("center", 0.1), relative=True, total_duration=clip_duration, size=(size[0]*0.9,None))
+                text_clip_title = add_text_clip(text=title, bg_color="black", opacity=0.8, position=("center", 0.1), relative=True, total_duration=clip_duration, size=(int(size[0]*0.9),None))
             # text_clips.append(text_clip_title) # intro text
         
             # text_clips = []
-            text_clip_body = add_text_clip(text=sentence, font_size=40, position=("center", "center"), relative=True, total_duration=clip_duration, size=(size[0]*0.9,None), stroke_color="black", stroke_width=1)
+            text_clip_body = add_text_clip(text=sentence, font_size=40, position=("center", "center"), relative=True, total_duration=clip_duration, size=(int(size[0]*0.9),None), stroke_color="black", stroke_width=1)
             # text_clips.append(text_clip_body)
             
             # generate SRT (per word)
             if useSRT == True: 
                 srt_file = generate_srt_from_audio_using_whisper(tts_file, method="continuous")
-                generator = lambda txt: TextClip(txt=txt, fontsize=40, color="white", font="Impact", stroke_color="black", method="caption", size=(size[0]*0.9, None))
+                generator = lambda text: TextClip(text=text, font_size=40, color="white", font="C:\\Windows\\Fonts\\impact.ttf", stroke_color="black", method="caption", size=(int(size[0]*0.9), None))
                 # generator = lambda txt: add_text_clip(text=txt, position=("center"), total_duration=clip_duration)
-                subtitles = SubtitlesClip(srt_file, generator)
-                subtitles = subtitles.set_position(("center", "center")).set_duration(clip_duration)
+                subtitles = SubtitlesClip(srt_file, make_textclip=generator)
+                subtitles = subtitles.with_position(("center", "center")).with_duration(clip_duration)
                 print("Subtitles Set...")
             
                 text_clip_body = subtitles
             # generate video clip
-            video_clip = add_video_clip(start=0, total_duration=clip_duration, size=size, crop=crop)
+            video_clip = add_video_clip(start=0, total_duration=clip_duration, size=size, cropped=cropped)
             
             # Finally, create the video
             if(usePlaywright):
@@ -515,10 +551,10 @@ def generate_reddit_video(url, num_posts=10, num_comments=3, crop=False, useSRT=
             else:
                 final_video_clip = CompositeVideoClip([video_clip, text_clip_body, text_clip_title], use_bgclip=True)
             
-            final_video_clip = final_video_clip.set_duration(clip_duration)
+            final_video_clip = final_video_clip.with_duration(clip_duration)
 
             # Set Audio
-            final_video_clip = final_video_clip.set_audio(tts_clip)
+            final_video_clip = final_video_clip.with_audio(tts_clip)
             print("Videos and banner, and TTS set!")
 
             # Debug
@@ -534,6 +570,8 @@ def generate_reddit_video(url, num_posts=10, num_comments=3, crop=False, useSRT=
             video_clips.append(final_video_clip)
         
         final_video = concatenate_videoclips(video_clips)
+        print(f"FINAL DURATION {final_video.duration}")
+
         # Set the background audio music
         final_video = add_background_audio(final_video)
 
@@ -545,7 +583,7 @@ def generate_reddit_video(url, num_posts=10, num_comments=3, crop=False, useSRT=
         # reddit_file = os.path.join("resources", "uploaded_videos", f"reddit", f"reddit_{i}.mp4")
         # final_video.save_frame("frame.png", t=1)
         # exit()
-        final_video.write_videofile(reddit_file, fps=30, threads=1, codec='h264_nvenc')
+        final_video.write_videofile(reddit_file, fps=30, codec='h264_nvenc', ffmpeg_params=['-pix_fmt', 'yuv420p'])
         
         # time taken?
         end_time = time.time()  
@@ -567,12 +605,12 @@ def main():
     url = "https://www.reddit.com/r/AskReddit/top.json?t=day"
     num_posts = 5
     num_comments = 3
-    crop = False
+    cropped = False
     useSRT = True
     usePlaywright = True
     
     # Start generation
-    generate_reddit_video(url, num_posts=num_posts, num_comments=num_comments, crop=crop, useSRT=useSRT,usePlaywright=usePlaywright)
+    generate_reddit_video(url, num_posts=num_posts, num_comments=num_comments, cropped=cropped, useSRT=useSRT,usePlaywright=usePlaywright)
     
     return
 
