@@ -29,7 +29,7 @@ How to use:
   /uploaded_videos
 
 Notes:
-
+In moviepy (moviepy==2.1.2) ffmpeg_reader.py, I commented out the `print(self.infos)` line for cleaner logs and `print(" ".join(cmd))`. It was driving me crazy.
 
 Helpful links:
 https://developer.nvidia.com/cuda-downloads
@@ -39,4 +39,5 @@ https://pypi.org/project/faster-whisper/
 
 
 Todos:
-- update folder management (requires resources/audio, resources/temp/audio, resources/background_videos, resources/uploaded_videos/reddit)
+- clean up function and process
+- remove old stuff

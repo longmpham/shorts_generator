@@ -1,7 +1,7 @@
 @echo off
 
 echo Activate the Python environment
-call .\Scripts\activate
+call .\virtual_env\Scripts\activate
 
 echo Run the Python script
 python make_short_reddit.py

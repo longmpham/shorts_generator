@@ -58,16 +58,36 @@ video_files_list = []
 audio_files_list = []
 
 
-def delete_temp_audio(folder_path="./resources/reddit/audio"):
+def delete_temp_audio(folder_path="./resources/temp/audio"):
     # If temp folder is found, delete it
     if os.path.exists(folder_path):
         print(f"deleting {folder_path}")
         shutil.rmtree(folder_path)
         print("removed temp audio")
+
     # Create the folder
     os.makedirs(folder_path)
     
     return
+
+def delete_temp_srt(folder_path="./resources/temp/srt"):
+    # If temp folder is found, delete it
+    if os.path.exists(folder_path):
+        print(f"deleting {folder_path}")
+        shutil.rmtree(folder_path)
+        print("removed temp srt")
+    folder_path = "./resources/temp/audio"
+    if os.path.exists(folder_path):
+        print(f"deleting {folder_path}")
+        shutil.rmtree(folder_path)
+        print("removed temp audio")
+
+    # Create the folder
+    os.makedirs(folder_path)
+    
+    return
+
+
     
 def get_todays_date():
     today = datetime.date.today()
@@ -79,7 +99,7 @@ def create_folder_if_not_exists(goal_name):
     def _create_folder_if_not_exists(folder_path):
         if not os.path.exists(folder_path):
             os.makedirs(folder_path)
-    
+
     data_folder_path = os.path.join("resources", "data")
     _create_folder_if_not_exists(data_folder_path)
 
@@ -96,7 +116,11 @@ def create_folder_if_not_exists(goal_name):
     _create_folder_if_not_exists(background_videos_folder_path)
 
     # Create folder under resources/uploaded_videos
-    temp_folder_path = os.path.join("resources", "temp")
+    temp_folder_path = os.path.join("resources", "temp", "audio")
+    _create_folder_if_not_exists(temp_folder_path)
+
+    # Create folder under resources/uploaded_videos
+    temp_folder_path = os.path.join("resources", "temp", "srt")
     _create_folder_if_not_exists(temp_folder_path)
 
     return
@@ -146,6 +170,7 @@ def get_reddit_title_image(url):
     image_clip = ImageClip(image_path)
 
     return image_clip    
+
 
 
 def get_video_files(path):
@@ -339,7 +364,7 @@ def generate_srt_from_audio_using_whisper(audio_file_path, method="sentence"):
     # Create the SRT file path dynamically
     audio_file_name = os.path.basename(audio_file_path)
     srt_file_name = os.path.splitext(audio_file_name)[0] + ".srt"
-    srt_file_path = os.getcwd() + f"\\resources\\temp\\{srt_file_name}"
+    srt_file_path = os.getcwd() + f"\\resources\\temp\\srt\\{srt_file_name}"
     
     # open a new srt file and save the output from each segment
     with open(srt_file_path, "w") as srt_file:
@@ -402,12 +427,11 @@ def add_video_clip(start=0, total_duration=5, size=(720,1280), blur_image=False,
     
     video_file = get_video_file(index) # -int is random, otherwise, pick a number any number.
     video_clip = VideoFileClip(video_file, audio=True)
-    print(video_clip)
     # video_clip = video_clip.with_effects([Loop(duration=total_duration)])
     # loop = Loop(duration=total_duration)
     # loop.apply(video_clip)
     
-    if cropped == True:
+    if (cropped):
         video_clip = video_clip.with_start(start).with_duration(total_duration).resized(height=size[1]).cropped(x1=780, width=720, height=1280)
         # resized(height=1920).cropped(x_center=960, y_center=960, width=1080, height=1920)
     else: 
@@ -418,7 +442,7 @@ def add_video_clip(start=0, total_duration=5, size=(720,1280), blur_image=False,
         """ Returns a blurred (blur_level=radius=3 pixels) version of the image """
         return gaussian(image.astype(float), sigma=blur_level)
     
-    if blur_image == True:
+    if (blur_image):
         print(f'blurring image because blur is {blur_image}')
         # video_clip = video_clip.fl_image(blur)
         video_clip = video_clip.fl_image(lambda image: blur(image, blur_level=5))
@@ -441,7 +465,7 @@ def add_background_audio(final_video, index=-1):
     combined_audio = CompositeAudioClip([background_audio_clip, final_video.audio])
     # combined_audio = afx.audio_loop(combined_audio, duration=final_video.duration) # outdated, use v2+
     combined_audio = combined_audio.with_effects([afx.AudioLoop(duration=final_video.duration)])
-    print(f"FINAL DURATION AUDIO {combined_audio.duration}")
+    # print(f"FINAL DURATION AUDIO {combined_audio.duration}")
     final_video = final_video.with_audio(combined_audio)
     # print(final_video)
     return final_video
@@ -494,9 +518,9 @@ def generate_reddit_video(url, num_posts=10, num_comments=3, cropped=False, useS
     size = (720, 1280)
     
     # Get each post for each post that comes back
-    posts = asyncio.run(get_reddit_data(reddit_url=url, num_posts=num_posts))
-    # posts = []
-    # posts.append(load_json_file("./resources/reddit/post_0.json")) # delete this after we test moviepy. We know reddit works.
+    # posts = asyncio.run(get_reddit_data(reddit_url=url, num_posts=num_posts))
+    posts = []
+    posts.append(load_json_file("./resources/reddit/post_0.json")) # delete this after we test moviepy. We know reddit works.
     print("\n\nFinished getting all the posts! Lets begin MoviePy stuff.\n")
     # time.sleep(30) # wait artifically because reddit is catching on
     for i, post in enumerate(posts): 
@@ -548,13 +572,15 @@ def generate_reddit_video(url, num_posts=10, num_comments=3, cropped=False, useS
             # Finally, create the video
             if(usePlaywright):
                 final_video_clip = CompositeVideoClip([video_clip, image_clip, text_clip_body], use_bgclip=True)
+                
             else:
                 final_video_clip = CompositeVideoClip([video_clip, text_clip_body, text_clip_title], use_bgclip=True)
             
             final_video_clip = final_video_clip.with_duration(clip_duration)
-
+            
             # Set Audio
             final_video_clip = final_video_clip.with_audio(tts_clip)
+            
             print("Videos and banner, and TTS set!")
 
             # Debug
@@ -570,7 +596,7 @@ def generate_reddit_video(url, num_posts=10, num_comments=3, cropped=False, useS
             video_clips.append(final_video_clip)
         
         final_video = concatenate_videoclips(video_clips)
-        print(f"FINAL DURATION {final_video.duration}")
+        # print(f"FINAL DURATION {final_video.duration}")
 
         # Set the background audio music
         final_video = add_background_audio(final_video)
@@ -599,7 +625,8 @@ def main():
     video_path = "resources\\background_videos\\scraper\\catsdogsanimalspetsvertical\\vertical"#scraper\\verticalyoga"
     get_video_files(video_path)
     get_audio_files(audio_path)
-    
+    # create_folder_if_not_exists("reddit")
+
     # Variables to setup - Required!
     # url = "https://www.reddit.com/r/Ask/top.json?t=day"
     url = "https://www.reddit.com/r/AskReddit/top.json?t=day"
