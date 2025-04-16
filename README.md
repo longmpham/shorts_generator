@@ -14,7 +14,8 @@ How to use:
 3. Activate the Python Env by typing `.\venv\Scripts\activate` in the terminal.
 4. Using the requirements.txt, install the necessary packages required (comes from `pip freeze > requirements.txt`)
 `pip install -r requirements.txt`. This should install all the necessary packages required. The GPU is NVIDIA based and contains the packages in the requirements.txt as well. If it helps I used this link: https://github.com/SYSTRAN/faster-whisper/issues/1080. Installing faster_whisper should work at this point. If not, go to the pypi for faster_whisper and checkout the installation instructions https://pypi.org/project/faster-whisper/
-5. Follow the directory I have layed out or change them to your liking... you'll need your own audio/video files to make the clips!
+5. You may have to install playwright. Run the `python playwright install` to install playwright in your environment.
+6. Follow the directory I have layed out or change them to your liking... you'll need your own audio/video files to make the clips!
 6. Recommended to create your own .env file to make logins for reddit.
 
 <todo: fix pathing up...>
@@ -27,10 +28,7 @@ How to use:
   /tiktok
   /uploaded_videos
 
-Note:
-fx/resize.py
-            # resized_pil = pilim.resize(newsize[::-1], Image.ANTIALIAS) # PIL 9.5.0
-            resized_pil = pilim.resize(newsize[::-1], Image.Resampling.LANCZOS) # PIL 10+
+Notes:
 
 
 Helpful links:
@@ -38,3 +36,7 @@ https://developer.nvidia.com/cuda-downloads
 https://developer.nvidia.com/cudnn-downloads
 https://github.com/SYSTRAN/faster-whisper/issues/1080
 https://pypi.org/project/faster-whisper/
+
+
+Todos:
+- update folder management (requires resources/audio, resources/temp/audio, resources/background_videos, resources/uploaded_videos/reddit)
